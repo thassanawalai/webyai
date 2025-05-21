@@ -1,8 +1,7 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>จัดการร้านค้า</title>
+    <title>แดชบอร์ดผู้ซื้อ</title>
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -34,12 +33,12 @@
             border-radius: 5px;
         }
 
-        .store-actions {
-            margin-bottom: 20px;
+        .actions {
             text-align: center;
+            margin-top: 20px;
         }
 
-        .store-actions button {
+        .actions button {
             background-color: #ff704d;
             color: white;
             border: none;
@@ -50,19 +49,15 @@
             transition: background-color 0.3s;
         }
 
-        .store-actions button:hover {
+        .actions button:hover {
             background-color: #e65c3d;
         }
 
-        .product-list {
+        .order-list {
             margin-top: 30px;
         }
 
-        .product-list h3 {
-            color: #cc3300;
-        }
-
-        .product-item {
+        .order-item {
             background-color: #fff0e6;
             padding: 15px;
             border-radius: 5px;
@@ -70,65 +65,83 @@
             box-shadow: 0 0 5px rgba(255, 102, 51, 0.1);
         }
 
-        .product-item h4 {
+        .order-item h4 {
             margin: 0;
         }
 
-        .product-item p {
-            margin: 5px 0 0;
+        .order-item p {
+            margin: 5px 0;
         }
 
-        .logout-button {
-            background-color: #ff704d;
-            color: white;
+        .order-item button {
+            margin-top: 10px;
+            background-color: #ff9966;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 5px;
+            color: white;
             cursor: pointer;
-            transition: background-color 0.3s;
-            display: block;
-            margin: 20px auto;
-            text-align: center;
         }
 
-        .logout-button:hover {
-            background-color: #e65c3d;
+        .order-item button:hover {
+            background-color: #e67350;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>ยินดีต้อนรับสู่หน้าผู้ซื้อ</h2>
+        <h2>แดชบอร์ดผู้ซื้อ</h2>
 
-        <div class="user-info" id="userInfo">
-            <!-- จะแสดงชื่อผู้ใช้ -->
+        <div class="user-info">
+            👤 ผู้ใช้: <span id="username">ไม่ทราบ</span>
         </div>
 
-        <div class="product-list">
-            <h3>สินค้าที่น่าสนใจ</h3>
-            <div class="product-item">
-                <h4>ชื่อสินค้า 1</h4>
-                <p>รายละเอียดสินค้า 1</p>
+        <div class="order-list">
+            <h3>คำสั่งซื้อของคุณ</h3>
+            <div class="order-item">
+                <h4>คำสั่งซื้อ #001</h4>
+                <p>สถานะ: กำลังจัดส่ง</p>
+                <button onclick="addToCart('คำสั่งซื้อ #001')">เพิ่มลงตะกร้า</button>
             </div>
-            <div class="product-item">
-                <h4>ชื่อสินค้า 2</h4>
-                <p>รายละเอียดสินค้า 2</p>
+            <div class="order-item">
+                <h4>คำสั่งซื้อ #002</h4>
+                <p>สถานะ: จัดส่งแล้ว</p>
+                <button onclick="addToCart('คำสั่งซื้อ #002')">เพิ่มลงตะกร้า</button>
             </div>
-            <!-- เพิ่มสินค้าอื่น ๆ ได้ตามต้องการ -->
         </div>
 
-        <button class="logout-button" onclick="goback()">กลับไปหน้าแรก</button>
+        <div class="actions">
+            <button onclick="searchProduct()">ค้นหา</button>
+            <button onclick="checkCart()">เช็คตะกร้า</button>
+            <button onclick="accountSettings()">ตั้งค่าบัญชี</button>
+            <button onclick="logout()">ออกจากระบบ</button>
+        </div>
     </div>
 
     <script>
-        // แสดงชื่อผู้ใช้
-        const username = localStorage.getItem("registeredUsername");
-        const userInfo = document.getElementById("userInfo");
-        userInfo.innerHTML = `👤 ผู้ใช้: ${username || 'ไม่ทราบ'}`;
+        document.getElementById("username").textContent = localStorage.getItem("registeredUsername") || "ไม่ทราบ";
 
-        function goback() {
-            window.location.href = "index.html";
+        function logout() {
+            localStorage.clear();
+            window.location.href = "buyer-login.html";
+        }
+
+        function addToCart(orderId) {
+            alert(orderId + " ถูกเพิ่มลงในตะกร้าแล้ว (จำลอง)");
+        }
+
+        function searchProduct() {
+            window.location.href = "search.html";
+        }
+
+        function checkCart() {
+            window.location.href = "cart.html";
+        }
+
+        function accountSettings() {
+            window.location.href = "settings.html";
         }
     </script>
+
 </body>
 </html>

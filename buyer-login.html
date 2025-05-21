@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>เข้าสู่ระบบ ผู้ซื้อ</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #fff5f0;
+            color: #4a2c2a;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            color: #cc3300;
+            margin-top: 40px;
+        }
+
+        .form-wrapper {
+            max-width: 360px;
+            margin: 30px auto;
+            background-color: #ffe5d0;
+            padding: 40px 30px 60px;
+            border-radius: 12px;
+            box-shadow: 0 0 12px rgba(255, 102, 51, 0.2);
+            position: relative;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input {
+            margin: 12px 0;
+            padding: 12px;
+            border: 1px solid #ffb399;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px;
+            margin-top: 12px;
+            background-color: #ff704d;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #e65c3d;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+        }
+
+        .actions button {
+            width: 48%;
+        }
+
+        .back-button {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background-color: #ff704d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #e65c3d;
+        }
+    </style>
+</head>
+<body>
+    <h2>เข้าสู่ระบบ</h2>
+    <div class="form-wrapper">
+        <form id="loginForm">
+            <input type="email" id="loginEmail" placeholder="อีเมล" required>
+            <input type="password" id="loginPassword" placeholder="รหัสผ่าน" required>
+            <button type="submit">เข้าสู่ระบบ</button>
+
+            <div class="actions">
+                <button type="button" onclick="resetPassword()">รีเซ็ตรหัสผ่าน</button>
+                <button type="button" onclick="goToRegister()">สมัครสมาชิก</button>
+            </div>
+        </form>
+
+        <button type="button" class="back-button" onclick="goBack()">ย้อนกลับ</button>
+    </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const loginEmail = document.getElementById("loginEmail").value;
+            const loginPassword = document.getElementById("loginPassword").value;
+
+            const registeredEmail = localStorage.getItem("registeredEmail");
+            const registeredPassword = localStorage.getItem("registeredPassword");
+
+            if (loginEmail === registeredEmail && loginPassword === registeredPassword) {
+                alert("เข้าสู่ระบบสำเร็จ!");
+                window.location.href = "buyer-dashboard.html";
+            } else {
+                alert("อีเมลหรือรหัสผ่านไม่ถูกต้อง");
+            }
+        });
+
+        function resetPassword() {
+            const email = prompt("กรุณากรอกอีเมลที่ใช้สมัคร:");
+            const registeredEmail = localStorage.getItem("registeredEmail");
+
+            if (email === registeredEmail) {
+                const newPassword = prompt("กรอกรหัสผ่านใหม่:");
+                if (newPassword) {
+                    localStorage.setItem("registeredPassword", newPassword);
+                    alert("รีเซ็ตรหัสผ่านเรียบร้อยแล้ว");
+                }
+            } else {
+                alert("ไม่พบอีเมลนี้ในระบบ");
+            }
+        }
+
+        function goToRegister() {
+            window.location.href = "buyer-register.html";
+        }
+
+        function goBack() {
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>

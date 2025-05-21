@@ -58,7 +58,8 @@
         <input type="email" id="email" placeholder="อีเมล" required>
         <input type="password" id="password" placeholder="รหัสผ่าน" required>
         <button type="submit">สมัครสมาชิก</button>
-         <button type="button" onclick="goBack()">ย้อนกลับไปหน้าล็อกอิน</button>
+        <button type="button" onclick="goBack()">ย้อนกลับไปหน้าล็อกอิน</button>
+
     </form>
 
     <script>
@@ -73,11 +74,13 @@
             localStorage.setItem("registeredEmail", email);
             localStorage.setItem("registeredPassword", password);
 
-            window.location.href = "login.html";
+            window.location.href = "buyer-login.html";
         });
+        
         function goBack() {
             window.location.href = "buyer-login.html";
          }
+
     </script>
 </body>
 </html>

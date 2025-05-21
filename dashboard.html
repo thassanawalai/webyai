@@ -117,7 +117,8 @@
         </div>
 
         <div class="store-actions">
-            <button onclick="window.location.href='create-store.html'">สร้างร้านค้า</button>
+            <button id="createStoreBtn" onclick="window.location.href='create-store.html'">สร้างร้านค้า</button>
+            <button id="editStoreBtn" style="display: none;" onclick="window.location.href='edit-store.html'">แก้ไขร้านค้า</button>
             <button onclick="window.location.href='orders.html'">ดูคำสั่งซื้อ</button>
             <button onclick="logout()">ออกจากระบบ</button>
         </div>
@@ -145,21 +146,29 @@
         </div>
     </div>
 
-    <script>
-        // แสดงชื่อผู้ใช้และร้านค้า
-        document.getElementById("username").textContent = localStorage.getItem("registeredUsername") || "ไม่ทราบ";
-        document.getElementById("storeName").textContent = localStorage.getItem("storeName") || "ยังไม่ได้สร้างร้านค้า";
+   <script>
+    const username = localStorage.getItem("registeredUsername") || "ไม่ทราบ";
+    const storeName = localStorage.getItem("storeName");
 
-        function logout() {
-            localStorage.clear();
-            window.location.href = "login.html";
-        }
+    document.getElementById("username").textContent = username;
+    document.getElementById("storeName").textContent = storeName || "ยังไม่ได้สร้างร้านค้า";
 
-        // เพิ่มสินค้า (จำลอง)
-        document.getElementById("productForm").addEventListener("submit", function(e) {
-            e.preventDefault();
-            alert("เพิ่มสินค้าเรียบร้อยแล้ว (ตัวอย่าง)");
-        });
-    </script>
+    // แสดงปุ่มแก้ไขร้านค้าแทนปุ่มสร้างร้านค้า
+    if (storeName) {
+        document.getElementById("createStoreBtn").style.display = "none";
+        document.getElementById("editStoreBtn").style.display = "inline-block";
+    }
+    
+    function logout() {
+        localStorage.clear();
+        window.location.href = "login.html";
+    }
+
+    document.getElementById("productForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        alert("เพิ่มสินค้าเรียบร้อยแล้ว (ตัวอย่าง)");
+    });
+</script>
+
 </body>
 </html>

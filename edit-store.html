@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>สร้างร้านค้า</title>
+    <title>แก้ไขร้านค้า</title>
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -69,20 +69,35 @@
     </style>
 </head>
 <body>
-    <h2>สร้างร้านค้า</h2>
+    <h2>แก้ไขร้านค้า</h2>
     <div class="container">
-        <form id="storeForm">
+        <form id="editStoreForm">
             <input type="text" id="storeName" placeholder="ชื่อร้านค้า" required>
             <textarea id="storeDescription" placeholder="รายละเอียดร้านค้า"></textarea>
             <div class="actions">
-                <button type="submit">สร้างร้าน</button>
+                <button type="submit">บันทึก</button>
                 <button type="button" onclick="goBack()">ย้อนกลับ</button>
             </div>
         </form>
     </div>
 
     <script>
-        document.getElementById("storeForm").addEventListener("submit", function(event) {
+        // โหลดข้อมูลร้านค้าเดิม
+        window.onload = function () {
+            const savedName = localStorage.getItem("storeName");
+            const savedDesc = localStorage.getItem("storeDescription");
+
+            if (savedName) {
+                document.getElementById("storeName").value = savedName;
+            }
+
+            if (savedDesc) {
+                document.getElementById("storeDescription").value = savedDesc;
+            }
+        };
+
+        // บันทึกการแก้ไข
+        document.getElementById("editStoreForm").addEventListener("submit", function(event) {
             event.preventDefault();
             const name = document.getElementById("storeName").value;
             const description = document.getElementById("storeDescription").value;
@@ -90,7 +105,7 @@
             localStorage.setItem("storeName", name);
             localStorage.setItem("storeDescription", description);
 
-            alert("สร้างร้านค้าเรียบร้อยแล้ว!");
+            alert("บันทึกการแก้ไขร้านค้าเรียบร้อยแล้ว!");
             window.location.href = "dashboard.html";
         });
 

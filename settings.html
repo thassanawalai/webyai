@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ตั้งค่าบัญชี</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #fff5f0;
+            padding: 30px;
+        }
+
+        h2 {
+            color: #cc3300;
+            text-align: center;
+        }
+
+        .settings-form {
+            max-width: 400px;
+            margin: 30px auto;
+            background-color: #ffe5d0;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ffb399;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #ff704d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #e65c3d;
+        }
+    </style>
+</head>
+<body>
+    <h2>ตั้งค่าบัญชี</h2>
+    <div class="settings-form">
+        <input type="text" placeholder="ชื่อผู้ใช้ใหม่">
+        <input type="email" placeholder="อีเมลใหม่">
+        <input type="password" placeholder="รหัสผ่านใหม่">
+        <button onclick="saveSettings()">บันทึกการเปลี่ยนแปลง</button>
+    </div>
+
+    <script>
+        function saveSettings() {
+            alert("บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว (จำลอง)");
+        }
+    </script>
+</body>
+</html>

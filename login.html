@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>เข้าสู่ระบบ</title>
+    <title>เข้าสู่ระบบ ผู้ขาย</title>
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -66,31 +66,10 @@
             width: 48%;
         }
 
-        .back-button, .buyer-button {
-            position: absolute;
-            bottom: 20px;
-            padding: 8px 16px;
-            border-radius: 5px;
-            border: none;
-            color: white;
-            background-color: #ff704d;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
         .back-button {
-            left: 20px;
-            display: none;
-        }
-
-        .back-button:hover{
-            background-color: #e65c3d;
-        }
-        .buyer-button {
             position: absolute;
             bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            left: 20px;
             background-color: #ff704d;
             color: white;
             border: none;
@@ -100,11 +79,9 @@
             transition: background-color 0.3s;
         }
 
-        .buyer-button:hover {
+        .back-button:hover {
             background-color: #e65c3d;
         }
-
-        
     </style>
 </head>
 <body>
@@ -114,6 +91,7 @@
             <input type="email" id="loginEmail" placeholder="อีเมล" required>
             <input type="password" id="loginPassword" placeholder="รหัสผ่าน" required>
             <button type="submit">เข้าสู่ระบบ</button>
+            
 
             <div class="actions">
                 <button type="button" onclick="resetPassword()">รีเซ็ตรหัสผ่าน</button>
@@ -121,8 +99,7 @@
             </div>
         </form>
 
-        <button type="button" class="back-button" id="backBtn" onclick="goBack()">ย้อนกลับ</button>
-        <button type="button" class="buyer-button" onclick="goToBuyer()">ไปยังหน้าผู้ซื้อ</button>
+        <button type="button" class="back-button" onclick="goBack()">ย้อนกลับ</button>
     </div>
 
     <script>
@@ -165,17 +142,6 @@
         function goBack() {
             window.location.href = "index.html";
         }
-
-        function goToBuyer() {
-            window.location.href = "buyer-dashboard.html";
-        }
-
-        window.addEventListener("DOMContentLoaded", function () {
-            const referrer = document.referrer;
-            if (referrer.includes("index.html")) {
-                document.getElementById("backBtn").style.display = "block";
-            }
-        });
     </script>
 </body>
 </html>

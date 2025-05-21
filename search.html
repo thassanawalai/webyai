@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ค้นหาสินค้า</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #fff5f0;
+            padding: 30px;
+        }
+
+        h2 {
+            color: #cc3300;
+            text-align: center;
+        }
+
+        .search-box {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 60%;
+            border: 1px solid #ffb399;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #ff704d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .results {
+            margin-top: 40px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h2>ค้นหาสินค้า</h2>
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="พิมพ์ชื่อสินค้าที่ต้องการค้นหา...">
+        <button onclick="search()">ค้นหา</button>
+    </div>
+    <div class="results" id="results"></div>
+
+    <script>
+        function search() {
+            const keyword = document.getElementById("searchInput").value;
+            const results = document.getElementById("results");
+            results.innerHTML = `<p>ผลลัพธ์สำหรับ: <strong>${keyword}</strong> (จำลอง)</p>`;
+        }
+    </script>
+</body>
+</html>
