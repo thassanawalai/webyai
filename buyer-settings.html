@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <title>ตั้งค่าบัญชี</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Kanit', sans-serif;
+      background-color: #f5f9ff;
+      color: #2c3e50;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .form-wrapper {
+      width: 100%;
+      max-width: 360px;
+      background-color: #ffffff;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(52, 152, 219, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #3498db;
+      margin-top: 0;
+      font-weight: 600;
+      font-size: 1.8rem;
+    }
+
+    .input-group {
+      margin: 15px 0;
+    }
+
+    input {
+      font-family: 'Kanit', sans-serif;
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      border-color: #3498db;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+      outline: none;
+    }
+
+    button {
+      font-family: 'Kanit', sans-serif;
+      padding: 12px;
+      margin-top: 20px;
+      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+    }
+  </style>
+</head>
+<body>
+  <div class="form-wrapper">
+    <h2>ตั้งค่าบัญชี</h2>
+    <div class="input-group">
+      <input type="text" placeholder="ชื่อผู้ใช้ใหม่">
+    </div>
+    <div class="input-group">
+      <input type="email" placeholder="อีเมลใหม่">
+    </div>
+    <div class="input-group">
+      <input type="password" placeholder="รหัสผ่านใหม่">
+    </div>
+    <button onclick="saveSettings()">บันทึกการเปลี่ยนแปลง</button>
+  </div>
+
+  <script>
+    function saveSettings() {
+      alert("บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว (จำลอง)");
+    }
+  </script>
+</body>
+</html>

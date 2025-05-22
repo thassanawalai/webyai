@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ค้นหาสินค้า</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+
+            font-family: 'Kanit', sans-serif;
+            background-color: #f5f9ff;
+            color: #2c3e50;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h2 {
+            color: #3498db;
+            text-align: center;
+        }
+
+        .search-box {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        input[type="text"] {
+            padding: 12px;
+            width: 60%;
+            max-width: 400px;
+            border: 1px solid #99c2ff;
+            border-radius: 6px;
+            font-size: 16px;
+            font-family: 'Kanit', sans-serif;
+            background-color: #ffffff;
+        }
+
+        button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            margin-left: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #2470a3 0%, #3b749b 100%);
+        }
+
+        .results {
+            margin-top: 40px;
+            text-align: center;
+            background-color: #dceeff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+            width: 80%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <h2>ค้นหาสินค้า</h2>
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="พิมพ์ชื่อสินค้าที่ต้องการค้นหา...">
+        <button onclick="search()">ค้นหา</button>
+    </div>
+    <div class="results" id="results"></div>
+
+    <script>
+        function search() {
+            const keyword = document.getElementById("searchInput").value;
+            const results = document.getElementById("results");
+            results.innerHTML = `<p>ผลลัพธ์สำหรับ: <strong>${keyword}</strong> (จำลอง)</p>`;
+        }
+    </script>
+</body>
+</html>
