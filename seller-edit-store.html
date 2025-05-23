@@ -2,9 +2,8 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <title>แก้ไขร้านค้า</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <title>แก้ไขข้อมูลร้านค้า</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;500;600&display=swap" rel="stylesheet" />
   <style>
     * {
       box-sizing: border-box;
@@ -12,203 +11,193 @@
 
     body {
       font-family: 'Kanit', sans-serif;
-      background-color: #f3f7ff;
       margin: 0;
       padding: 0;
-    }
-
-    h2 {
-      text-align: center;
-      color: #3498db;
-      margin-top: 40px;
+      background-color: #f0f4fa;
     }
 
     .container {
-      max-width: 700px;
-      margin: 30px auto;
-      background-color: #ffffff;
-      padding: 40px 30px;
+      max-width: 1000px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 40px;
       border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+      display: flex;
+      gap: 40px;
+      box-shadow: 0 8px 24px rgba(0, 123, 255, 0.15);
     }
 
-    form {
-      display: flex;
-      flex-direction: column;
+    .left, .right {
+      flex: 1;
     }
 
-    .input-group {
-      display: flex;
-      flex-direction: column;
+    h2 {
+      margin-bottom: 24px;
+      color: #2c3e50;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .field {
       margin-bottom: 20px;
     }
 
-    label {
-      display: flex;
-      align-items: center;
+    .field label {
       font-weight: 500;
+      display: block;
       margin-bottom: 6px;
-      color: #495e80;
+      color: #34495e;
     }
 
-    label i {
-      margin-right: 8px;
-      color: #2980b9;
-    }
-
-    .input-group input,
-    .input-group textarea {
-      font-family: 'Kanit', sans-serif;
-      padding: 12px;
-      border: 1px solid #cbd5e1;
+    .field .view-mode {
+      background-color: #f8fafc;
+      border: 1px solid #d0d7e2;
+      padding: 10px 14px;
       border-radius: 8px;
-      font-size: 16px;
-      background-color: #f9fbff;
-      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .input-group textarea {
+    .field input, .field textarea {
+      width: 100%;
+      padding: 10px 14px;
+      font-family: 'Kanit', sans-serif;
+      font-size: 16px;
+      border: 1px solid #d0d7e2;
+      border-radius: 8px;
+      background-color: #ffffff;
+    }
+
+    .field textarea {
       resize: vertical;
       min-height: 80px;
     }
 
-    .row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
+    .edit-btn {
+      background: #2980b9;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
     }
 
-    .row .input-group {
-      flex: 1 1 48%;
-    }
-
-    @media (max-width: 600px) {
-      .row .input-group {
-        flex: 1 1 100%;
-      }
+    .edit-btn:hover {
+      background: #1f6391;
     }
 
     .actions {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
+      text-align: center;
+      margin-top: 30px;
     }
 
-    button {
+    .actions button {
       font-family: 'Kanit', sans-serif;
-      padding: 12px;
+      padding: 12px 20px;
       border: none;
       border-radius: 8px;
       font-size: 16px;
       cursor: pointer;
-      transition: background-color 0.3s;
-      width: 48%;
+      margin: 0 10px;
     }
 
-    button[type="submit"] {
-      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    .save-btn {
+      background: #2ecc71;
       color: white;
     }
 
-    button[type="submit"]:hover {
-      background: linear-gradient(135deg, #2470a3 0%, #3b749b 100%);
+    .save-btn:hover {
+      background: #27ae60;
     }
 
-    button[type="button"] {
-      background-color: #e2e8f0;
-      color: #374151;
+    .back-btn {
+      background: #bdc3c7;
+      color: #2c3e50;
     }
 
-    button[type="button"]:hover {
-      background-color: #cbd5e1;
+    .back-btn:hover {
+      background: #95a5a6;
     }
   </style>
 </head>
 <body>
-  <h2><i class="fas fa-edit"></i> แก้ไขร้านค้า</h2>
+  <h2>แก้ไขข้อมูลร้านค้า</h2>
   <div class="container">
-    <form id="editForm">
-      <div class="input-group">
-        <label for="storeName"><i class="fas fa-tag"></i> ชื่อร้านค้า</label>
-        <input type="text" id="storeName" required />
-      </div>
-
-      <div class="input-group">
-        <label for="storeDescription"><i class="fas fa-comment-dots"></i> คำอธิบายร้าน</label>
-        <textarea id="storeDescription"></textarea>
-      </div>
-
-      <div class="input-group">
-        <label for="storeLogo"><i class="fas fa-image"></i> โลโก้ร้าน / รูปปก</label>
-        <input type="file" id="storeLogo" accept="image/*" />
-      </div>
-
-      <div class="input-group">
-        <label for="storeAddress"><i class="fas fa-map-marker-alt"></i> ที่อยู่ร้าน / คลังสินค้า</label>
-        <textarea id="storeAddress"></textarea>
-      </div>
-
-      <div class="row">
-        <div class="input-group">
-          <label for="country"><i class="fas fa-globe-asia"></i> ประเทศ</label>
-          <input type="text" id="country" />
+    <div class="left">
+      <div class="field">
+        <label>ชื่อร้านค้า</label>
+        <div class="view-mode">
+          <span id="storeNameView">ร้านของใบเตย</span>
+          <button class="edit-btn" onclick="toggleEdit('storeName')">แก้ไข</button>
         </div>
-
-        <div class="input-group">
-          <label for="province"><i class="fas fa-map"></i> จังหวัด</label>
-          <input type="text" id="province" />
-        </div>
+        <input type="text" id="storeName" style="display:none;" value="ร้านของใบเตย">
       </div>
 
-      <div class="row">
-        <div class="input-group">
-          <label for="district"><i class="fas fa-location-arrow"></i> เขต / อำเภอ</label>
-          <input type="text" id="district" />
+      <div class="field">
+        <label>คำอธิบายร้าน</label>
+        <div class="view-mode">
+          <span id="descriptionView">จำหน่ายสินค้าน่ารัก ของขวัญ และของสะสม</span>
+          <button class="edit-btn" onclick="toggleEdit('description')">แก้ไข</button>
         </div>
-
-        <div class="input-group">
-          <label for="postalCode"><i class="fas fa-mail-bulk"></i> รหัสไปรษณีย์</label>
-          <input type="text" id="postalCode" />
-        </div>
+        <textarea id="description" style="display:none;">จำหน่ายสินค้าน่ารัก ของขวัญ และของสะสม</textarea>
       </div>
 
-      <div class="actions">
-        <button type="submit"><i class="fas fa-save"></i> บันทึกการแก้ไข</button>
-        <button type="button" onclick="goBack()"><i class="fas fa-arrow-left"></i> ย้อนกลับ</button>
+      <div class="field">
+        <label>โลโก้ร้าน</label>
+        <input type="file" id="logoUpload" accept="image/*">
       </div>
-    </form>
+    </div>
+
+    <div class="right">
+      <div class="field">
+        <label>ที่อยู่ร้าน</label>
+        <div class="view-mode">
+          <span id="addressView">509 ซอยบางนา-ตราด 56, เขตบางนา, กรุงเทพ</span>
+          <button class="edit-btn" onclick="toggleEdit('address')">แก้ไข</button>
+        </div>
+        <textarea id="address" style="display:none;">509 ซอยบางนา-ตราด 56, เขตบางนา, กรุงเทพ</textarea>
+      </div>
+
+      <div class="field">
+        <label>จังหวัด</label>
+        <div class="view-mode">
+          <span id="provinceView">กรุงเทพมหานคร</span>
+          <button class="edit-btn" onclick="toggleEdit('province')">แก้ไข</button>
+        </div>
+        <input type="text" id="province" style="display:none;" value="กรุงเทพมหานคร">
+      </div>
+
+      <div class="field">
+        <label>รหัสไปรษณีย์</label>
+        <div class="view-mode">
+          <span id="zipcodeView">10260</span>
+          <button class="edit-btn" onclick="toggleEdit('zipcode')">แก้ไข</button>
+        </div>
+        <input type="text" id="zipcode" style="display:none;" value="10260">
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="save-btn" onclick="saveStore()">บันทึก</button>
+    <button class="back-btn" onclick="goBack()">ย้อนกลับ</button>
   </div>
 
   <script>
-    // โหลดข้อมูลเก่าเข้าแบบฟอร์ม
-    window.onload = function () {
-      document.getElementById("storeName").value = localStorage.getItem("storeName") || "";
-      document.getElementById("storeDescription").value = localStorage.getItem("storeDescription") || "";
-      document.getElementById("storeAddress").value = localStorage.getItem("storeAddress") || "";
-      document.getElementById("country").value = localStorage.getItem("storeCountry") || "";
-      document.getElementById("province").value = localStorage.getItem("storeProvince") || "";
-      document.getElementById("district").value = localStorage.getItem("storeDistrict") || "";
-      document.getElementById("postalCode").value = localStorage.getItem("storePostalCode") || "";
-    };
+    function toggleEdit(field) {
+      document.getElementById(field).style.display = 'block';
+      document.getElementById(field + 'View').parentElement.style.display = 'none';
+    }
 
-    // บันทึกข้อมูลใหม่
-    document.getElementById("editForm").addEventListener("submit", function (event) {
-      event.preventDefault();
-
-      localStorage.setItem("storeName", document.getElementById("storeName").value);
-      localStorage.setItem("storeDescription", document.getElementById("storeDescription").value);
-      localStorage.setItem("storeAddress", document.getElementById("storeAddress").value);
-      localStorage.setItem("storeCountry", document.getElementById("country").value);
-      localStorage.setItem("storeProvince", document.getElementById("province").value);
-      localStorage.setItem("storeDistrict", document.getElementById("district").value);
-      localStorage.setItem("storePostalCode", document.getElementById("postalCode").value);
-
-      alert("บันทึกข้อมูลเรียบร้อยแล้ว!");
-      window.location.href = "seller-dashboard.html";
-    });
+    function saveStore() {
+      alert('บันทึกข้อมูลร้านค้าสำเร็จ (จำลอง)');
+      // TODO: เชื่อมกับฐานข้อมูลจริง
+    }
 
     function goBack() {
-      window.location.href = "seller-dashboard.html";
+      window.location.href = 'seller-dashboard.html';
     }
   </script>
 </body>

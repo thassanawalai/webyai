@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <title>ตั้งค่าบัญชี</title>
+  <title>ตั้งค่าบัญชีผู้ใช้</title>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     * {
@@ -11,19 +11,18 @@
 
     body {
       font-family: 'Kanit', sans-serif;
-      background-color: #f5f9ff;
+      background-color: #f0f8ff;
       color: #2c3e50;
       margin: 0;
-      padding: 0;
+      padding: 40px 0;
       display: flex;
       justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+      align-items: flex-start;
     }
 
     .form-wrapper {
-      width: 100%;
-      max-width: 360px;
+      width: 95%;
+      max-width: 600px;
       background-color: #ffffff;
       padding: 40px;
       border-radius: 20px;
@@ -33,16 +32,23 @@
     h2 {
       text-align: center;
       color: #3498db;
-      margin-top: 0;
+      margin-bottom: 30px;
       font-weight: 600;
-      font-size: 1.8rem;
+      font-size: 2rem;
     }
 
     .input-group {
       margin: 15px 0;
     }
 
-    input {
+    .input-group label {
+      font-weight: 500;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    input,
+    select {
       font-family: 'Kanit', sans-serif;
       width: 100%;
       padding: 12px;
@@ -52,51 +58,124 @@
       transition: all 0.3s ease;
     }
 
-    input:focus {
+    input:focus,
+    select:focus {
       border-color: #3498db;
       box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
       outline: none;
     }
 
-    button {
+    .btn {
       font-family: 'Kanit', sans-serif;
       padding: 12px;
-      margin-top: 20px;
+      margin-top: 25px;
       background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
       color: white;
       border: none;
       border-radius: 8px;
       font-size: 16px;
       cursor: pointer;
-      transition: all 0.3s ease;
       width: 100%;
+      transition: all 0.3s ease;
       box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
     }
 
-    button:hover {
+    .btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+    }
+
+    .back-btn {
+      background: #bdc3c7;
+      margin-top: 15px;
+    }
+
+    .back-btn:hover {
+      background: #95a5a6;
     }
   </style>
 </head>
 <body>
   <div class="form-wrapper">
-    <h2>ตั้งค่าบัญชี</h2>
+    <h2>ตั้งค่าบัญชีผู้ใช้</h2>
+
     <div class="input-group">
-      <input type="text" placeholder="ชื่อผู้ใช้ใหม่">
+      <label for="username">ชื่อผู้ใช้</label>
+      <input type="text" id="username" placeholder="ชื่อผู้ใช้ใหม่">
     </div>
+
     <div class="input-group">
-      <input type="email" placeholder="อีเมลใหม่">
+      <label for="fullname">ชื่อ-นามสกุล</label>
+      <input type="text" id="fullname" placeholder="ชื่อเต็ม">
     </div>
+
     <div class="input-group">
-      <input type="password" placeholder="รหัสผ่านใหม่">
+      <label for="email">อีเมล</label>
+      <input type="email" id="email" placeholder="example@email.com">
     </div>
-    <button onclick="saveSettings()">บันทึกการเปลี่ยนแปลง</button>
+
+    <div class="input-group">
+      <label for="phone">เบอร์โทรศัพท์</label>
+      <input type="tel" id="phone" placeholder="08xxxxxxxx">
+    </div>
+
+    <div class="input-group">
+      <label for="password">รหัสผ่านใหม่</label>
+      <input type="password" id="password" placeholder="********">
+    </div>
+
+    <div class="input-group">
+      <label for="gender">เพศ</label>
+      <select id="gender">
+        <option value="">-- เลือกเพศ --</option>
+        <option value="ชาย">ชาย</option>
+        <option value="หญิง">หญิง</option>
+        <option value="ไม่ระบุ">ไม่ระบุ</option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label for="birthdate">วันเกิด</label>
+      <input type="date" id="birthdate">
+    </div>
+
+    <div class="input-group">
+      <label for="address">ที่อยู่จัดส่ง</label>
+      <input type="text" id="address" placeholder="บ้านเลขที่ / หมู่บ้าน / ถนน">
+    </div>
+
+    <div class="input-group">
+      <label for="province">จังหวัด</label>
+      <input type="text" id="province" placeholder="กรุงเทพมหานคร">
+    </div>
+
+    <div class="input-group">
+      <label for="district">อำเภอ/เขต</label>
+      <input type="text" id="district" placeholder="เขตบางนา">
+    </div>
+
+    <div class="input-group">
+      <label for="zipcode">รหัสไปรษณีย์</label>
+      <input type="text" id="zipcode" placeholder="10260">
+    </div>
+
+    <div class="input-group">
+      <label for="profilePic">รูปโปรไฟล์ (ชื่อไฟล์)</label>
+      <input type="text" id="profilePic" placeholder="profile.jpg">
+    </div>
+
+    <button class="btn" onclick="saveSettings()">บันทึกการเปลี่ยนแปลง</button>
+    <button class="btn back-btn" onclick="goBack()">ย้อนกลับ</button>
   </div>
 
   <script>
     function saveSettings() {
+      // จำลองการบันทึก
       alert("บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว (จำลอง)");
+    }
+
+    function goBack() {
+      window.location.href = "buyer-dashboard.html";
     }
   </script>
 </body>
