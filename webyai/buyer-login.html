@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>เข้าสู่ระบบ ผู้ซื้อ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #f5f9ff;
+            color: #2c3e50;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h2 {
+            text-align: center;
+            color: #3498db;
+            margin-top: 0;
+            font-weight: 600;
+            font-size: 1.8rem;
+        }
+
+        .form-wrapper {
+            width: 100%;
+            max-width: 360px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(52, 152, 219, 0.1);
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .form-wrapper:hover {
+            transform: translateY(-5px);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group {
+            position: relative;
+            margin: 15px 0;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7f8c8d;
+        }
+
+        input {
+            font-family: 'Kanit', sans-serif;
+            width: 85%;
+            margin: 0 auto;
+            padding: 12px 12px 12px 40px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        input:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+
+        button {
+            font-family: 'Kanit', sans-serif;
+            padding: 12px;
+            margin-top: 15px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+        }
+
+        button i {
+            margin-right: 8px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        .actions button {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .back-button {
+            margin-top: 20px;
+            width: 100%;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="form-wrapper">
+        <h2>เข้าสู่ระบบ ผู้ซื้อ</h2>
+        <form id="loginForm">
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="loginEmail" placeholder="อีเมล" required>
+            </div>
+            
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="loginPassword" placeholder="รหัสผ่าน" required>
+            </div>
+            
+            <button type="submit">
+                <i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ
+            </button>
+
+            <div class="actions">
+                <button type="button" onclick="resetPassword()">
+                    <i class="fas fa-key"></i> รีเซ็ตรหัสผ่าน
+                </button>
+                <button type="button" onclick="goToRegister()">
+                    <i class="fas fa-user-plus"></i> สมัครสมาชิก
+                </button>
+                </div>
+             </form>
+
+        <!-- ปุ่มย้อนกลับย้ายมาอยู่นอก form -->
+        <button type="button" class="back-button" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i> ย้อนกลับ
+        </button>
+    </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const loginEmail = document.getElementById("loginEmail").value;
+            const loginPassword = document.getElementById("loginPassword").value;
+
+            const registeredEmail = localStorage.getItem("registeredEmail");
+            const registeredPassword = localStorage.getItem("registeredPassword");
+
+            if (loginEmail === registeredEmail && loginPassword === registeredPassword) {
+                alert("เข้าสู่ระบบสำเร็จ!");
+                window.location.href = "buyer-dashboard.html";
+            } else {
+                alert("อีเมลหรือรหัสผ่านไม่ถูกต้อง");
+            }
+        });
+
+        function resetPassword() {
+            const email = prompt("กรุณากรอกอีเมลที่ใช้สมัคร:");
+            const registeredEmail = localStorage.getItem("registeredEmail");
+
+            if (email === registeredEmail) {
+                const newPassword = prompt("กรอกรหัสผ่านใหม่:");
+                if (newPassword) {
+                    localStorage.setItem("registeredPassword", newPassword);
+                    alert("รีเซ็ตรหัสผ่านเรียบร้อยแล้ว");
+                }
+            } else {
+                alert("ไม่พบอีเมลนี้ในระบบ");
+            }
+        }
+
+        function goToRegister() {
+            window.location.href = "buyer-register.html";
+        }
+
+        function goBack() {
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>
