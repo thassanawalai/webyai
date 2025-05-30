@@ -139,9 +139,7 @@
                 <input type="password" id="password" placeholder="รหัสผ่าน" required>
             </div>
             
-            <button type="submit">
-                <i class="fas fa-user-plus"></i> สมัครสมาชิก
-            </button>
+            <button type="button" onclick="registerUser()">สมัครสมาชิก</button>
         
         <button type="button" class="back-button" onclick="goBack()">
             <i class="fas fa-arrow-left"></i> ย้อนกลับ
@@ -150,23 +148,26 @@
     </div>
 
     <script>
-        document.getElementById("registerForm").addEventListener("submit", function(event) {
-            event.preventDefault();
+        function registerUser() {
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-            const username = document.getElementById("username").value;
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
+            if (!username || !email || !password) {
+                alert('กรุณากรอกข้อมูลให้ครบ');
+                return;
+            }
 
-            localStorage.setItem("registeredUsername", username);
-            localStorage.setItem("registeredEmail", email);
-            localStorage.setItem("registeredPassword", password);
+            localStorage.setItem('registeredUsername', username);
+            localStorage.setItem('registeredEmail', email);
+            localStorage.setItem('registeredPassword', password);
 
-            alert("สมัครสมาชิกสำเร็จ!");
-            window.location.href = "buyer-login.html";
-        });
+            window.location.href = 'buyer-setting.html';
+        }
+
         
         function goBack() {
-            window.location.href = "buyer-login.html";
+            window.location.href = "buyer-dashboard.html";
         }
     </script>
 </body>

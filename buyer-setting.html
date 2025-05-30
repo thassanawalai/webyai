@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>ตั้งค่าผู้ซื้อ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Kanit', sans-serif;
+      background-color: #f7faff;
+      padding: 30px;
+      display: flex;
+      justify-content: center;
+    }
+    .form-box {
+      background: #fff;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 600px;
+    }
+    h2 {
+      text-align: center;
+      color: #3498db;
+      margin-bottom: 30px;
+    }
+    .input-group {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    .btn {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background: #2ecc71;
+      color: white;
+      border: none;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #27ae60;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-box">
+    <h2>ตั้งค่าผู้ซื้อ</h2>
+    <div class="input-group">
+      <label>ชื่อผู้ใช้</label>
+      <input type="text" id="username">
+    </div>
+    <div class="input-group">
+      <label>ชื่อ-นามสกุล</label>
+      <input type="text" id="fullname">
+    </div>
+    <div class="input-group">
+      <label>อีเมล</label>
+      <input type="email" id="email">
+    </div>
+    <div class="input-group">
+      <label>เบอร์โทรศัพท์</label>
+      <input type="tel" id="phone">
+    </div>
+    <div class="input-group">
+      <label>รหัสผ่านใหม่</label>
+      <input type="password" id="password">
+    </div>
+    <div class="input-group">
+      <label>เพศ</label>
+      <select id="gender">
+        <option value="">เลือกเพศ</option>
+        <option value="ชาย">ชาย</option>
+        <option value="หญิง">หญิง</option>
+        <option value="ไม่ระบุ">ไม่ระบุ</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label>วันเกิด</label>
+      <input type="date" id="birthdate">
+    </div>
+    <div class="input-group">
+      <label>ที่อยู่</label>
+      <input type="text" id="address">
+    </div>
+    <div class="input-group">
+      <label>จังหวัด</label>
+      <input type="text" id="province">
+    </div>
+    <div class="input-group">
+      <label>อำเภอ/เขต</label>
+      <input type="text" id="district">
+    </div>
+    <div class="input-group">
+      <label>รหัสไปรษณีย์</label>
+      <input type="text" id="zipcode">
+    </div>
+    <div class="input-group">
+      <label>ชื่อไฟล์รูปโปรไฟล์</label>
+      <input type="text" id="profilePic" placeholder="profile.jpg">
+    </div>
+    <button class="btn" onclick="saveBuyer()">บันทึกข้อมูล</button>
+  </div>
+
+  <script>
+    window.onload = () => {
+      const username = localStorage.getItem('registeredUsername');
+      const email = localStorage.getItem('registeredEmail');
+
+      if (username) document.getElementById('username').value = username;
+      if (email) document.getElementById('email').value = email;
+    }
+
+    function saveBuyer() {
+      const buyer = {
+        username: document.getElementById("username").value,
+        fullname: document.getElementById("fullname").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phone").value,
+        password: document.getElementById("password").value,
+        gender: document.getElementById("gender").value,
+        birthdate: document.getElementById("birthdate").value,
+        address: document.getElementById("address").value,
+        province: document.getElementById("province").value,
+        district: document.getElementById("district").value,
+        zipcode: document.getElementById("zipcode").value,
+        profilePic: document.getElementById("profilePic").value,
+      };
+
+      localStorage.setItem("buyerProfile", JSON.stringify(buyer));
+      alert("บันทึกข้อมูลผู้ซื้อเรียบร้อยแล้ว!");
+    }
+  </script>
+</body>
+</html>
