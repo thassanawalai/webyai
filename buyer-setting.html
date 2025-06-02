@@ -139,6 +139,7 @@
         zipcode: document.getElementById("zipcode").value,
         profilePic: document.getElementById("profilePic").value,
       };
+      window.location.href = "buyer-login.html";
 
       localStorage.setItem("buyerProfile", JSON.stringify(buyer));
       alert("บันทึกข้อมูลผู้ซื้อเรียบร้อยแล้ว!");

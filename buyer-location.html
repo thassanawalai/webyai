@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Libra Market</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Kanit', sans-serif;
+      background: #f0f8ff;
+      color: #2c3e50;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      padding: 15px 30px;
+      color: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      z-index: 1001;
+      height: 70px;
+    }
+
+    .navbar-left {
+      font-size: 32px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+    }
+
+    .nav-item {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      padding: 8px 0;
+      transition: opacity 0.2s;
+      position: relative;
+    }
+
+    .nav-item:hover {
+      opacity: 0.8;
+    }
+
+    .nav-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: white;
+      transition: width 0.3s ease;
+    }
+
+    .nav-item:hover::after {
+      width: 100%;
+    }
+
+    .nav-buttons {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .profile {
+      position: relative;
+    }
+
+    .username-display {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 6px 12px;
+      border-radius: 20px;
+      transition: background 0.3s;
+    }
+
+    .username-display:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .username-text {
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      right: 0;
+      top: 100%;
+      background: white;
+      color: #333;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      min-width: 220px;
+      z-index: 1000;
+      margin-top: 8px;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .dropdown-menu.show {
+      display: flex;
+    }
+
+    .dropdown-header {
+      padding: 15px;
+      background: #f0f8ff;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .dropdown-username {
+      font-weight: bold;
+      font-size: 16px;
+      color: #2980b9;
+    }
+
+    .dropdown-email {
+      font-size: 12px;
+      color: #777;
+      margin-top: 3px;
+    }
+
+    .dropdown-menu a {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      text-decoration: none;
+      color: #333;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+      transition: background-color 0.2s ease;
+    }
+
+    .dropdown-menu a:last-child {
+      border-bottom: none;
+    }
+
+    .dropdown-menu a:hover {
+      background-color: #f6f6f6;
+    }
+
+    .dropdown-menu i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+
+    .btn {
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      transition: transform 0.2s;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .btn:hover {
+      transform: scale(1.1);
+      background: rgba(255,255,255,0.2);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 36px;
+      height: 36px;
+      background-color: white;
+      border-radius: 50%;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: transform 0.3s;
+      position: relative;
+      z-index: 1001;
+    }
+
+    .hamburger span {
+      background: #ffffff;
+      height: 3px;
+      width: 16px;
+      margin: 3px 0;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(4px, 4px);
+    }
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(4px, -4px);
+    }
+    @media (max-width: 768px) {
+      .hamburger {
+        display: flex;
+      }
+
+      .nav-links {
+        display: none;
+      }
+      
+      .navbar {
+        padding: 15px 20px;
+      }
+      
+      .username-text {
+        max-width: 80px;
+      }
+    }
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 70%;
+      height: 100%;
+      background: white;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+      padding: 70px 20px 20px;
+      z-index: 1000;
+      overflow-y: auto;
+    }
+
+    .mobile-menu.show {
+      display: flex;
+    }
+
+    .mobile-menu .nav-item {
+      color: #333;
+      padding: 12px 15px;
+      margin-bottom: 5px;
+      border-radius: 6px;
+      background-color: #f0f8ff;
+      text-decoration: none;
+    }
+
+    .mobile-menu .nav-item:hover {
+      background-color: #3498db;
+      color: white;
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+    }
+
+    .overlay.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay" id="overlay" onclick="toggleMobileMenu()"></div> 
+
+  <div class="navbar">
+    <div class="navbar-left" onclick="goHome()">
+      <span>🛍️</span>
+      <span>Libra Market</span>
+    </div>
+
+    <div class="nav-links">
+      <a href="#" class="nav-item" onclick="viewPromotions()">หน้าแรก</a>
+      <a href="#" class="nav-item" onclick="searchProduct()">สินค้า</a>
+      <a href="#" class="nav-item" onclick="viewReview()">วิธีใช้งาน</a>
+      <a href="#" class="nav-item" onclick="viewPromotions()">เกี่ยวกับเรา</a>
+      <a href="#" class="nav-item" onclick="searchProduct()">ติดต่อ</a>
+    </div>
+
+    <div class="nav-buttons">
+      <div class="profile" onclick="toggleDropdown(event)">
+        <div class="username-display">
+          <i class="fas fa-user"></i>
+          <span class="username-text" id="usernameDisplay">ล็อกอิน</span>
+        </div>
+        <div class="dropdown-menu" id="dropdownMenu">
+          <div class="dropdown-header">
+            <i class="fas fa-user-circle"></i>
+            <div>
+              <div class="dropdown-username" id="dropdownUsername">ผู้ใช้งาน</div>
+              <div class="dropdown-email" id="dropdownEmail">example@email.com</div>
+            </div>
+          </div>
+          <a href="#" onclick="manageAccount()"><i class="fas fa-user-cog"></i> จัดการบัญชี</a>
+          <a href="#" onclick="viewOrders()"><i class="fas fa-box"></i> การสั่งซื้อ</a>
+          <a href="#" onclick="viewReview()"><i class="fas fa-star"></i> รีวิวของฉัน</a>
+          <a href="#"><i class="fas fa-sync-alt"></i> คืนสินค้า</a>
+          <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</a>
+        </div>
+      </div>
+      
+      <button class="btn" onclick="checkCart()">
+        <i class="fas fa-shopping-cart"></i>
+      </button>
+      
+      <div class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+      <a href="#" class="nav-item" onclick="viewPromotions()">หน้าแรก</a>
+      <a href="#" class="nav-item" onclick="searchProduct()">สินค้า</a>
+      <a href="#" class="nav-item" onclick="viewReview()">วิธีใช้งาน</a>
+      <a href="#" class="nav-item" onclick="viewPromotions()">เกี่ยวกับเรา</a>
+      <a href="#" class="nav-item" onclick="searchProduct()">ติดต่อ</a>
+  </div>
+  
+  <script>
+    // ดึงข้อมูลผู้ใช้งานจาก localStorage
+    const username = localStorage.getItem("registeredUsername");
+    const email = localStorage.getItem("registeredEmail") || "example@email.com";
+    
+    const usernameDisplay = document.getElementById("usernameDisplay");
+    const dropdownUsername = document.getElementById("dropdownUsername");
+    const dropdownEmail = document.getElementById("dropdownEmail");
+    const dropdown = document.getElementById("dropdownMenu");
+    const hamburger = document.getElementById("hamburger");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const overlay = document.getElementById("overlay");
+
+    // แสดงชื่อผู้ใช้งานถ้ามี
+    if (username) {
+      usernameDisplay.textContent = username;
+      dropdownUsername.textContent = username;
+      dropdownEmail.textContent = email;
+    }
+
+    function toggleDropdown(event) {
+      event.stopPropagation();
+      if (!username) {
+        window.location.href = "buyer-login.html";
+        return;
+      }
+      dropdown.classList.toggle("show");
+    }
+
+    document.addEventListener("click", function (event) {
+      if (!event.target.closest(".profile")) {
+        dropdown.classList.remove("show");
+      }
+    });
+
+    function toggleMobileMenu() {
+      hamburger.classList.toggle("active");
+      mobileMenu.classList.toggle("show");
+      overlay.classList.toggle("show");
+    }
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = "buyer-login.html";
+    }
+
+    function manageAccount() {
+      window.location.href = "buyer-setting.html";
+    }
+
+    function setlocation(){
+      window.location.href = "buyer-setlocation"
+    }
+
+    function viewOrders() {
+      window.location.href = "buyer-orders.html";
+    }
+
+    function viewPromotions() {
+      window.location.href = "buyer-promotions.html";
+    }
+
+    function viewReview() {
+      window.location.href = "buyer-review.html";
+    }
+
+    function searchProduct() {
+      window.location.href = "buyer-search.html";
+    }
+
+    function checkCart() {
+      window.location.href = "buyer-cart.html";
+    }
+
+    function goHome() {
+      window.location.href = "buyer-dashboard.html";
+    }
+  </script>
+</body>
+</html>
