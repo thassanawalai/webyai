@@ -39,7 +39,7 @@
 
     .nav-links {
       display: flex;
-      gap: 25px;
+      gap: 50px;
     }
 
     .nav-item {
@@ -355,9 +355,8 @@
   <div class="overlay" id="overlay" onclick="toggleMobileMenu()"></div> 
 
   <div class="navbar">
-    <div class="navbar-left" onclick="goHome()">
-      <span>🛍️</span>
-      <span>Libra Market</span>
+     <div class="navbar-left" onclick="goHome()">
+      <span><img src="images/logo.png" style="background-color: #ffffff;height: 100px; width: auto;border-radius: 35px;box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);"></span>
     </div>
 
     <div class="nav-links">
@@ -365,7 +364,6 @@
       <a href="#" class="nav-item" onclick="viewProduct()">สินค้า</a>
       <a href="#" class="nav-item" onclick="viewHowtouse()">วิธีใช้งาน</a>
       <a href="#" class="nav-item" onclick="viewAboutus()">เกี่ยวกับเรา</a>
-      <a href="#" class="nav-item" onclick="viewContactus()">ติดต่อ</a>
     </div>
 
     <div class="nav-buttons">
@@ -405,7 +403,6 @@
       <a href="#" class="nav-item" onclick="viewProduct()">สินค้า</a>
       <a href="#" class="nav-item" onclick="viewHowtouse()">วิธีใช้งาน</a>
       <a href="#" class="nav-item" onclick="viewAboutus()">เกี่ยวกับเรา</a>
-      <a href="#" class="nav-item" onclick="viewContactus()">ติดต่อ</a>
   </div>
   
   <section class="banner">
@@ -495,9 +492,6 @@
       window.location.href = "buyer-dashboard.html";
     }
 
-    function viewContactus() {
-      window.location.href = "buyer-contactus.html";
-    }
   </script>
 </body>
 </html>
