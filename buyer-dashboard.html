@@ -199,8 +199,8 @@
       display: none;
       flex-direction: column;
       position: fixed;
-      top: 0;
-      left: 0;
+      top: 30px;
+      left: 0px;
       width: 70%;
       height: 100%;
       background: white;
@@ -208,6 +208,7 @@
       padding: 70px 20px 20px;
       z-index: 1000;
       overflow-y: auto;
+      gap: 10px;
     }
     .mobile-menu.show {
       display: flex;
@@ -219,9 +220,10 @@
       border-radius: 6px;
       background-color: #f0f8ff;
       text-decoration: none;
+
     }
     .mobile-menu .nav-item:hover {
-      background-color: #3498db;
+      background-color: #000000;
       color: white;
     }
     .overlay {
@@ -301,6 +303,7 @@
       max-width: 400px; /* จำกัดขนาดสูงสุด */
       height: auto;
       border-radius: 8px;
+
 
     }
     .product-details {
@@ -914,16 +917,6 @@
                 <a href="#"><i class="fab fa-line"></i></a>
                 <a href="#"><i class="fab fa-instagram"></i></a>
             </div>
-        </div>
-        
-        <div class="footer-section">
-            <h3>ลิงก์ด่วน</h3>
-            <ul>
-                <li><a href="#" onclick="goHome()">หน้าแรก</a></li>
-                <li><a href="#" onclick="viewProduct()">สินค้าทั้งหมด</a></li>
-                <li><a href="#" onclick="viewHowtouse()">วิธีการสั่งซื้อ</a></li>
-                <li><a href="#">คำถามที่พบบ่อย</a></li>
-            </ul>
         </div>
         
         <div class="footer-section contact-info">
