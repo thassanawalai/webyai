@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>เข้าสู่ระบบ ผู้ซื้อ</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -15,6 +17,103 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+        }
+
+        .container {
+            display: flex;
+            width: 900px;
+            height: 550px;
+            background-color: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .left-section {
+            flex: 1;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .left-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(30deg);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+        }
+
+        .logo i {
+            background-color: white;
+            color: #3498db;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .left-section h1 {
+            font-size: 2.2rem;
+            margin: 0 0 15px;
+            font-weight: 700;
+        }
+
+        .left-section p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .features {
+            margin-top: 30px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+
+        .feature i {
+            margin-right: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .right-section {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         h2 {
@@ -23,22 +122,7 @@
             margin-top: 0;
             font-weight: 600;
             font-size: 1.8rem;
-        }
-
-        .form-wrapper {
-            width: 100%;
-            max-width: 360px;
-            margin: 20px auto;
-            background-color: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(52, 152, 219, 0.1);
-            position: relative;
-            transition: transform 0.3s ease;
-        }
-
-        .form-wrapper:hover {
-            transform: translateY(-5px);
+            margin-bottom: 30px;
         }
 
         form {
@@ -61,11 +145,10 @@
 
         input {
             font-family: 'Kanit', sans-serif;
-            width: 85%;
-            margin: 0 auto;
-            padding: 12px 12px 12px 40px;
+            width: 100%;
+            padding: 14px 14px 14px 45px;
             border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 16px;
             transition: all 0.3s ease;
             display: block;
@@ -79,23 +162,24 @@
 
         button {
             font-family: 'Kanit', sans-serif;
-            padding: 12px;
-            margin-top: 15px;
+            padding: 14px;
+            margin-top: 20px;
             background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 16px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
+            font-weight: 500;
         }
 
         button:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
             box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
         }
 
@@ -112,70 +196,142 @@
 
         .actions button {
             width: 100%;
-            padding: 10px;
-            font-size: 14px;
+            padding: 12px;
+            font-size: 15px;
+            margin-top: 0;
         }
 
         .back-button {
-            margin-top: 20px;
-            width: 100%;
-            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-            color: white;
+            margin-top: 15px;
+            background: #f5f5f5;
+            color: #2c3e50;
             border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
+            padding: 12px;
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 16px;
+            font-weight: 500;
+            border: 1px solid #e0e0e0;
         }
 
         .back-button:hover {
+            background: #e9e9e9;
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+        }
+
+        .switch-form {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 15px;
+        }
+
+        .switch-form a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .switch-form a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 950px) {
+            .container {
+                width: 95%;
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .left-section, .right-section {
+                padding: 30px;
+            }
+            
+            .left-section {
+                padding-top: 50px;
+                padding-bottom: 50px;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="form-wrapper">
-        <h2>เข้าสู่ระบบ ผู้ซื้อ</h2>
-        <form id="loginForm">
-            <div class="input-group">
-                <i class="fas fa-envelope"></i>
-                <input type="email" id="loginEmail" placeholder="อีเมล" required>
+    <div class="container">
+        <div class="left-section">
+            <div class="logo">
+                <i class="fas fa-eye"></i>
+                Alice Moist Daily
             </div>
+            <h1>ยินดีต้อนรับ</h1>
+            <p>เข้าสู่ระบบเพื่อสัมผัสประสบการณ์การซื้อเลนส์สัมผัสรายวันคุณภาพสูง พร้อมบริการและโปรโมชั่นพิเศษ</p>
             
-            <div class="input-group">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="loginPassword" placeholder="รหัสผ่าน" required>
-            </div>
-            
-            <button type="submit">
-                <i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ
-            </button>
-
-            <div class="actions">
-                <button type="button" onclick="resetPassword()">
-                    <i class="fas fa-key"></i> รีเซ็ตรหัสผ่าน
-                </button>
-                <button type="button" onclick="goToRegister()">
-                    <i class="fas fa-user-plus"></i> สมัครสมาชิก
-                </button>
+            <div class="features">
+                <div class="feature">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>ซื้อสินค้าได้สะดวกรวดเร็ว</span>
                 </div>
-             </form>
+                <div class="feature">
+                    <i class="fas fa-history"></i>
+                    <span>ตรวจสอบประวัติการสั่งซื้อ</span>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-star"></i>
+                    <span>สะสมแต้มและรับสิทธิพิเศษ</span>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-tag"></i>
+                    <span>รับส่วนพิเศษสำหรับสมาชิก</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="right-section">
+            <h2>เข้าสู่ระบบ ผู้ซื้อ</h2>
+            <form id="loginForm">
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="loginEmail" placeholder="อีเมล" required>
+                </div>
+                
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="loginPassword" placeholder="รหัสผ่าน" required>
+                </div>
+                
+                <button type="submit">
+                    <i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ
+                </button>
 
-        <button type="button" class="back-button" onclick="goBack()">
-            <i class="fas fa-arrow-left"></i> ย้อนกลับ
-        </button>
+                <div class="actions">
+                    <button type="button" onclick="resetPassword()">
+                        <i class="fas fa-key"></i> รีเซ็ตรหัสผ่าน
+                    </button>
+                    <button type="button" onclick="goToRegister()">
+                        <i class="fas fa-user-plus"></i> สมัครสมาชิก
+                    </button>
+                </div>
+                
+                <button type="button" class="back-button" onclick="goBack()">
+                    <i class="fas fa-arrow-left"></i> ย้อนกลับ
+                </button>
+            </form>
+        </div>
     </div>
 
     <script>
         document.getElementById("loginForm").addEventListener("submit", function(event) {
             event.preventDefault();
+            loginUser();
+        });
 
+        function loginUser() {
             const loginEmail = document.getElementById("loginEmail").value;
             const loginPassword = document.getElementById("loginPassword").value;
 
@@ -188,7 +344,7 @@
             } else {
                 alert("อีเมลหรือรหัสผ่านไม่ถูกต้อง");
             }
-        });
+        }
 
         function resetPassword() {
             const email = prompt("กรุณากรอกอีเมลที่ใช้สมัคร:");
@@ -197,6 +353,12 @@
             if (email === registeredEmail) {
                 const newPassword = prompt("กรอกรหัสผ่านใหม่:");
                 if (newPassword) {
+                    // ตรวจสอบความยาวรหัสผ่าน
+                    if (newPassword.length < 6) {
+                        alert('รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร');
+                        return;
+                    }
+                    
                     localStorage.setItem("registeredPassword", newPassword);
                     alert("รีเซ็ตรหัสผ่านเรียบร้อยแล้ว");
                 }
@@ -210,7 +372,7 @@
         }
 
         function goBack() {
-            window.location.href = "buyer-dashboard.html";
+            window.location.href = "index.html";
         }
     </script>
 </body>
