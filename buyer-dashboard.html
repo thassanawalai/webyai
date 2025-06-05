@@ -128,6 +128,8 @@
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
       gap: 20px;
+      max-height: 500px;
+      overflow-y: auto;
     }
 
     /* ปรับขนาดสำหรับมือถือ */
@@ -1584,6 +1586,54 @@
         justify-content: center;
       }
     }
+     /* สไตล์สำหรับปุ่มลบ */
+  .delete-order {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+  
+  .delete-order:hover {
+    background: #c0392b;
+    transform: scale(1.05);
+  }
+  
+  .delete-order:active {
+    transform: scale(0.95);
+  }
+  
+  /* ปรับระยะห่างของปุ่มใน order-actions */
+  .order-actions {
+    gap: 10px;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .order-actions {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+    
+    .order-action-btn {
+      padding: 8px 12px;
+      font-size: 0.85rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .order-actions {
+      flex-direction: column;
+    }
+    
+    .order-action-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
   </style>
 </head>
 
@@ -2665,16 +2715,18 @@
     
     // ฟังก์ชันเปิด modal ประวัติการสั่งซื้อ
     function openOrderHistoryModal() {
-      const modal = document.getElementById('orderHistoryModal');
-      modal.style.display = 'block';
-      
-      // ป้องกันการสกรอลของ body ขณะเปิด modal
-      document.body.style.overflow = 'hidden';
-      
-      filteredOrders = [...orders];
-      displayOrderHistory();
-      generatePagination();
-    }
+    const modal = document.getElementById('orderHistoryModal');
+    modal.style.display = 'block';
+    
+    // อ่านข้อมูลใหม่จาก localStorage ทุกครั้ง
+    orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
+    filteredOrders = [...orders];
+    
+    displayOrderHistory();
+    generatePagination();
+    
+    document.body.style.overflow = 'hidden';
+  }
     
     // ฟังก์ชันปิด modal
     function closeOrderHistoryModal() {
@@ -2740,19 +2792,19 @@
     }
     
     // ฟังก์ชันแสดงประวัติการสั่งซื้อ
-    function displayOrderHistory() {
-      const container = document.getElementById('orderHistoryContainer');
-      
-      if (filteredOrders.length === 0) {
-        container.innerHTML = `
-          <div class="empty-orders">
-            <i class="fas fa-box-open"></i>
-            <h3>ไม่พบประวัติการสั่งซื้อ</h3>
-            <p>คุณยังไม่ได้ทำการสั่งซื้อสินค้าใด ๆ</p>
-          </div>
-        `;
-        return;
-      }
+   function displayOrderHistory() {
+    const container = document.getElementById('orderHistoryContainer');
+    
+    if (filteredOrders.length === 0) {
+      container.innerHTML = `
+        <div class="empty-orders">
+          <i class="fas fa-box-open"></i>
+          <h3>ไม่พบประวัติการสั่งซื้อ</h3>
+          <p>คุณยังไม่ได้ทำการสั่งซื้อสินค้าใด ๆ</p>
+        </div>
+      `;
+      return;
+    }
       
       // คำนวณคำสั่งซื้อที่จะแสดงในหน้าปัจจุบัน
       const startIndex = (currentPage - 1) * ordersPerPage;
@@ -2828,75 +2880,77 @@
         
         statusHtml = `<span class="order-status ${statusClass}"><i class="fas fa-circle"></i> ${statusText}</span>`;
         
-        // แปลงชื่อวิธีการชำระเงิน
-        const paymentMethod = getPaymentMethodName(order.payment);
-        
-        html += `
-          <div class="order-item">
-            <div class="order-header">
-              <div>
-                <div class="order-id">คำสั่งซื้อ #${order.id}</div>
-                <div class="order-date">${order.date}</div>
-              </div>
-              ${statusHtml}
+         const paymentMethod = getPaymentMethodName(order.payment);
+      
+      html += `
+        <div class="order-item">
+          <div class="order-header">
+            <div>
+              <div class="order-id">คำสั่งซื้อ #${order.id}</div>
+              <div class="order-date">${order.date}</div>
+            </div>
+            ${statusHtml}
+          </div>
+          
+          <div class="order-details">
+            <div class="order-products">
+              <div class="order-summary-title">รายการสินค้า</div>
+              ${productsHtml}
             </div>
             
-            <div class="order-details">
-              <div class="order-products">
-                <div class="order-summary-title">รายการสินค้า</div>
-                ${productsHtml}
+            <div class="order-summary">
+              <div class="order-summary-title">สรุปการสั่งซื้อ</div>
+              <div class="order-summary-row">
+                <span>ยอดรวมสินค้า:</span>
+                <span>${order.subtotal.toFixed(2)} บาท</span>
+              </div>
+              <div class="order-summary-row">
+                <span>ค่าจัดส่ง:</span>
+                <span>${order.shippingFee.toFixed(2)} บาท</span>
+              </div>
+              <div class="order-summary-row">
+                <span>ส่วนลด:</span>
+                <span>${order.discount.toFixed(2)} บาท</span>
+              </div>
+              <div class="order-summary-row order-total">
+                <span>ยอดชำระทั้งหมด:</span>
+                <span>${order.total.toFixed(2)} บาท</span>
               </div>
               
-              <div class="order-summary">
-                <div class="order-summary-title">สรุปการสั่งซื้อ</div>
-                <div class="order-summary-row">
-                  <span>ยอดรวมสินค้า:</span>
-                  <span>${order.subtotal} บาท</span>
-                </div>
-                <div class="order-summary-row">
-                  <span>ค่าจัดส่ง:</span>
-                  <span>${order.shippingFee} บาท</span>
-                </div>
-                <div class="order-summary-row">
-                  <span>ส่วนลด:</span>
-                  <span>${order.discount} บาท</span>
-                </div>
-                <div class="order-summary-row order-total">
-                  <span>ยอดชำระทั้งหมด:</span>
-                  <span>${order.total} บาท</span>
-                </div>
-                
-                <div class="order-payment">
-                  <div class="order-summary-title">วิธีการชำระเงิน</div>
-                  <p>${paymentMethod}</p>
-                </div>
-                
-                <div class="order-address">
-                  <div class="order-summary-title">ที่อยู่จัดส่ง</div>
-                  <div class="address-details">
-                    <p>${order.address.name}</p>
-                    <p>${order.address.address}, ${order.address.district}</p>
-                    <p>${order.address.province} ${order.address.postalCode}</p>
-                    <p>${order.address.phone}</p>
-                  </div>
+              <div class="order-payment">
+                <div class="order-summary-title">วิธีการชำระเงิน</div>
+                <p>${paymentMethod}</p>
+              </div>
+              
+              <div class="order-address">
+                <div class="order-summary-title">ที่อยู่จัดส่ง</div>
+                <div class="address-details">
+                  <p>${order.address.name}</p>
+                  <p>${order.address.address}, ${order.address.district}</p>
+                  <p>${order.address.province} ${order.address.postalCode}</p>
+                  <p>${order.address.phone}</p>
                 </div>
               </div>
             </div>
-            
-            <div class="order-actions">
-              <button class="order-action-btn view-details" onclick="viewOrderDetails('${order.id}')">
-                <i class="fas fa-eye"></i> ดูรายละเอียด
-              </button>
-              <button class="order-action-btn reorder" onclick="reorder('${order.id}')">
-                <i class="fas fa-redo"></i> สั่งซื้ออีกครั้ง
-              </button>
-            </div>
           </div>
-        `;
-      });
-      
-      container.innerHTML = html;
-    }
+          
+          <div class="order-actions">
+            <button class="order-action-btn view-details" onclick="viewOrderDetails('${order.id}')">
+              <i class="fas fa-eye"></i> ดูรายละเอียด
+            </button>
+            <button class="order-action-btn reorder" onclick="reorder('${order.id}')">
+              <i class="fas fa-redo"></i> สั่งซื้ออีกครั้ง
+            </button>
+            <button class="order-action-btn delete-order" onclick="deleteOrder('${order.id}')">
+              <i class="fas fa-trash"></i> ลบ
+            </button>
+          </div>
+        </div>
+      `;
+    });
+    
+    container.innerHTML = html;
+  }
     
     // ฟังก์ชันสร้าง pagination
     function generatePagination() {
@@ -2945,12 +2999,12 @@
     
     // ฟังก์ชันแปลงชื่อวิธีการชำระเงิน
     function getPaymentMethodName(method) {
-      switch(method) {
-        case 'bank': return 'โอนเงินผ่านธนาคาร';
-        case 'credit': return 'บัตรเครดิต/เดบิต';
-        case 'promptpay': return 'พร้อมเพย์';
-        case 'cod': return 'เก็บเงินปลายทาง (COD)';
-        default: return method || 'ไม่ระบุ';
+    switch(method) {
+      case 'bank': return 'โอนเงินผ่านธนาคาร';
+      case 'credit': return 'บัตรเครดิต/เดบิต';
+      case 'promptpay': return 'พร้อมเพย์';
+      case 'cod': return 'เก็บเงินปลายทาง (COD)';
+      default: return method || 'ไม่ระบุ';
       }
     }
     
@@ -2981,154 +3035,80 @@
     
     // ฟังก์ชันแปลงสถานะเป็นข้อความ
     function getStatusText(status) {
-      switch(status) {
-        case 'pending': return 'รอดำเนินการ';
-        case 'processing': return 'กำลังเตรียมสินค้า';
-        case 'shipped': return 'จัดส่งแล้ว';
-        case 'delivered': return 'จัดส่งสำเร็จ';
-        case 'cancelled': return 'ยกเลิก';
-        default: return 'ไม่ระบุ';
-      }
+    switch(status) {
+      case 'pending': return 'รอดำเนินการ';
+      case 'processing': return 'กำลังเตรียมสินค้า';
+      case 'shipped': return 'จัดส่งแล้ว';
+      case 'delivered': return 'จัดส่งสำเร็จ';
+      case 'cancelled': return 'ยกเลิก';
+      default: return 'ไม่ระบุ';
     }
+  }
     
     // สร้างข้อมูลตัวอย่างสำหรับแสดงผล
     document.addEventListener('DOMContentLoaded', function() {
-      // ถ้าไม่มีข้อมูลคำสั่งซื้อ ให้สร้างตัวอย่าง
-      if (orders.length === 0) {
-        orders = [
-          {
-            id: 'ORD-20230601-001',
-            date: '2023-06-01 14:30:25',
-            items: [
-              {
-                id: 1,
-                name: 'Alice Moist Daily เลนส์สัมผัสรายวัน',
-                price: 450,
-                image: 'images/product1.png',
-                rightEye: '-1.50',
-                leftEye: '-1.75',
-                quantity: 2,
-                timestamp: '2023-06-01T14:30:25.000Z'
-              }
-            ],
-            subtotal: 900,
-            shippingFee: 0,
-            discount: 0,
-            total: 900,
-            payment: 'promptpay',
-            address: {
-              name: 'สมชาย ใจดี',
-              address: '123 ถนนสุขุมวิท',
-              district: 'คลองเตย',
-              province: 'กรุงเทพมหานคร',
-              postalCode: '10110',
-              phone: '0812345678'
-            },
-            status: 'delivered'
+    orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
+    
+    if (orders.length === 0) {
+      orders = [
+        {
+          id: 'ORD-' + Date.now(),
+          date: new Date().toLocaleString(),
+          items: [
+            {
+              id: 1,
+              name: 'Alice Moist Daily เลนส์สัมผัสรายวัน',
+              price: 450,
+              image: 'images/product1.png',
+              rightEye: '-1.50',
+              leftEye: '-1.75',
+              quantity: 2,
+              timestamp: new Date().toISOString()
+            }
+          ],
+          subtotal: 900,
+          shippingFee: 0,
+          discount: 0,
+          total: 900,
+          payment: 'promptpay',
+          address: {
+            name: 'สมชาย ใจดี',
+            address: '123 ถนนสุขุมวิท',
+            district: 'คลองเตย',
+            province: 'กรุงเทพมหานคร',
+            postalCode: '10110',
+            phone: '0812345678'
           },
-          {
-            id: 'ORD-20230605-002',
-            date: '2023-06-05 10:15:42',
-            items: [
-              {
-                id: 1,
-                name: 'Alice Moist Daily เลนส์สัมผัสรายวัน',
-                price: 450,
-                image: 'images/product1.png',
-                rightEye: '-2.00',
-                leftEye: '-2.25',
-                quantity: 1,
-                timestamp: '2023-06-05T10:15:42.000Z'
-              },
-              {
-                id: 2,
-                name: 'น้ำยาล้างเลนส์ Alice Clean',
-                price: 250,
-                image: 'images/product2.png',
-                quantity: 1,
-                timestamp: '2023-06-05T10:15:42.000Z'
-              }
-            ],
-            subtotal: 700,
-            shippingFee: 0,
-            discount: 50,
-            total: 650,
-            payment: 'credit',
-            address: {
-              name: 'ส้มโอ ผลไม้',
-              address: '456 ถนนรัชดาภิเษก',
-              district: 'ห้วยขวาง',
-              province: 'กรุงเทพมหานคร',
-              postalCode: '10310',
-              phone: '0898765432'
-            },
-            status: 'shipped'
-          },
-          {
-            id: 'ORD-20230610-003',
-            date: '2023-06-10 16:20:18',
-            items: [
-              {
-                id: 1,
-                name: 'Alice Moist Daily เลนส์สัมผัสรายวัน',
-                price: 450,
-                image: 'images/product1.png',
-                rightEye: '-0.75',
-                leftEye: '-1.00',
-                quantity: 3,
-                timestamp: '2023-06-10T16:20:18.000Z'
-              }
-            ],
-            subtotal: 1350,
-            shippingFee: 0,
-            discount: 100,
-            total: 1250,
-            payment: 'bank',
-            address: {
-              name: 'นางสาวดอกไม้ กลิ่นหอม',
-              address: '789 ถนนศรีนครินทร์',
-              district: 'สวนหลวง',
-              province: 'กรุงเทพมหานคร',
-              postalCode: '10250',
-              phone: '0823456789'
-            },
-            status: 'processing'
-          },
-          {
-            id: 'ORD-20230615-004',
-            date: '2023-06-15 09:45:33',
-            items: [
-              {
-                id: 1,
-                name: 'Alice Moist Daily เลนส์สัมผัสรายวัน',
-                price: 450,
-                image: 'images/product1.png',
-                rightEye: '-3.25',
-                leftEye: '-3.50',
-                quantity: 1,
-                timestamp: '2023-06-15T09:45:33.000Z'
-              }
-            ],
-            subtotal: 450,
-            shippingFee: 0,
-            discount: 0,
-            total: 450,
-            payment: 'cod',
-            address: {
-              name: 'นายธนาคาร เงินดี',
-              address: '321 ถนนเพชรบุรี',
-              district: 'ราชเทวี',
-              province: 'กรุงเทพมหานคร',
-              postalCode: '10400',
-              phone: '0834567890'
-            },
-            status: 'pending'
-          }
-        ];
+          status: 'delivered'
+        }
+      ];
+      
+      localStorage.setItem('orderHistory', JSON.stringify(orders));
+    }
+    
+    filteredOrders = [...orders];
+    updateCartBadge();
+  });
+     function deleteOrder(orderId) {
+    if (confirm('คุณแน่ใจหรือไม่ว่าต้องการลบรายการสั่งซื้อนี้?')) {
+      const index = orders.findIndex(order => order.id === orderId);
+      
+      if (index !== -1) {
+        orders.splice(index, 1);
         
         localStorage.setItem('orderHistory', JSON.stringify(orders));
+        filteredOrders = orders.filter(order => order.id !== orderId);
+        
+        currentPage = 1;
+        displayOrderHistory();
+        generatePagination();
+        
+        showNotification('ลบรายการสั่งซื้อสำเร็จ', 'success');
+      } else {
+        showNotification('ไม่พบรายการสั่งซื้อที่ต้องการลบ', 'error');
       }
-    });
+     }
+    }
 </script>
 </body>
 </html>
