@@ -2,11 +2,174 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Alice Moist Daily</title>
   <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    /* เพิ่ม/แก้ไข CSS สำหรับ modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      overflow: auto;
+    }
+    
+    .modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 800px;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+      width: 90%;
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .close-btn {
+      color: #aaa;
+      float: right;
+      font-size: 35px;
+      font-weight: bold;
+      cursor: pointer;
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      z-index: 10;
+    }
+    
+    .close-btn:hover {
+      color: #333;
+    }
+
+    /* ปรับขนาดและระยะห่างสำหรับ modal ประวัติการสั่งซื้อ */
+    .order-history-modal {
+      max-width: 1000px;
+      width: 90%;
+      padding: 0;
+    }
+
+    .order-history-header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      padding: 20px;
+      color: white;
+      border-radius: 10px 10px 0 0;
+    }
+
+    .order-history-controls {
+      position: sticky;
+      top: 80px;
+      z-index: 4;
+      background: #f8f9fa;
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      border-radius: 0 0 10px 10px;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      min-width: 200px;
+      flex: 1;
+    }
+    
+    .filter-group label {
+      font-weight: 500;
+      margin-bottom: 5px;
+      color: #2c3e50;
+    }
+    
+    .filter-select {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      font-family: 'Kanit', sans-serif;
+      background: white;
+    }
+    
+    .search-input {
+      display: flex;
+    }
+    
+    .search-input input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px 0 0 6px;
+      font-family: 'Kanit', sans-serif;
+    }
+    
+    .search-input button {
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 0 6px 6px 0;
+      padding: 0 15px;
+      cursor: pointer;
+    }
+
+    .order-history-container {
+      padding: 15px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 20px;
+    }
+
+    /* ปรับขนาดสำหรับมือถือ */
+    @media (max-width: 768px) {
+      .modal-content {
+        top: 40px;
+        transform: none;
+        max-height: calc(100vh - 80px);
+      }
+      
+      .order-history-controls {
+        top: 60px;
+      }
+      
+      .order-history-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .modal-content {
+        width: 95%;
+        padding: 15px;
+        top: 20px;
+        max-height: calc(100vh - 40px);
+      }
+      
+      .order-history-header {
+        padding: 15px;
+      }
+      
+      .order-history-controls {
+        padding: 10px;
+        flex-direction: column;
+      }
+      
+      .filter-group {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+    }
+
     /* สไตล์เดิมทั้งหมด */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -688,35 +851,6 @@
       }
     }
     
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1002;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.5);
-    }
-    .modal-content {
-      background-color: #fefefe;
-      margin: 10% auto;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 500px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-      width: 90%;
-    }
-    .close-btn {
-      color: #aaa;
-      float: right;
-      font-size: 50px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .close-btn:hover {
-      color: #333;
-    }
     .prescription-type {
       display: flex;
       margin: 20px 0;
@@ -1143,6 +1277,313 @@
     .notification.error i {
       color: #e74c3c;
     }
+    
+    /* ปรับปรุงสไตล์สำหรับประวัติการสั่งซื้อ */
+    .order-item {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-left: 4px solid #3498db;
+    }
+    
+    .order-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    }
+    
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: #f8fafc;
+      border-bottom: 1px solid #eee;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .order-id {
+      font-weight: bold;
+      color: #3498db;
+      font-size: 1.1rem;
+    }
+    
+    .order-date {
+      color: #777;
+      font-size: 0.9rem;
+    }
+    
+    .order-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+    
+    .status-processing {
+      background: #cce5ff;
+      color: #004085;
+    }
+    
+    .status-shipped {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .status-delivered {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+    
+    .status-cancelled {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    
+    .order-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 20px;
+    }
+    
+    .order-products {
+      flex: 2;
+      min-width: 300px;
+    }
+    
+    .order-summary {
+      flex: 1;
+      min-width: 250px;
+      border-left: 1px solid #eee;
+      padding-left: 20px;
+    }
+    
+    .order-product-item {
+      display: flex;
+      padding: 12px 0;
+      border-bottom: 1px solid #f5f5f5;
+      align-items: center;
+    }
+    
+    .order-product-item:last-child {
+      border-bottom: none;
+    }
+    
+    .order-product-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      border-radius: 8px;
+      margin-right: 15px;
+      background: #f8f9fa;
+      padding: 5px;
+    }
+    
+    .order-product-details {
+      flex: 1;
+    }
+    
+    .order-product-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #2c3e50;
+    }
+    
+    .order-product-prescription {
+      color: #666;
+      font-size: 0.85rem;
+      margin-bottom: 5px;
+    }
+    
+    .order-product-price {
+      color: #2ecc71;
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+    
+    .order-summary-title {
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #2c3e50;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 8px;
+    }
+    
+    .order-summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+    
+    .order-total {
+      font-weight: bold;
+      font-size: 1.1rem;
+      border-top: 1px solid #eee;
+      padding-top: 10px;
+      margin-top: 10px;
+    }
+    
+    .order-address {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+    }
+    
+    .order-address-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #2c3e50;
+    }
+    
+    .address-details {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #555;
+    }
+    
+    .order-actions {
+      display: flex;
+      justify-content: flex-end;
+      padding: 15px 20px;
+      background: #f8fafc;
+      border-top: 1px solid #eee;
+      gap: 10px;
+    }
+    
+    .order-action-btn {
+      padding: 8px 15px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    
+    .view-details {
+      background: #3498db;
+      color: white;
+      border: none;
+    }
+    
+    .view-details:hover {
+      background: #2980b9;
+    }
+    
+    .reorder {
+      background: #2ecc71;
+      color: white;
+      border: none;
+    }
+    
+    .reorder:hover {
+      background: #27ae60;
+    }
+    
+    .pagination {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      gap: 8px;
+      border-top: 1px solid #eee;
+    }
+    
+    .page-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid #ddd;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .page-btn.active {
+      background: #3498db;
+      color: white;
+      border-color: #3498db;
+    }
+    
+    .page-btn:hover:not(.active) {
+      background: #f0f8ff;
+    }
+    
+    .empty-orders {
+      text-align: center;
+      padding: 40px 20px;
+      color: #777;
+      grid-column: 1 / -1;
+    }
+    
+    .empty-orders i {
+      font-size: 3.5rem;
+      color: #bdc3c7;
+      margin-bottom: 15px;
+    }
+    
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      .order-details {
+        flex-direction: column;
+      }
+      
+      .order-summary {
+        border-left: none;
+        border-top: 1px solid #eee;
+        padding-left: 0;
+        padding-top: 20px;
+      }
+      
+      .order-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .order-controls {
+        flex-direction: column;
+      }
+      
+      .filter-group {
+        min-width: 100%;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .order-product-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .order-product-item img {
+        margin-bottom: 10px;
+      }
+      
+      .order-actions {
+        flex-direction: column;
+      }
+      
+      .order-action-btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
   </style>
 </head>
 
@@ -1173,7 +1614,7 @@
             </div>
           </div>
           <a href="#" onclick="setAccount()"><i class="fas fa-user-cog"></i> จัดการบัญชี</a>
-          <a href="#" onclick="viewOrder()"><i class="fas fa-list"></i> รายการสั่งซื้อ</a>
+          <a href="#" onclick="openOrderHistoryModal()"><i class="fas fa-list"></i> ประวัติการสั่งซื้อ</a>
           <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</a>
         </div>
       </div>
@@ -1432,7 +1873,56 @@
         </div>
       </div>
     </div>
-
+ <div id="orderHistoryModal" class="modal">
+    <div class="modal-content order-history-modal">
+      <span class="close-btn" onclick="closeOrderHistoryModal()">&times;</span>
+      <div class="order-history-header">
+        <h2 class="order-history-title">
+          <i class="fas fa-history"></i> ประวัติการสั่งซื้อ
+        </h2>
+      </div>
+      
+      <div class="order-history-controls">
+        <div class="filter-group">
+          <label for="statusFilter"><i class="fas fa-filter"></i> กรองตามสถานะ</label>
+          <select id="statusFilter" class="filter-select" onchange="filterOrders()">
+            <option value="all">ทั้งหมด</option>
+            <option value="pending">รอดำเนินการ</option>
+            <option value="processing">กำลังเตรียมสินค้า</option>
+            <option value="shipped">จัดส่งแล้ว</option>
+            <option value="delivered">จัดส่งสำเร็จ</option>
+            <option value="cancelled">ยกเลิก</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="sortOrder"><i class="fas fa-sort"></i> เรียงตาม</label>
+          <select id="sortOrder" class="filter-select" onchange="sortOrders()">
+            <option value="newest">ใหม่ล่าสุด</option>
+            <option value="oldest">เก่าที่สุด</option>
+            <option value="price-high">ราคาสูงสุด</option>
+            <option value="price-low">ราคาต่ำสุด</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="orderSearch"><i class="fas fa-search"></i> ค้นหาคำสั่งซื้อ</label>
+          <div class="search-input">
+            <input type="text" id="orderSearch" placeholder="ค้นหาด้วยรหัสคำสั่งซื้อ...">
+            <button onclick="searchOrders()"><i class="fas fa-search"></i></button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="orderHistoryContainer" class="order-history-container">
+        <!-- รายการประวัติการสั่งซื้อจะแสดงที่นี่ -->
+      </div>
+      
+      <div class="pagination" id="pagination">
+        <!-- ปุ่ม pagination จะถูกสร้างโดย JavaScript -->
+      </div>
+    </div>
+  </div>
     <section class="product-info">
         <div class="container">
             <h2>Alice Moist Daily เลนส์สัมผัสรายวัน</h2>
@@ -1510,7 +2000,7 @@
   function addToCart() {
     if (rightEyeSelected.textContent === 'ยังไม่ได้เลือก' || 
         leftEyeSelected.textContent === 'ยังไม่ได้เลือก') {
-      alert('กรุณาเลือกค่าสายตาทั้งสองข้างก่อน');
+      showNotification('กรุณาเลือกค่าสายตาทั้งสองข้างก่อน');
       return;
     }
     
@@ -1576,7 +2066,7 @@
   function buyNow() {
     if (rightEyeSelected.textContent === 'ยังไม่ได้เลือก' || 
         leftEyeSelected.textContent === 'ยังไม่ได้เลือก') {
-      alert('กรุณาเลือกค่าสายตาทั้งสองข้างก่อน');
+      showNotification('กรุณาเลือกค่าสายตาทั้งสองข้างก่อน');
       return;
     }
     
@@ -1840,6 +2330,9 @@
     }
     if (event.target.classList.contains('auth-modal')) {
       closeAuthModal();
+    }
+    if (event.target.classList.contains('modal')) {
+      closeOrderHistoryModal();
     }
   });
   
@@ -2164,6 +2657,478 @@
       updateUserUI();
     }
   });
+  // ตัวแปรสำหรับระบบประวัติการสั่งซื้อ
+    let orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
+    let filteredOrders = [];
+    const ordersPerPage = 4;
+    let currentPage = 1;
+    
+    // ฟังก์ชันเปิด modal ประวัติการสั่งซื้อ
+    function openOrderHistoryModal() {
+      const modal = document.getElementById('orderHistoryModal');
+      modal.style.display = 'block';
+      
+      // ป้องกันการสกรอลของ body ขณะเปิด modal
+      document.body.style.overflow = 'hidden';
+      
+      filteredOrders = [...orders];
+      displayOrderHistory();
+      generatePagination();
+    }
+    
+    // ฟังก์ชันปิด modal
+    function closeOrderHistoryModal() {
+      document.getElementById('orderHistoryModal').style.display = 'none';
+      
+      // คืนค่าการสกรอลของ body
+      document.body.style.overflow = 'auto';
+    }
+    
+    // ฟังก์ชันกรองคำสั่งซื้อตามสถานะ
+    function filterOrders() {
+      const status = document.getElementById('statusFilter').value;
+      
+      if (status === 'all') {
+        filteredOrders = [...orders];
+      } else {
+        filteredOrders = orders.filter(order => order.status === status);
+      }
+      
+      currentPage = 1;
+      displayOrderHistory();
+      generatePagination();
+    }
+    
+    // ฟังก์ชันเรียงลำดับคำสั่งซื้อ
+    function sortOrders() {
+      const sortBy = document.getElementById('sortOrder').value;
+      
+      filteredOrders.sort((a, b) => {
+        if (sortBy === 'newest') {
+          return new Date(b.date) - new Date(a.date);
+        } else if (sortBy === 'oldest') {
+          return new Date(a.date) - new Date(b.date);
+        } else if (sortBy === 'price-high') {
+          return b.total - a.total;
+        } else if (sortBy === 'price-low') {
+          return a.total - b.total;
+        }
+        return 0;
+      });
+      
+      currentPage = 1;
+      displayOrderHistory();
+      generatePagination();
+    }
+    
+    // ฟังก์ชันค้นหาคำสั่งซื้อ
+    function searchOrders() {
+      const searchTerm = document.getElementById('orderSearch').value.toLowerCase();
+      
+      if (!searchTerm) {
+        filteredOrders = [...orders];
+      } else {
+        filteredOrders = orders.filter(order => 
+          order.id.toLowerCase().includes(searchTerm) ||
+          order.date.toLowerCase().includes(searchTerm)
+        );
+      }
+      
+      currentPage = 1;
+      displayOrderHistory();
+      generatePagination();
+    }
+    
+    // ฟังก์ชันแสดงประวัติการสั่งซื้อ
+    function displayOrderHistory() {
+      const container = document.getElementById('orderHistoryContainer');
+      
+      if (filteredOrders.length === 0) {
+        container.innerHTML = `
+          <div class="empty-orders">
+            <i class="fas fa-box-open"></i>
+            <h3>ไม่พบประวัติการสั่งซื้อ</h3>
+            <p>คุณยังไม่ได้ทำการสั่งซื้อสินค้าใด ๆ</p>
+          </div>
+        `;
+        return;
+      }
+      
+      // คำนวณคำสั่งซื้อที่จะแสดงในหน้าปัจจุบัน
+      const startIndex = (currentPage - 1) * ordersPerPage;
+      const endIndex = startIndex + ordersPerPage;
+      const ordersToShow = filteredOrders.slice(startIndex, endIndex);
+      
+      let html = '';
+      
+      ordersToShow.forEach(order => {
+        // สร้างรายการสินค้า
+        let productsHtml = '';
+        order.items.forEach(item => {
+          productsHtml += `
+            <div class="order-product-item">
+              <img src="${item.image}" alt="${item.name}">
+              <div class="order-product-details">
+                <div class="order-product-title">${item.name}</div>
+                <div class="order-product-prescription">
+                  ตาขวา: ${item.rightEye || 'N/A'}, ตาซ้าย: ${item.leftEye || 'N/A'}
+                </div>
+                <div class="order-product-price">
+                  ${item.quantity} × ${item.price} บาท = ${item.quantity * item.price} บาท
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        
+        // สร้างสถานะ
+        let statusHtml = '';
+        let statusClass = 'status-pending';
+        let statusText = 'รอดำเนินการ';
+        
+        if (order.status) {
+          switch(order.status) {
+            case 'pending':
+              statusClass = 'status-pending';
+              statusText = 'รอดำเนินการ';
+              break;
+            case 'processing':
+              statusClass = 'status-processing';
+              statusText = 'กำลังเตรียมสินค้า';
+              break;
+            case 'shipped':
+              statusClass = 'status-shipped';
+              statusText = 'จัดส่งแล้ว';
+              break;
+            case 'delivered':
+              statusClass = 'status-delivered';
+              statusText = 'จัดส่งสำเร็จ';
+              break;
+            case 'cancelled':
+              statusClass = 'status-cancelled';
+              statusText = 'ยกเลิก';
+              break;
+          }
+        } else {
+          // สำหรับข้อมูลเดิมที่ไม่มีสถานะ
+          const orderDate = new Date(order.date);
+          const daysAgo = Math.floor((new Date() - orderDate) / (1000 * 60 * 60 * 24));
+          
+          if (daysAgo > 7) {
+            statusClass = 'status-delivered';
+            statusText = 'จัดส่งสำเร็จ';
+          } else if (daysAgo > 3) {
+            statusClass = 'status-shipped';
+            statusText = 'จัดส่งแล้ว';
+          } else if (daysAgo > 1) {
+            statusClass = 'status-processing';
+            statusText = 'กำลังเตรียมสินค้า';
+          }
+        }
+        
+        statusHtml = `<span class="order-status ${statusClass}"><i class="fas fa-circle"></i> ${statusText}</span>`;
+        
+        // แปลงชื่อวิธีการชำระเงิน
+        const paymentMethod = getPaymentMethodName(order.payment);
+        
+        html += `
+          <div class="order-item">
+            <div class="order-header">
+              <div>
+                <div class="order-id">คำสั่งซื้อ #${order.id}</div>
+                <div class="order-date">${order.date}</div>
+              </div>
+              ${statusHtml}
+            </div>
+            
+            <div class="order-details">
+              <div class="order-products">
+                <div class="order-summary-title">รายการสินค้า</div>
+                ${productsHtml}
+              </div>
+              
+              <div class="order-summary">
+                <div class="order-summary-title">สรุปการสั่งซื้อ</div>
+                <div class="order-summary-row">
+                  <span>ยอดรวมสินค้า:</span>
+                  <span>${order.subtotal} บาท</span>
+                </div>
+                <div class="order-summary-row">
+                  <span>ค่าจัดส่ง:</span>
+                  <span>${order.shippingFee} บาท</span>
+                </div>
+                <div class="order-summary-row">
+                  <span>ส่วนลด:</span>
+                  <span>${order.discount} บาท</span>
+                </div>
+                <div class="order-summary-row order-total">
+                  <span>ยอดชำระทั้งหมด:</span>
+                  <span>${order.total} บาท</span>
+                </div>
+                
+                <div class="order-payment">
+                  <div class="order-summary-title">วิธีการชำระเงิน</div>
+                  <p>${paymentMethod}</p>
+                </div>
+                
+                <div class="order-address">
+                  <div class="order-summary-title">ที่อยู่จัดส่ง</div>
+                  <div class="address-details">
+                    <p>${order.address.name}</p>
+                    <p>${order.address.address}, ${order.address.district}</p>
+                    <p>${order.address.province} ${order.address.postalCode}</p>
+                    <p>${order.address.phone}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="order-actions">
+              <button class="order-action-btn view-details" onclick="viewOrderDetails('${order.id}')">
+                <i class="fas fa-eye"></i> ดูรายละเอียด
+              </button>
+              <button class="order-action-btn reorder" onclick="reorder('${order.id}')">
+                <i class="fas fa-redo"></i> สั่งซื้ออีกครั้ง
+              </button>
+            </div>
+          </div>
+        `;
+      });
+      
+      container.innerHTML = html;
+    }
+    
+    // ฟังก์ชันสร้าง pagination
+    function generatePagination() {
+      const pagination = document.getElementById('pagination');
+      const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
+      
+      if (totalPages <= 1) {
+        pagination.innerHTML = '';
+        return;
+      }
+      
+      let html = '';
+      const maxVisiblePages = 5;
+      let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+      let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+      
+      if (endPage - startPage < maxVisiblePages - 1) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+      }
+      
+      // ปุ่มก่อนหน้า
+      if (currentPage > 1) {
+        html += `<div class="page-btn" onclick="changePage(${currentPage - 1})"><i class="fas fa-chevron-left"></i></div>`;
+      }
+      
+      // ปุ่มหน้า
+      for (let i = startPage; i <= endPage; i++) {
+        html += `<div class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</div>`;
+      }
+      
+      // ปุ่มถัดไป
+      if (currentPage < totalPages) {
+        html += `<div class="page-btn" onclick="changePage(${currentPage + 1})"><i class="fas fa-chevron-right"></i></div>`;
+      }
+      
+      pagination.innerHTML = html;
+    }
+    
+    // ฟังก์ชันเปลี่ยนหน้า
+    function changePage(page) {
+      currentPage = page;
+      displayOrderHistory();
+      generatePagination();
+      document.getElementById('orderHistoryContainer').scrollTop = 0;
+    }
+    
+    // ฟังก์ชันแปลงชื่อวิธีการชำระเงิน
+    function getPaymentMethodName(method) {
+      switch(method) {
+        case 'bank': return 'โอนเงินผ่านธนาคาร';
+        case 'credit': return 'บัตรเครดิต/เดบิต';
+        case 'promptpay': return 'พร้อมเพย์';
+        case 'cod': return 'เก็บเงินปลายทาง (COD)';
+        default: return method || 'ไม่ระบุ';
+      }
+    }
+    
+    // ฟังก์ชันดูรายละเอียดคำสั่งซื้อ
+    function viewOrderDetails(orderId) {
+      const order = orders.find(o => o.id === orderId);
+      if (order) {
+        alert(`ดูรายละเอียดคำสั่งซื้อ #${orderId}\n\nสถานะ: ${getStatusText(order.status)}\nวันที่สั่งซื้อ: ${order.date}\nยอดรวม: ${order.total} บาท`);
+      }
+    }
+    
+    // ฟังก์ชันสั่งซื้ออีกครั้ง
+    function reorder(orderId) {
+      const order = orders.find(o => o.id === orderId);
+      if (order) {
+        // เพิ่มสินค้าในตะกร้า
+        cart = [...order.items];
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartBadge();
+        
+        // ปิด modal และเปิดตะกร้า
+        closeOrderHistoryModal();
+        openCartModal();
+        
+        showNotification('เพิ่มสินค้าในตะกร้าเรียบร้อยแล้ว', 'success');
+      }
+    }
+    
+    // ฟังก์ชันแปลงสถานะเป็นข้อความ
+    function getStatusText(status) {
+      switch(status) {
+        case 'pending': return 'รอดำเนินการ';
+        case 'processing': return 'กำลังเตรียมสินค้า';
+        case 'shipped': return 'จัดส่งแล้ว';
+        case 'delivered': return 'จัดส่งสำเร็จ';
+        case 'cancelled': return 'ยกเลิก';
+        default: return 'ไม่ระบุ';
+      }
+    }
+    
+    // สร้างข้อมูลตัวอย่างสำหรับแสดงผล
+    document.addEventListener('DOMContentLoaded', function() {
+      // ถ้าไม่มีข้อมูลคำสั่งซื้อ ให้สร้างตัวอย่าง
+      if (orders.length === 0) {
+        orders = [
+          {
+            id: 'ORD-20230601-001',
+            date: '2023-06-01 14:30:25',
+            items: [
+              {
+                id: 1,
+                name: 'Alice Moist Daily เลนส์สัมผัสรายวัน',
+                price: 450,
+                image: 'images/product1.png',
+                rightEye: '-1.50',
+                leftEye: '-1.75',
+                quantity: 2,
+                timestamp: '2023-06-01T14:30:25.000Z'
+              }
+            ],
+            subtotal: 900,
+            shippingFee: 0,
+            discount: 0,
+            total: 900,
+            payment: 'promptpay',
+            address: {
+              name: 'สมชาย ใจดี',
+              address: '123 ถนนสุขุมวิท',
+              district: 'คลองเตย',
+              province: 'กรุงเทพมหานคร',
+              postalCode: '10110',
+              phone: '0812345678'
+            },
+            status: 'delivered'
+          },
+          {
+            id: 'ORD-20230605-002',
+            date: '2023-06-05 10:15:42',
+            items: [
+              {
+                id: 1,
+                name: 'Alice Moist Daily เลนส์สัมผัสรายวัน',
+                price: 450,
+                image: 'images/product1.png',
+                rightEye: '-2.00',
+                leftEye: '-2.25',
+                quantity: 1,
+                timestamp: '2023-06-05T10:15:42.000Z'
+              },
+              {
+                id: 2,
+                name: 'น้ำยาล้างเลนส์ Alice Clean',
+                price: 250,
+                image: 'images/product2.png',
+                quantity: 1,
+                timestamp: '2023-06-05T10:15:42.000Z'
+              }
+            ],
+            subtotal: 700,
+            shippingFee: 0,
+            discount: 50,
+            total: 650,
+            payment: 'credit',
+            address: {
+              name: 'ส้มโอ ผลไม้',
+              address: '456 ถนนรัชดาภิเษก',
+              district: 'ห้วยขวาง',
+              province: 'กรุงเทพมหานคร',
+              postalCode: '10310',
+              phone: '0898765432'
+            },
+            status: 'shipped'
+          },
+          {
+            id: 'ORD-20230610-003',
+            date: '2023-06-10 16:20:18',
+            items: [
+              {
+                id: 1,
+                name: 'Alice Moist Daily เลนส์สัมผัสรายวัน',
+                price: 450,
+                image: 'images/product1.png',
+                rightEye: '-0.75',
+                leftEye: '-1.00',
+                quantity: 3,
+                timestamp: '2023-06-10T16:20:18.000Z'
+              }
+            ],
+            subtotal: 1350,
+            shippingFee: 0,
+            discount: 100,
+            total: 1250,
+            payment: 'bank',
+            address: {
+              name: 'นางสาวดอกไม้ กลิ่นหอม',
+              address: '789 ถนนศรีนครินทร์',
+              district: 'สวนหลวง',
+              province: 'กรุงเทพมหานคร',
+              postalCode: '10250',
+              phone: '0823456789'
+            },
+            status: 'processing'
+          },
+          {
+            id: 'ORD-20230615-004',
+            date: '2023-06-15 09:45:33',
+            items: [
+              {
+                id: 1,
+                name: 'Alice Moist Daily เลนส์สัมผัสรายวัน',
+                price: 450,
+                image: 'images/product1.png',
+                rightEye: '-3.25',
+                leftEye: '-3.50',
+                quantity: 1,
+                timestamp: '2023-06-15T09:45:33.000Z'
+              }
+            ],
+            subtotal: 450,
+            shippingFee: 0,
+            discount: 0,
+            total: 450,
+            payment: 'cod',
+            address: {
+              name: 'นายธนาคาร เงินดี',
+              address: '321 ถนนเพชรบุรี',
+              district: 'ราชเทวี',
+              province: 'กรุงเทพมหานคร',
+              postalCode: '10400',
+              phone: '0834567890'
+            },
+            status: 'pending'
+          }
+        ];
+        
+        localStorage.setItem('orderHistory', JSON.stringify(orders));
+      }
+    });
 </script>
 </body>
 </html>
