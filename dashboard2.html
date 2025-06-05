@@ -569,39 +569,87 @@
     /* ปรับการแสดงผลสำหรับมือถือ */
     @media (max-width: 880px) {
       .navbar {
-        padding: 0 15px;
+        padding: 0 10px;
+        height: 60px;
       }
-      .username-text {
-        max-width: 80px;
+      
+      .navbar-left {
+        font-size: 24px;
       }
+      
+      .nav-buttons {
+        gap: 8px;
+      }
+      
+      .username-display {
+        padding: 4px 8px;
+      }
+      
+      .btn {
+        width: 30px;
+        height: 30px;
+      }
+      
+      .cart-badge {
+        top: -3px;
+        right: -3px;
+        width: 16px;
+        height: 16px;
+        font-size: 10px;
+      }
+      
       .hamburger {
         display: flex;
       }
+      
       .nav-links {
         display: none;
       }
+      
       .product-section {
         flex-direction: column;
+        margin: 15px 0;
       }
+      
+      .product-image img {
+        max-width: 100%;
+        height: auto;
+        padding: 10px;
+      }
+      
       .eye-selection {
         flex-direction: column;
         gap: 15px;
       }
+      
       .action-buttons {
         flex-direction: column;
+        gap: 10px;
       }
+      
       .add-to-cart, .buy-now {
         width: 100%;
+        padding: 12px;
+        font-size: 14px;
+        box-sizing: border-box;
       }
+      
+      .product-details {
+        padding: 15px;
+      }
+      
       .banner-content {
         flex-direction: column;
       }
+      
       .banner-text {
         order: 2;
       }
+      
       .banner-image {
         order: 1;
       }
+      
       .footer-container {
         flex-direction: column;
         gap: 30px;
@@ -613,20 +661,30 @@
       .banner h1 {
         font-size: 1.5rem;
       }
+      
       .banner p {
         font-size: 0.9rem;
       }
+      
       .product-title {
         font-size: 1.3rem;
       }
+      
       .price {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
       }
+      
       .eye-btn {
         font-size: 13px;
       }
+      
       .footer-section {
         min-width: 100%;
+      }
+      
+      .navbar-left img {
+        height: 70px;
+        border-radius: 25px;
       }
     }
     
