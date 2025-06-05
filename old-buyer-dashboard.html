@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* สไตล์เดิมทั้งหมด */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Kanit', sans-serif;
@@ -91,7 +90,6 @@
       white-space: nowrap;
     }
     .dropdown-menu {
-      display: none;
       position: absolute;
       right: 0;
       top: 100%;
@@ -569,87 +567,39 @@
     /* ปรับการแสดงผลสำหรับมือถือ */
     @media (max-width: 880px) {
       .navbar {
-        padding: 0 10px;
-        height: 60px;
+        padding: 0 15px;
       }
-      
-      .navbar-left {
-        font-size: 24px;
+      .username-text {
+        max-width: 80px;
       }
-      
-      .nav-buttons {
-        gap: 8px;
-      }
-      
-      .username-display {
-        padding: 4px 8px;
-      }
-      
-      .btn {
-        width: 30px;
-        height: 30px;
-      }
-      
-      .cart-badge {
-        top: -3px;
-        right: -3px;
-        width: 16px;
-        height: 16px;
-        font-size: 10px;
-      }
-      
       .hamburger {
         display: flex;
       }
-      
       .nav-links {
         display: none;
       }
-      
       .product-section {
         flex-direction: column;
-        margin: 15px 0;
       }
-      
-      .product-image img {
-        max-width: 100%;
-        height: auto;
-        padding: 10px;
-      }
-      
       .eye-selection {
         flex-direction: column;
         gap: 15px;
       }
-      
       .action-buttons {
         flex-direction: column;
-        gap: 10px;
       }
-      
       .add-to-cart, .buy-now {
         width: 100%;
-        padding: 12px;
-        font-size: 14px;
-        box-sizing: border-box;
       }
-      
-      .product-details {
-        padding: 15px;
-      }
-      
       .banner-content {
         flex-direction: column;
       }
-      
       .banner-text {
         order: 2;
       }
-      
       .banner-image {
         order: 1;
       }
-      
       .footer-container {
         flex-direction: column;
         gap: 30px;
@@ -661,30 +611,20 @@
       .banner h1 {
         font-size: 1.5rem;
       }
-      
       .banner p {
         font-size: 0.9rem;
       }
-      
       .product-title {
         font-size: 1.3rem;
       }
-      
       .price {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
       }
-      
       .eye-btn {
         font-size: 13px;
       }
-      
       .footer-section {
         min-width: 100%;
-      }
-      
-      .navbar-left img {
-        height: 70px;
-        border-radius: 25px;
       }
     }
     
@@ -945,204 +885,6 @@
       color: #ffc107;
     }
     
-    /* เพิ่มสไตล์สำหรับโมดอลล็อกอิน/สมัครสมาชิก */
-    .auth-modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.7);
-      z-index: 2000;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    .auth-modal.show {
-      display: flex;
-    }
-    
-    .auth-container {
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      width: 90%;
-      max-width: 450px;
-      overflow: hidden;
-      animation: modalFadeIn 0.3s ease-out;
-    }
-    
-    @keyframes modalFadeIn {
-      from { opacity: 0; transform: translateY(-50px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .auth-header {
-      background: linear-gradient(135deg, #3498db, #2980b9);
-      color: white;
-      padding: 20px;
-      text-align: center;
-      position: relative;
-    }
-    
-    .auth-close {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      font-size: 24px;
-      cursor: pointer;
-      color: white;
-    }
-    
-    .auth-tabs {
-      display: flex;
-      background: #2980b9;
-    }
-    
-    .auth-tab {
-      flex: 1;
-      padding: 15px;
-      text-align: center;
-      cursor: pointer;
-      font-weight: 500;
-      transition: background 0.3s;
-    }
-    
-    .auth-tab.active {
-      background: #3498db;
-    }
-    
-    .auth-content {
-      padding: 25px;
-    }
-    
-    .auth-form {
-      display: none;
-    }
-    
-    .auth-form.active {
-      display: block;
-    }
-    
-    .auth-form-group {
-      margin-bottom: 20px;
-    }
-    
-    .auth-form-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-    }
-    
-    .auth-form-group input {
-      width: 100%;
-      padding: 12px 15px;
-      border: 2px solid #e0e0e0;
-      border-radius: 8px;
-      font-size: 16px;
-      font-family: 'Kanit', sans-serif;
-    }
-    
-    .auth-form-group input:focus {
-      border-color: #3498db;
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-    }
-    
-    .auth-btn {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s;
-      margin-top: 10px;
-    }
-    
-    .auth-btn:hover {
-      background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
-    }
-    
-    .auth-footer {
-      text-align: center;
-      margin-top: 20px;
-      padding-top: 15px;
-      border-top: 1px solid #eee;
-      font-size: 14px;
-    }
-    
-    .auth-footer a {
-      color: #3498db;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    
-    .auth-footer a:hover {
-      text-decoration: underline;
-    }
-    
-    .auth-error {
-      color: #e74c3c;
-      font-size: 14px;
-      margin-top: 5px;
-      display: none;
-    }
-    
-    /* สไตล์สำหรับการแจ้งเตือน */
-    .notification {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      padding: 15px 20px;
-      z-index: 3000;
-      transform: translateX(120%);
-      transition: transform 0.3s ease-out;
-      display: flex;
-      align-items: center;
-      border-left: 5px solid;
-    }
-    
-    .notification.success {
-      border-left-color: #2ecc71;
-    }
-    
-    .notification.error {
-      border-left-color: #e74c3c;
-    }
-    
-    .notification.show {
-      transform: translateX(0);
-    }
-    
-    .notification.hide {
-      transform: translateX(120%);
-    }
-    
-    .notification-content {
-      display: flex;
-      align-items: center;
-    }
-    
-    .notification-content i {
-      font-size: 1.5rem;
-      margin-right: 15px;
-    }
-    
-    .notification.success i {
-      color: #2ecc71;
-    }
-    
-    .notification.error i {
-      color: #e74c3c;
-    }
   </style>
 </head>
 
@@ -1355,83 +1097,6 @@
       </div>
     </div>
 
-    <!-- เพิ่มโมดอลสำหรับล็อกอินและสมัครสมาชิก -->
-    <div class="auth-modal" id="authModal">
-      <div class="auth-container">
-        <div class="auth-header">
-          <h2>เข้าสู่ระบบ / สมัครสมาชิก</h2>
-          <div class="auth-close" onclick="closeAuthModal()">
-            <i class="fas fa-times"></i>
-          </div>
-        </div>
-        
-        <div class="auth-tabs">
-          <div class="auth-tab active" data-tab="login">เข้าสู่ระบบ</div>
-          <div class="auth-tab" data-tab="register">สมัครสมาชิก</div>
-        </div>
-        
-        <div class="auth-content">
-          <!-- ฟอร์มล็อกอิน -->
-          <form id="loginForm" class="auth-form active">
-            <div class="auth-form-group">
-              <label for="authEmail">อีเมล</label>
-              <input type="email" id="authEmail" required>
-              <div id="emailError" class="auth-error"></div>
-            </div>
-            
-            <div class="auth-form-group">
-              <label for="authPassword">รหัสผ่าน</label>
-              <input type="password" id="authPassword" required>
-              <div id="passwordError" class="auth-error"></div>
-            </div>
-            
-            <button type="button" class="auth-btn" onclick="loginUser()">
-              <i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ
-            </button>
-            
-            <div class="auth-footer">
-              ลืมรหัสผ่าน? <a href="#" onclick="resetPassword()">รีเซ็ตรหัสผ่าน</a>
-            </div>
-          </form>
-          
-          <!-- ฟอร์มสมัครสมาชิก -->
-          <form id="registerForm" class="auth-form">
-            <div class="auth-form-group">
-              <label for="regUsername">ชื่อผู้ใช้</label>
-              <input type="text" id="regUsername" required>
-              <div id="usernameError" class="auth-error"></div>
-            </div>
-            
-            <div class="auth-form-group">
-              <label for="regEmail">อีเมล</label>
-              <input type="email" id="regEmail" required>
-              <div id="regEmailError" class="auth-error"></div>
-            </div>
-            
-            <div class="auth-form-group">
-              <label for="regPassword">รหัสผ่าน</label>
-              <input type="password" id="regPassword" required>
-              <div id="regPasswordError" class="auth-error"></div>
-            </div>
-            
-            <div class="auth-form-group">
-              <label for="regConfirmPassword">ยืนยันรหัสผ่าน</label>
-              <input type="password" id="regConfirmPassword" required>
-              <div id="confirmPasswordError" class="auth-error"></div>
-            </div>
-            
-            <button type="button" class="auth-btn" onclick="registerUser()">
-              <i class="fas fa-user-plus"></i> สมัครสมาชิก
-            </button>
-            
-            <div class="auth-footer">
-              มีบัญชีอยู่แล้ว? <a href="#" onclick="switchToLogin()">เข้าสู่ระบบ</a>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-
     <section class="product-info">
         <div class="container">
             <h2>Alice Moist Daily เลนส์สัมผัสรายวัน</h2>
@@ -1546,7 +1211,7 @@
     updateCartBadge();
     
     // แจ้งเตือน
-    showNotification('เพิ่มสินค้าในตะกร้าเรียบร้อยแล้ว', 'success');
+    alert('เพิ่มสินค้าในตะกร้าเรียบร้อยแล้ว');
   }
   
   // ฟังก์ชันเพิ่ม/ลดจำนวนสินค้า
@@ -1673,7 +1338,7 @@
   
   function checkout() {
     if (cart.length === 0) {
-      showNotification('ไม่มีสินค้าในตะกร้า', 'error');
+      alert('ไม่มีสินค้าในตะกร้า');
       return;
     }
     
@@ -1682,15 +1347,12 @@
     
     if (!username) {
       // ยังไม่ได้ล็อกอิน
-      closeCartModal();
-      openAuthModal('login');
-      showNotification('กรุณาล็อกอินก่อนดำเนินการชำระเงิน', 'error');
+      alert('กรุณาล็อกอินก่อนดำเนินการชำระเงิน');
+      window.location.href = "buyer-login.html";
     } else {
       // ล็อกอินแล้ว
-      showNotification('กำลังนำคุณไปยังหน้าชำระเงิน', 'success');
-      setTimeout(() => {
-        window.location.href = "buyer-checkout.html";
-      }, 1500);
+      alert('กำลังนำคุณไปยังหน้าชำระเงิน');
+      window.location.href = "buyer-checkout.html";
     }
   }
   
@@ -1739,10 +1401,8 @@
   
   function toggleDropdown(event) {
     event.stopPropagation();
-    const username = localStorage.getItem('registeredUsername');
-    const dropdown = document.getElementById('dropdownMenu');
-     if (!username) {
-      openAuthModal('login');
+    if (!username) {
+      window.location.href = "buyer-login.html";
       return;
     }
     dropdown.classList.toggle("show");
@@ -1760,26 +1420,17 @@
     overlay.classList.toggle("show");
   }
   
-  function logout() {
-    // ลบข้อมูลการล็อกอิน
-    localStorage.removeItem('isLoggedIn');
+function logout() {
+    // ลบข้อมูลการล็อกอินจาก localStorage
     localStorage.removeItem('registeredUsername');
     localStorage.removeItem('registeredEmail');
     localStorage.removeItem('registeredPassword');
     
     // ล้างตะกร้าสินค้า
     localStorage.removeItem('cart');
-    cart = [];
-    updateCartBadge();
     
-    const dropdown = document.getElementById('dropdownMenu');
-    dropdown.classList.remove('show');
-
-    // แจ้งเตือน
-    showNotification('ออกจากระบบสำเร็จ', 'success');
-    
-    // อัพเดท UI
-    updateUserUI();
+    // เปลี่ยนหน้าไปยังหน้าล็อกอิน
+    window.location.href = "buyer-login.html";
   }
   
   function setAccount() {
@@ -1837,9 +1488,6 @@
     if (event.target.classList.contains('cart-modal')) {
       closeCartModal();
     }
-    if (event.target.classList.contains('auth-modal')) {
-      closeAuthModal();
-    }
   });
   
   // สลับระหว่าง MINUS และ PLUS
@@ -1878,7 +1526,7 @@
       modal.style.display = 'none';
       calculateTotal();
     } else {
-      showNotification('กรุณาเลือกค่าสายตาก่อน', 'error');
+      alert('กรุณาเลือกค่าสายตาก่อน');
     }
   });
   
@@ -1900,269 +1548,6 @@
       totalPriceElement.textContent = 'XXX บาท';
     }
   }
-  
-  // ฟังก์ชันสำหรับระบบล็อกอิน/สมัครสมาชิกแบบโมดอล
-  function openAuthModal(tab = 'login') {
-    const modal = document.getElementById('authModal');
-    modal.classList.add('show');
-    
-    // ซ่อนฟอร์มทั้งหมด
-    document.querySelectorAll('.auth-form').forEach(form => {
-      form.classList.remove('active');
-    });
-    
-    // เปิดฟอร์มที่เลือก
-    if (tab === 'login') {
-      document.getElementById('loginForm').classList.add('active');
-      
-      // ตั้งค่าตำแหน่งแท็บ
-      document.querySelectorAll('.auth-tab').forEach(tab => {
-        tab.classList.remove('active');
-        if (tab.dataset.tab === 'login') {
-          tab.classList.add('active');
-        }
-      });
-    } else {
-      document.getElementById('registerForm').classList.add('active');
-      
-      // ตั้งค่าตำแหน่งแท็บ
-      document.querySelectorAll('.auth-tab').forEach(tab => {
-        tab.classList.remove('active');
-        if (tab.dataset.tab === 'register') {
-          tab.classList.add('active');
-        }
-      });
-    }
-  }
-  
-  function closeAuthModal() {
-    document.getElementById('authModal').classList.remove('show');
-    clearErrors();
-  }
-  
-  function switchToLogin() {
-    openAuthModal('login');
-  }
-  
-  function switchToRegister() {
-    openAuthModal('register');
-  }
-  
-  function clearErrors() {
-    document.querySelectorAll('.auth-error').forEach(error => {
-      error.style.display = 'none';
-      error.textContent = '';
-    });
-  }
-  
-  function showError(elementId, message) {
-    const errorElement = document.getElementById(elementId);
-    errorElement.textContent = message;
-    errorElement.style.display = 'block';
-  }
-  
-  // ฟังก์ชันล็อกอินแบบโมดอล
-  function loginUser() {
-    const email = document.getElementById('authEmail').value;
-    const password = document.getElementById('authPassword').value;
-    
-    clearErrors();
-    
-    if (!email || !password) {
-      showError('emailError', 'กรุณากรอกอีเมลและรหัสผ่าน');
-      return;
-    }
-    
-    // ตรวจสอบข้อมูลผู้ใช้
-    const registeredEmail = localStorage.getItem('registeredEmail');
-    const registeredPassword = localStorage.getItem('registeredPassword');
-    const registeredUsername = localStorage.getItem('registeredUsername');
-    
-    if (email === registeredEmail && password === registeredPassword) {
-      // บันทึกสถานะล็อกอิน
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('registeredUsername', registeredUsername);
-      
-      // อัพเดท UI
-      updateUserUI();
-      
-      // ปิดโมดอล
-      closeAuthModal();
-      
-      // แจ้งเตือน
-      showNotification('เข้าสู่ระบบสำเร็จ!', 'success');
-    } else {
-      showError('passwordError', 'อีเมลหรือรหัสผ่านไม่ถูกต้อง');
-    }
-  }
-  
-  // ฟังก์ชันสมัครสมาชิกแบบโมดอล
-  function registerUser() {
-    const username = document.getElementById('regUsername').value;
-    const email = document.getElementById('regEmail').value;
-    const password = document.getElementById('regPassword').value;
-    const confirmPassword = document.getElementById('regConfirmPassword').value;
-    
-    clearErrors();
-    
-    // ตรวจสอบความถูกต้อง
-    let hasError = false;
-    
-    if (!username) {
-      showError('usernameError', 'กรุณากรอกชื่อผู้ใช้');
-      hasError = true;
-    }
-    
-    if (!email) {
-      showError('regEmailError', 'กรุณากรอกอีเมล');
-      hasError = true;
-    } else {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        showError('regEmailError', 'รูปแบบอีเมลไม่ถูกต้อง');
-        hasError = true;
-      }
-    }
-    
-    if (!password) {
-      showError('regPasswordError', 'กรุณากรอกรหัสผ่าน');
-      hasError = true;
-    } else if (password.length < 6) {
-      showError('regPasswordError', 'รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร');
-      hasError = true;
-    }
-    
-    if (!confirmPassword) {
-      showError('confirmPasswordError', 'กรุณายืนยันรหัสผ่าน');
-      hasError = true;
-    } else if (password !== confirmPassword) {
-      showError('confirmPasswordError', 'รหัสผ่านไม่ตรงกัน');
-      hasError = true;
-    }
-    
-    if (hasError) return;
-    
-    // บันทึกข้อมูลผู้ใช้
-    localStorage.setItem('registeredUsername', username);
-    localStorage.setItem('registeredEmail', email);
-    localStorage.setItem('registeredPassword', password);
-    localStorage.setItem('isLoggedIn', 'true');
-    
-    // อัพเดท UI
-    updateUserUI();
-    
-    // ปิดโมดอล
-    closeAuthModal();
-    
-    // แจ้งเตือน
-    showNotification('สมัครสมาชิกสำเร็จ! คุณสามารถเข้าสู่ระบบได้ทันที', 'success');
-  }
-  
-  // ฟังก์ชันรีเซ็ตรหัสผ่าน
-  function resetPassword() {
-    const email = prompt("กรุณากรอกอีเมลที่ใช้สมัคร:");
-    const registeredEmail = localStorage.getItem("registeredEmail");
-    
-    if (email === registeredEmail) {
-      const newPassword = prompt("กรอกรหัสผ่านใหม่:");
-      if (newPassword) {
-        if (newPassword.length < 6) {
-          showNotification('รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร', 'error');
-          return;
-        }
-        
-        localStorage.setItem("registeredPassword", newPassword);
-        showNotification('รีเซ็ตรหัสผ่านเรียบร้อยแล้ว', 'success');
-      }
-    } else {
-      showNotification('ไม่พบอีเมลนี้ในระบบ', 'error');
-    }
-  }
-  
-  // ฟังก์ชันอัพเดท UI หลังจากล็อกอิน
-  function updateUserUI() {
-    const username = localStorage.getItem('registeredUsername');
-    const usernameDisplay = document.getElementById('usernameDisplay');
-    const dropdownUsername = document.getElementById('dropdownUsername');
-    const dropdownEmail = document.getElementById('dropdownEmail');
-    const dropdown = document.getElementById('dropdownMenu');
-    
-    if (username) {
-      usernameDisplay.textContent = username;
-      dropdownUsername.textContent = username;
-      dropdownEmail.textContent = localStorage.getItem('registeredEmail') || 'example@email.com';
-        dropdown.classList.remove('show');
-    } else {
-      usernameDisplay.textContent = 'ล็อกอิน';
-      // ซ่อน dropdown เมื่อไม่มีผู้ใช้
-      dropdown.classList.remove('show');
-    }
-    
-    // อัพเดทจำนวนสินค้าในตะกร้า
-    updateCartBadge();
-  }
-  
-  // ฟังก์ชันแสดงการแจ้งเตือน
-  function showNotification(message, type) {
-    // สร้างองค์ประกอบแจ้งเตือน
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.innerHTML = `
-      <div class="notification-content">
-        <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
-        <span>${message}</span>
-      </div>
-    `;
-    
-    // เพิ่มลงใน body
-    document.body.appendChild(notification);
-    
-    // แสดงการแจ้งเตือน
-    setTimeout(() => {
-      notification.classList.add('show');
-    }, 100);
-    
-    // ตั้งเวลาให้หายไป
-    setTimeout(() => {
-      notification.classList.remove('show');
-      notification.classList.add('hide');
-      setTimeout(() => {
-        document.body.removeChild(notification);
-      }, 300);
-    }, 3000);
-  }
-  
-  // เพิ่มการคลิกที่แท็บ
-  document.querySelectorAll('.auth-tab').forEach(tab => {
-    tab.addEventListener('click', function() {
-      // ลบ active จากแท็บทั้งหมด
-      document.querySelectorAll('.auth-tab').forEach(t => {
-        t.classList.remove('active');
-      });
-      
-      // เพิ่ม active ให้แท็บที่คลิก
-      this.classList.add('active');
-      
-      // ซ่อนฟอร์มทั้งหมด
-      document.querySelectorAll('.auth-form').forEach(form => {
-        form.classList.remove('active');
-      });
-      
-      // แสดงฟอร์มที่ตรงกับแท็บ
-      const tabId = this.dataset.tab;
-      document.getElementById(`${tabId}Form`).classList.add('active');
-    });
-  });
-  
-  // อัพเดท UI เมื่อโหลดหน้า
-  window.addEventListener('DOMContentLoaded', function() {
-    updateUserUI();
-    
-    // ตรวจสอบว่ามีผู้ใช้ล็อกอินอยู่แล้วหรือไม่
-    if (localStorage.getItem('isLoggedIn')) {
-      updateUserUI();
-    }
-  });
 </script>
 </body>
 </html>
