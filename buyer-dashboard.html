@@ -56,6 +56,8 @@
       max-width: 1000px;
       width: 90%;
       padding: 0;
+      display: flex;
+      flex-direction: column;
     }
 
     .order-history-header {
@@ -69,8 +71,7 @@
     }
 
     .order-history-controls {
-      position: sticky;
-      top: 80px;
+      /* ลบ position: sticky และ top */
       z-index: 4;
       background: #f8f9fa;
       padding: 15px;
@@ -128,7 +129,7 @@
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
       gap: 20px;
-      max-height: 500px;
+      max-height: calc(85vh - 250px); /* ปรับ max-height ให้พอดี */
       overflow-y: auto;
     }
 
@@ -146,6 +147,7 @@
       
       .order-history-container {
         grid-template-columns: 1fr;
+        max-height: calc(100vh - 300px);
       }
     }
 
@@ -169,6 +171,10 @@
       .filter-group {
         width: 100%;
         margin-bottom: 10px;
+      }
+      
+      .order-history-container {
+        max-height: calc(100vh - 350px);
       }
     }
 
@@ -1847,7 +1853,7 @@
       </div>
     </div>
 
-    <!-- เพิ่มโมดอลสำหรับล็อกอินและสมัครสมาชิก -->
+    <!-- เพิ่มโมดอลสำหรับล็อกอิน/สมัครสมาชิก -->
     <div class="auth-modal" id="authModal">
       <div class="auth-container">
         <div class="auth-header">
@@ -2162,7 +2168,7 @@
           <div class="cart-item-details">
             <div class="cart-item-title">${item.name}</div>
             <div class="cart-item-prescription">
-              ตาขวา: ${item.rightEye}, ตาซ้าย: ${item.leftEye}
+              ตาขวา: ${item.rightEye || 'N/A'}, ตาซ้าย: ${item.leftEye || 'N/A'}
             </div>
             <div class="cart-item-price">${item.price} บาท × ${item.quantity} = ${itemTotal} บาท</div>
             <div class="quantity-controls">
@@ -2707,94 +2713,98 @@
       updateUserUI();
     }
   });
-  // ตัวแปรสำหรับระบบประวัติการสั่งซื้อ
-    let orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
-    let filteredOrders = [];
-    const ordersPerPage = 4;
-    let currentPage = 1;
-    
-    // ฟังก์ชันเปิด modal ประวัติการสั่งซื้อ
-    function openOrderHistoryModal() {
-    const modal = document.getElementById('orderHistoryModal');
-    modal.style.display = 'block';
-    
+   // ตัวแปรสำหรับระบบประวัติการสั่งซื้อ
+  let orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
+  let filteredOrders = [];
+  const ordersPerPage = 4;
+  let currentPage = 1;
+  
+  // ฟังก์ชันเปิด modal ประวัติการสั่งซื้อ
+  function openOrderHistoryModal() {
     // อ่านข้อมูลใหม่จาก localStorage ทุกครั้ง
     orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
     filteredOrders = [...orders];
+
+    const modal = document.getElementById('orderHistoryModal');
+    modal.style.display = 'block';
     
+    // เรียกฟังก์ชันแสดงประวัติใหม่
     displayOrderHistory();
+    
+    // สร้าง pagination
     generatePagination();
     
     document.body.style.overflow = 'hidden';
   }
+  
+  // ฟังก์ชันปิด modal
+  function closeOrderHistoryModal() {
+    document.getElementById('orderHistoryModal').style.display = 'none';
     
-    // ฟังก์ชันปิด modal
-    function closeOrderHistoryModal() {
-      document.getElementById('orderHistoryModal').style.display = 'none';
-      
-      // คืนค่าการสกรอลของ body
-      document.body.style.overflow = 'auto';
+    // คืนค่าการสกรอลของ body
+    document.body.style.overflow = 'auto';
+  }
+  
+  // ฟังก์ชันกรองคำสั่งซื้อตามสถานะ
+  function filterOrders() {
+    const status = document.getElementById('statusFilter').value;
+    
+    if (status === 'all') {
+      filteredOrders = [...orders];
+    } else {
+      filteredOrders = orders.filter(order => order.status === status);
     }
     
-    // ฟังก์ชันกรองคำสั่งซื้อตามสถานะ
-    function filterOrders() {
-      const status = document.getElementById('statusFilter').value;
-      
-      if (status === 'all') {
-        filteredOrders = [...orders];
-      } else {
-        filteredOrders = orders.filter(order => order.status === status);
+    currentPage = 1;
+    displayOrderHistory();
+    generatePagination();
+  }
+  
+  // ฟังก์ชันเรียงลำดับคำสั่งซื้อ
+  function sortOrders() {
+    const sortBy = document.getElementById('sortOrder').value;
+    
+    filteredOrders.sort((a, b) => {
+      if (sortBy === 'newest') {
+        return new Date(b.date) - new Date(a.date);
+      } else if (sortBy === 'oldest') {
+        return new Date(a.date) - new Date(b.date);
+      } else if (sortBy === 'price-high') {
+        return b.total - a.total;
+      } else if (sortBy === 'price-low') {
+        return a.total - b.total;
       }
-      
-      currentPage = 1;
-      displayOrderHistory();
-      generatePagination();
+      return 0;
+    });
+    
+    currentPage = 1;
+    displayOrderHistory();
+    generatePagination();
+  }
+  
+  // ฟังก์ชันค้นหาคำสั่งซื้อ
+  function searchOrders() {
+    const searchTerm = document.getElementById('orderSearch').value.toLowerCase();
+    
+    if (!searchTerm) {
+      filteredOrders = [...orders];
+    } else {
+      filteredOrders = orders.filter(order => 
+        order.id.toLowerCase().includes(searchTerm) ||
+        order.date.toLowerCase().includes(searchTerm)
+      );
     }
     
-    // ฟังก์ชันเรียงลำดับคำสั่งซื้อ
-    function sortOrders() {
-      const sortBy = document.getElementById('sortOrder').value;
-      
-      filteredOrders.sort((a, b) => {
-        if (sortBy === 'newest') {
-          return new Date(b.date) - new Date(a.date);
-        } else if (sortBy === 'oldest') {
-          return new Date(a.date) - new Date(b.date);
-        } else if (sortBy === 'price-high') {
-          return b.total - a.total;
-        } else if (sortBy === 'price-low') {
-          return a.total - b.total;
-        }
-        return 0;
-      });
-      
-      currentPage = 1;
-      displayOrderHistory();
-      generatePagination();
-    }
-    
-    // ฟังก์ชันค้นหาคำสั่งซื้อ
-    function searchOrders() {
-      const searchTerm = document.getElementById('orderSearch').value.toLowerCase();
-      
-      if (!searchTerm) {
-        filteredOrders = [...orders];
-      } else {
-        filteredOrders = orders.filter(order => 
-          order.id.toLowerCase().includes(searchTerm) ||
-          order.date.toLowerCase().includes(searchTerm)
-        );
-      }
-      
-      currentPage = 1;
-      displayOrderHistory();
-      generatePagination();
-    }
-    
-    // ฟังก์ชันแสดงประวัติการสั่งซื้อ
-   function displayOrderHistory() {
+    currentPage = 1;
+    displayOrderHistory();
+    generatePagination();
+  }
+  
+  // ฟังก์ชันแสดงประวัติการสั่งซื้อ
+  function displayOrderHistory() {
     const container = document.getElementById('orderHistoryContainer');
     
+    // ตรวจสอบว่ามีคำสั่งซื้อหรือไม่
     if (filteredOrders.length === 0) {
       container.innerHTML = `
         <div class="empty-orders">
@@ -2805,83 +2815,83 @@
       `;
       return;
     }
-      
-      // คำนวณคำสั่งซื้อที่จะแสดงในหน้าปัจจุบัน
-      const startIndex = (currentPage - 1) * ordersPerPage;
-      const endIndex = startIndex + ordersPerPage;
-      const ordersToShow = filteredOrders.slice(startIndex, endIndex);
-      
-      let html = '';
-      
-      ordersToShow.forEach(order => {
-        // สร้างรายการสินค้า
-        let productsHtml = '';
-        order.items.forEach(item => {
-          productsHtml += `
-            <div class="order-product-item">
-              <img src="${item.image}" alt="${item.name}">
-              <div class="order-product-details">
-                <div class="order-product-title">${item.name}</div>
-                <div class="order-product-prescription">
-                  ตาขวา: ${item.rightEye || 'N/A'}, ตาซ้าย: ${item.leftEye || 'N/A'}
-                </div>
-                <div class="order-product-price">
-                  ${item.quantity} × ${item.price} บาท = ${item.quantity * item.price} บาท
-                </div>
+    
+    // คำนวณคำสั่งซื้อที่จะแสดงในหน้าปัจจุบัน
+    const startIndex = (currentPage - 1) * ordersPerPage;
+    const endIndex = startIndex + ordersPerPage;
+    const ordersToShow = filteredOrders.slice(startIndex, endIndex);
+    
+    let html = '';
+    
+    ordersToShow.forEach(order => {
+      // สร้างรายการสินค้า
+      let productsHtml = '';
+      order.items.forEach(item => {
+        productsHtml += `
+          <div class="order-product-item">
+            <img src="${item.image}" alt="${item.name}">
+            <div class="order-product-details">
+              <div class="order-product-title">${item.name}</div>
+              <div class="order-product-prescription">
+                ตาขวา: ${item.rightEye || 'N/A'}, ตาซ้าย: ${item.leftEye || 'N/A'}
+              </div>
+              <div class="order-product-price">
+                ${item.quantity} × ${item.price} บาท = ${item.quantity * item.price} บาท
               </div>
             </div>
-          `;
-        });
-        
-        // สร้างสถานะ
-        let statusHtml = '';
-        let statusClass = 'status-pending';
-        let statusText = 'รอดำเนินการ';
-        
-        if (order.status) {
-          switch(order.status) {
-            case 'pending':
-              statusClass = 'status-pending';
-              statusText = 'รอดำเนินการ';
-              break;
-            case 'processing':
-              statusClass = 'status-processing';
-              statusText = 'กำลังเตรียมสินค้า';
-              break;
-            case 'shipped':
-              statusClass = 'status-shipped';
-              statusText = 'จัดส่งแล้ว';
-              break;
-            case 'delivered':
-              statusClass = 'status-delivered';
-              statusText = 'จัดส่งสำเร็จ';
-              break;
-            case 'cancelled':
-              statusClass = 'status-cancelled';
-              statusText = 'ยกเลิก';
-              break;
-          }
-        } else {
-          // สำหรับข้อมูลเดิมที่ไม่มีสถานะ
-          const orderDate = new Date(order.date);
-          const daysAgo = Math.floor((new Date() - orderDate) / (1000 * 60 * 60 * 24));
-          
-          if (daysAgo > 7) {
-            statusClass = 'status-delivered';
-            statusText = 'จัดส่งสำเร็จ';
-          } else if (daysAgo > 3) {
-            statusClass = 'status-shipped';
-            statusText = 'จัดส่งแล้ว';
-          } else if (daysAgo > 1) {
+          </div>
+        `;
+      });
+  
+      // สร้างสถานะ
+      let statusHtml = '';
+      let statusClass = 'status-pending';
+      let statusText = 'รอดำเนินการ';
+      
+      if (order.status) {
+        switch(order.status) {
+          case 'pending':
+            statusClass = 'status-pending';
+            statusText = 'รอดำเนินการ';
+            break;
+          case 'processing':
             statusClass = 'status-processing';
             statusText = 'กำลังเตรียมสินค้า';
-          }
+            break;
+          case 'shipped':
+            statusClass = 'status-shipped';
+            statusText = 'จัดส่งแล้ว';
+            break;
+          case 'delivered':
+            statusClass = 'status-delivered';
+            statusText = 'จัดส่งสำเร็จ';
+            break;
+          case 'cancelled':
+            statusClass = 'status-cancelled';
+            statusText = 'ยกเลิก';
+            break;
         }
+      } else {
+        // สำหรับข้อมูลเดิมที่ไม่มีสถานะ
+        const orderDate = new Date(order.date);
+        const daysAgo = Math.floor((new Date() - orderDate) / (1000 * 60 * 60 * 24));
         
-        statusHtml = `<span class="order-status ${statusClass}"><i class="fas fa-circle"></i> ${statusText}</span>`;
-        
-         const paymentMethod = getPaymentMethodName(order.payment);
+        if (daysAgo > 7) {
+          statusClass = 'status-delivered';
+          statusText = 'จัดส่งสำเร็จ';
+        } else if (daysAgo > 3) {
+          statusClass = 'status-shipped';
+          statusText = 'จัดส่งแล้ว';
+        } else if (daysAgo > 1) {
+          statusClass = 'status-processing';
+          statusText = 'กำลังเตรียมสินค้า';
+        }
+      }
       
+      statusHtml = `<span class="order-status ${statusClass}"><i class="fas fa-circle"></i> ${statusText}</span>`;
+      
+      const paymentMethod = getPaymentMethodName(order.payment);
+    
       html += `
         <div class="order-item">
           <div class="order-header">
@@ -2902,19 +2912,19 @@
               <div class="order-summary-title">สรุปการสั่งซื้อ</div>
               <div class="order-summary-row">
                 <span>ยอดรวมสินค้า:</span>
-                <span>${order.subtotal.toFixed(2)} บาท</span>
+                <span>${Number(order.subtotal).toFixed(2)} บาท</span>
               </div>
               <div class="order-summary-row">
                 <span>ค่าจัดส่ง:</span>
-                <span>${order.shippingFee.toFixed(2)} บาท</span>
+                <span>${Number(order.shippingFee).toFixed(2)} บาท</span>
               </div>
               <div class="order-summary-row">
                 <span>ส่วนลด:</span>
-                <span>${order.discount.toFixed(2)} บาท</span>
+                <span>${Number(order.discount).toFixed(2)} บาท</span>
               </div>
               <div class="order-summary-row order-total">
                 <span>ยอดชำระทั้งหมด:</span>
-                <span>${order.total.toFixed(2)} บาท</span>
+                <span>${Number(order.total).toFixed(2)} บาท</span>
               </div>
               
               <div class="order-payment">
@@ -2951,90 +2961,90 @@
     
     container.innerHTML = html;
   }
+  
+  // ฟังก์ชันสร้าง pagination
+  function generatePagination() {
+    const pagination = document.getElementById('pagination');
+    const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
     
-    // ฟังก์ชันสร้าง pagination
-    function generatePagination() {
-      const pagination = document.getElementById('pagination');
-      const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
-      
-      if (totalPages <= 1) {
-        pagination.innerHTML = '';
-        return;
-      }
-      
-      let html = '';
-      const maxVisiblePages = 5;
-      let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-      let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-      
-      if (endPage - startPage < maxVisiblePages - 1) {
-        startPage = Math.max(1, endPage - maxVisiblePages + 1);
-      }
-      
-      // ปุ่มก่อนหน้า
-      if (currentPage > 1) {
-        html += `<div class="page-btn" onclick="changePage(${currentPage - 1})"><i class="fas fa-chevron-left"></i></div>`;
-      }
-      
-      // ปุ่มหน้า
-      for (let i = startPage; i <= endPage; i++) {
-        html += `<div class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</div>`;
-      }
-      
-      // ปุ่มถัดไป
-      if (currentPage < totalPages) {
-        html += `<div class="page-btn" onclick="changePage(${currentPage + 1})"><i class="fas fa-chevron-right"></i></div>`;
-      }
-      
-      pagination.innerHTML = html;
+    if (totalPages <= 1) {
+      pagination.innerHTML = '';
+      return;
     }
     
-    // ฟังก์ชันเปลี่ยนหน้า
-    function changePage(page) {
-      currentPage = page;
-      displayOrderHistory();
-      generatePagination();
-      document.getElementById('orderHistoryContainer').scrollTop = 0;
+    let html = '';
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    
+    if (endPage - startPage < maxVisiblePages - 1) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
     
-    // ฟังก์ชันแปลงชื่อวิธีการชำระเงิน
-    function getPaymentMethodName(method) {
+    // ปุ่มก่อนหน้า
+    if (currentPage > 1) {
+      html += `<div class="page-btn" onclick="changePage(${currentPage - 1})"><i class="fas fa-chevron-left"></i></div>`;
+    }
+    
+    // ปุ่มหน้า
+    for (let i = startPage; i <= endPage; i++) {
+      html += `<div class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</div>`;
+    }
+    
+    // ปุ่มถัดไป
+    if (currentPage < totalPages) {
+      html += `<div class="page-btn" onclick="changePage(${currentPage + 1})"><i class="fas fa-chevron-right"></i></div>`;
+    }
+    
+    pagination.innerHTML = html;
+  }
+  
+  // ฟังก์ชันเปลี่ยนหน้า
+  function changePage(page) {
+    currentPage = page;
+    displayOrderHistory();
+    generatePagination();
+    document.getElementById('orderHistoryContainer').scrollTop = 0;
+  }
+  
+  // ฟังก์ชันแปลงชื่อวิธีการชำระเงิน
+  function getPaymentMethodName(method) {
     switch(method) {
       case 'bank': return 'โอนเงินผ่านธนาคาร';
       case 'credit': return 'บัตรเครดิต/เดบิต';
       case 'promptpay': return 'พร้อมเพย์';
       case 'cod': return 'เก็บเงินปลายทาง (COD)';
       default: return method || 'ไม่ระบุ';
-      }
     }
-    
-    // ฟังก์ชันดูรายละเอียดคำสั่งซื้อ
-    function viewOrderDetails(orderId) {
-      const order = orders.find(o => o.id === orderId);
-      if (order) {
-        alert(`ดูรายละเอียดคำสั่งซื้อ #${orderId}\n\nสถานะ: ${getStatusText(order.status)}\nวันที่สั่งซื้อ: ${order.date}\nยอดรวม: ${order.total} บาท`);
-      }
+  }
+  
+  // ฟังก์ชันดูรายละเอียดคำสั่งซื้อ
+  function viewOrderDetails(orderId) {
+    const order = orders.find(o => o.id === orderId);
+    if (order) {
+      alert(`ดูรายละเอียดคำสั่งซื้อ #${orderId}\n\nสถานะ: ${getStatusText(order.status)}\nวันที่สั่งซื้อ: ${order.date}\nยอดรวม: ${order.total} บาท`);
     }
-    
-    // ฟังก์ชันสั่งซื้ออีกครั้ง
-    function reorder(orderId) {
-      const order = orders.find(o => o.id === orderId);
-      if (order) {
-        // เพิ่มสินค้าในตะกร้า
-        cart = [...order.items];
-        localStorage.setItem('cart', JSON.stringify(cart));
-        updateCartBadge();
-        
-        // ปิด modal และเปิดตะกร้า
-        closeOrderHistoryModal();
-        openCartModal();
-        
-        showNotification('เพิ่มสินค้าในตะกร้าเรียบร้อยแล้ว', 'success');
-      }
+  }
+  
+  // ฟังก์ชันสั่งซื้ออีกครั้ง
+  function reorder(orderId) {
+    const order = orders.find(o => o.id === orderId);
+    if (order) {
+      // เพิ่มสินค้าในตะกร้า
+      cart = [...order.items];
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartBadge();
+      
+      // ปิด modal และเปิดตะกร้า
+      closeOrderHistoryModal();
+      openCartModal();
+      
+      showNotification('เพิ่มสินค้าในตะกร้าเรียบร้อยแล้ว', 'success');
     }
-    
-    // ฟังก์ชันแปลงสถานะเป็นข้อความ
-    function getStatusText(status) {
+  }
+  
+  // ฟังก์ชันแปลงสถานะเป็นข้อความ
+  function getStatusText(status) {
     switch(status) {
       case 'pending': return 'รอดำเนินการ';
       case 'processing': return 'กำลังเตรียมสินค้า';
@@ -3044,52 +3054,9 @@
       default: return 'ไม่ระบุ';
     }
   }
-    
-    // สร้างข้อมูลตัวอย่างสำหรับแสดงผล
-    document.addEventListener('DOMContentLoaded', function() {
-    orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
-    
-    if (orders.length === 0) {
-      orders = [
-        {
-          id: 'ORD-' + Date.now(),
-          date: new Date().toLocaleString(),
-          items: [
-            {
-              id: 1,
-              name: 'Alice Moist Daily เลนส์สัมผัสรายวัน',
-              price: 450,
-              image: 'images/product1.png',
-              rightEye: '-1.50',
-              leftEye: '-1.75',
-              quantity: 2,
-              timestamp: new Date().toISOString()
-            }
-          ],
-          subtotal: 900,
-          shippingFee: 0,
-          discount: 0,
-          total: 900,
-          payment: 'promptpay',
-          address: {
-            name: 'สมชาย ใจดี',
-            address: '123 ถนนสุขุมวิท',
-            district: 'คลองเตย',
-            province: 'กรุงเทพมหานคร',
-            postalCode: '10110',
-            phone: '0812345678'
-          },
-          status: 'delivered'
-        }
-      ];
-      
-      localStorage.setItem('orderHistory', JSON.stringify(orders));
-    }
-    
-    filteredOrders = [...orders];
-    updateCartBadge();
-  });
-     function deleteOrder(orderId) {
+  
+  // ฟังก์ชันลบคำสั่งซื้อ
+  function deleteOrder(orderId) {
     if (confirm('คุณแน่ใจหรือไม่ว่าต้องการลบรายการสั่งซื้อนี้?')) {
       const index = orders.findIndex(order => order.id === orderId);
       
@@ -3107,8 +3074,9 @@
       } else {
         showNotification('ไม่พบรายการสั่งซื้อที่ต้องการลบ', 'error');
       }
-     }
     }
+  }
+  
 </script>
 </body>
 </html>
