@@ -144,6 +144,7 @@
         }
 
         input {
+            box-sizing: border-box;
             font-family: 'Kanit', sans-serif;
             width: 100%;
             padding: 14px 14px 14px 45px;
@@ -195,7 +196,7 @@
         }
 
         .actions button {
-            width: 100%;
+            width: calc(50% - 5px); /* ปรับความกว้างใหม่ */
             padding: 12px;
             font-size: 15px;
             margin-top: 0;
@@ -258,6 +259,10 @@
             
             .actions {
                 flex-direction: column;
+            }
+
+            .actions button {
+                width: 100%; /* ในโหมดมือถือให้เต็มความกว้าง */
             }
         }
     </style>
@@ -372,7 +377,7 @@
         }
 
         function goBack() {
-            window.location.href = "index.html";
+            window.location.href = "buyer-dashboard.html";
         }
     </script>
 </body>
