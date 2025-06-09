@@ -1592,7 +1592,7 @@
         justify-content: center;
       }
     }
-     /* สไตล์สำหรับปุ่มลบ */
+    
   .delete-order {
     background: #e74c3c;
     color: white;
@@ -1640,6 +1640,15 @@
       justify-content: center;
     }
   }
+  .success-message {
+      background-color: #d4edda;
+      color: #155724;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      text-align: center;
+      display: none;
+    }
   </style>
 </head>
 
@@ -2596,16 +2605,24 @@
     localStorage.setItem('registeredUsername', username);
     localStorage.setItem('registeredEmail', email);
     localStorage.setItem('registeredPassword', password);
-    localStorage.setItem('isLoggedIn', 'true');
     
     // อัพเดท UI
     updateUserUI();
     
-    // ปิดโมดอล
-    closeAuthModal();
+   const successMessage = document.createElement('div');
+    successMessage.className = 'success-message';
+    successMessage.innerHTML = '<i class="fas fa-check-circle"></i> สมัครสมาชิกสำเร็จ! กรุณาล็อกอินเพื่อใช้งาน';
+    successMessage.style.display = 'block';
     
-    // แจ้งเตือน
-    showNotification('สมัครสมาชิกสำเร็จ! คุณสามารถเข้าสู่ระบบได้ทันที', 'success');
+    // เพิ่มข้อความแจ้งเตือนก่อนฟอร์มล็อกอิน
+    const loginForm = document.getElementById('loginForm');
+    loginForm.parentNode.insertBefore(successMessage, loginForm);
+    
+    // สลับไปที่ฟอร์มล็อกอิน
+    switchToLogin();
+    
+    // รีเซ็ตฟอร์มสมัครสมาชิก
+    document.getElementById('registerForm').reset();
   }
   
   // ฟังก์ชันรีเซ็ตรหัสผ่าน
