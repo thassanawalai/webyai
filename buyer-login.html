@@ -719,6 +719,9 @@
       localStorage.setItem('users', JSON.stringify([]));
     }
     
+    // ====== ตั้งค่า BASE API URL ให้แก้ไขตรงนี้ ======
+    const API_BASE_URL = 'https://alice-moist.netlify.app/'; // เปลี่ยนเป็น IP ของเครื่องที่รัน Node.js
+    
     // DOM Elements
     const tabs = document.querySelectorAll('.tab');
     const loginForm = document.getElementById('loginForm');
@@ -928,7 +931,7 @@
           password: document.getElementById('password').value
         };
         try {
-          const res = await fetch('http://localhost:3000/api/register', {
+          const res = await fetch(`${API_BASE_URL}/api/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(user)
@@ -964,7 +967,7 @@
       if (code.length === 6 && /^\d{6}$/.test(code)) {
         const email = userEmailSpan.textContent;
         try {
-          const res = await fetch('http://localhost:3000/api/verify-email', {
+          const res = await fetch(`${API_BASE_URL}/api/verify-email`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, code })
@@ -1037,7 +1040,7 @@
         return;
       }
       try {
-        const res = await fetch('http://localhost:3000/api/login', {
+        const res = await fetch(`${API_BASE_URL}/api/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, password })
@@ -1082,7 +1085,7 @@
         return;
       }
       try {
-        const res = await fetch('http://localhost:3000/api/reset-password', {
+        const res = await fetch(`${API_BASE_URL}/api/reset-password`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, newPassword, confirmPassword })
