@@ -1866,7 +1866,6 @@
     <div class="auth-modal" id="authModal">
       <div class="auth-container">
         <div class="auth-header">
-          <h2>เข้าสู่ระบบ / สมัครสมาชิก</h2>
           <div class="auth-close" onclick="closeAuthModal()">
             <i class="fas fa-times"></i>
           </div>
@@ -2232,22 +2231,19 @@
       showNotification('ไม่มีสินค้าในตะกร้า', 'error');
       return;
     }
-    
-    // ตรวจสอบว่าล็อกอินแล้วหรือไม่
-    const username = localStorage.getItem('registeredUsername');
-    
-    if (!username) {
-      // ยังไม่ได้ล็อกอิน
+    let user = null;
+    try {
+      user = JSON.parse(sessionStorage.getItem('currentUser'));
+    } catch (e) {}
+    if (!user || !user.fullName) {
       closeCartModal();
-      openAuthModal('login');
-      showNotification('กรุณาล็อกอินก่อนดำเนินการชำระเงิน', 'error');
-    } else {
-      // ล็อกอินแล้ว
-      showNotification('กำลังนำคุณไปยังหน้าชำระเงิน', 'success');
-      setTimeout(() => {
-        window.location.href = "buyer-checkout.html";
-      }, 1500);
+      window.location.href = 'buyer-login.html';
+      return;
     }
+    showNotification('กำลังนำคุณไปยังหน้าชำระเงิน', 'success');
+    setTimeout(() => {
+      window.location.href = "buyer-checkout.html";
+    }, 1500);
   }
   
   // ตัวแปรสำหรับระบบเลือกค่าสายตา
@@ -2295,15 +2291,18 @@
   
   function toggleDropdown(event) {
     event.stopPropagation();
-    const username = localStorage.getItem('registeredUsername');
-    const dropdown = document.getElementById('dropdownMenu');
-     if (!username) {
-      openAuthModal('login');
+    let user = null;
+    try {
+      user = JSON.parse(sessionStorage.getItem('currentUser'));
+    } catch (e) {}
+    if (!user || !user.fullName) {
+      window.location.href = 'buyer-login.html';
       return;
     }
     dropdown.classList.toggle("show");
   }
   
+   
   document.addEventListener("click", function (event) {
     if (!event.target.closest(".profile")) {
       dropdown.classList.remove("show");
@@ -2648,24 +2647,23 @@
   
   // ฟังก์ชันอัพเดท UI หลังจากล็อกอิน
   function updateUserUI() {
-    const username = localStorage.getItem('registeredUsername');
     const usernameDisplay = document.getElementById('usernameDisplay');
     const dropdownUsername = document.getElementById('dropdownUsername');
     const dropdownEmail = document.getElementById('dropdownEmail');
     const dropdown = document.getElementById('dropdownMenu');
-    
-    if (username) {
-      usernameDisplay.textContent = username;
-      dropdownUsername.textContent = username;
-      dropdownEmail.textContent = localStorage.getItem('registeredEmail') || 'example@email.com';
-        dropdown.classList.remove('show');
+    let user = null;
+    try {
+      user = JSON.parse(sessionStorage.getItem('currentUser'));
+    } catch (e) {}
+    if (user && user.fullName) {
+      usernameDisplay.textContent = user.fullName;
+      dropdownUsername.textContent = user.fullName;
+      dropdownEmail.textContent = user.email;
+      dropdown.classList.remove('show');
     } else {
       usernameDisplay.textContent = 'ล็อกอิน';
-      // ซ่อน dropdown เมื่อไม่มีผู้ใช้
       dropdown.classList.remove('show');
     }
-    
-    // อัพเดทจำนวนสินค้าในตะกร้า
     updateCartBadge();
   }
   
@@ -2724,13 +2722,9 @@
   // อัพเดท UI เมื่อโหลดหน้า
   window.addEventListener('DOMContentLoaded', function() {
     updateUserUI();
-    
-    // ตรวจสอบว่ามีผู้ใช้ล็อกอินอยู่แล้วหรือไม่
-    if (localStorage.getItem('isLoggedIn')) {
-      updateUserUI();
-    }
   });
-   // ตัวแปรสำหรับระบบประวัติการสั่งซื้อ
+  
+  // ตัวแปรสำหรับระบบประวัติการสั่งซื้อ
   let orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
   let filteredOrders = [];
   const ordersPerPage = 4;

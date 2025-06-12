@@ -1,384 +1,1103 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เข้าสู่ระบบ ผู้ซื้อ</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Kanit', sans-serif;
-            background-color: #f5f9ff;
-            color: #2c3e50;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
-        }
-
-        .container {
-            display: flex;
-            width: 900px;
-            height: 550px;
-            background-color: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-        }
-
-        .left-section {
-            flex: 1;
-            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-            color: white;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .left-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
-            transform: rotate(30deg);
-        }
-
-        .logo {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-weight: 700;
-        }
-
-        .logo i {
-            background-color: white;
-            color: #3498db;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .left-section h1 {
-            font-size: 2.2rem;
-            margin: 0 0 15px;
-            font-weight: 700;
-        }
-
-        .left-section p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            opacity: 0.9;
-        }
-
-        .features {
-            margin-top: 30px;
-        }
-
-        .feature {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            font-size: 1.05rem;
-        }
-
-        .feature i {
-            margin-right: 12px;
-            background: rgba(255, 255, 255, 0.2);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .right-section {
-            flex: 1;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        h2 {
-            text-align: center;
-            color: #3498db;
-            margin-top: 0;
-            font-weight: 600;
-            font-size: 1.8rem;
-            margin-bottom: 30px;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .input-group {
-            position: relative;
-            margin: 15px 0;
-        }
-
-        .input-group i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #7f8c8d;
-        }
-
-        input {
-            box-sizing: border-box;
-            font-family: 'Kanit', sans-serif;
-            width: 100%;
-            padding: 14px 14px 14px 45px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            display: block;
-        }
-
-        input:focus {
-            border-color: #3498db;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-            outline: none;
-        }
-
-        button {
-            font-family: 'Kanit', sans-serif;
-            padding: 14px;
-            margin-top: 20px;
-            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 500;
-        }
-
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
-        }
-
-        button i {
-            margin-right: 8px;
-        }
-
-        .actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-            gap: 10px;
-        }
-
-        .actions button {
-            width: calc(50% - 5px); /* ปรับความกว้างใหม่ */
-            padding: 12px;
-            font-size: 15px;
-            margin-top: 0;
-        }
-
-        .back-button {
-            margin-top: 15px;
-            background: #f5f5f5;
-            color: #2c3e50;
-            border: none;
-            padding: 12px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            font-weight: 500;
-            border: 1px solid #e0e0e0;
-        }
-
-        .back-button:hover {
-            background: #e9e9e9;
-            transform: translateY(-2px);
-        }
-
-        .switch-form {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 15px;
-        }
-
-        .switch-form a {
-            color: #3498db;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .switch-form a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 950px) {
-            .container {
-                width: 95%;
-                flex-direction: column;
-                height: auto;
-            }
-            
-            .left-section, .right-section {
-                padding: 30px;
-            }
-            
-            .left-section {
-                padding-top: 50px;
-                padding-bottom: 50px;
-            }
-            
-            .actions {
-                flex-direction: column;
-            }
-
-            .actions button {
-                width: 100%; /* ในโหมดมือถือให้เต็มความกว้าง */
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alice Moist Daily - สมัครสมาชิก/ล็อกอิน</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Kanit', sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #f0f8ff, #e6f7ff);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      display: flex;
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+    }
+    
+    .illustration {
+      flex: 1;
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .illustration::before {
+      content: "";
+      position: absolute;
+      top: -50px;
+      left: -50px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .illustration::after {
+      content: "";
+      position: absolute;
+      bottom: -80px;
+      right: -80px;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .illustration img {
+      max-width: 300px;
+      margin-bottom: 30px;
+      z-index: 1;
+    }
+    
+    .illustration h1 {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      z-index: 1;
+    }
+    
+    .illustration p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      max-width: 500px;
+      line-height: 1.6;
+      z-index: 1;
+    }
+    
+    .form-container {
+      flex: 1;
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .tabs {
+      display: flex;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .tab {
+      padding: 15px 30px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #888;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .tab.active {
+      color: #3498db;
+    }
+    
+    .tab.active::after {
+      content: "";
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: #3498db;
+      border-radius: 3px;
+    }
+    
+    .form-section {
+      display: none;
+    }
+    
+    .form-section.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .form-title {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      color: #2c3e50;
+    }
+    
+    .form-subtitle {
+      color: #7f8c8d;
+      margin-bottom: 30px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #2c3e50;
+    }
+    
+    .input-icon {
+      position: relative;
+    }
+    
+    .input-icon i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #95a5a6;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 15px 15px 15px 45px;
+      border: 2px solid #ecf0f1;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+      border-color: #3498db;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    }
+    
+    .form-row {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .form-row .form-group {
+      flex: 1;
+    }
+    
+    .password-toggle {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #95a5a6;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+    
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+    }
+    
+    .form-footer {
+      text-align: center;
+      margin-top: 25px;
+      color: #7f8c8d;
+    }
+    
+    .form-footer a {
+      color: #3498db;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .form-footer a:hover {
+      text-decoration: underline;
+    }
+    
+    .progress-bar {
+      height: 5px;
+      background: #ecf0f1;
+      border-radius: 5px;
+      margin-bottom: 30px;
+      overflow: hidden;
+    }
+    
+    .progress {
+      height: 100%;
+      width: 33.33%;
+      background: #3498db;
+      transition: width 0.5s ease;
+    }
+    
+    .step-indicator {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    
+    .step {
+      text-align: center;
+      flex: 1;
+      position: relative;
+    }
+    
+    .step-number {
+      width: 30px;
+      height: 30px;
+      background: #ecf0f1;
+      color: #7f8c8d;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto 10px;
+      font-weight: 500;
+      z-index: 2;
+      position: relative;
+    }
+    
+    .step.active .step-number {
+      background: #3498db;
+      color: white;
+    }
+    
+    .step-title {
+      font-size: 0.9rem;
+      color: #7f8c8d;
+    }
+    
+    .step.active .step-title {
+      color: #3498db;
+      font-weight: 500;
+    }
+    
+    .step:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      width: 100%;
+      height: 2px;
+      background: #ecf0f1;
+      z-index: 1;
+    }
+    
+    .step.active:not(:last-child)::after {
+      background: #3498db;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 992px) {
+      .container {
+        flex-direction: column;
+      }
+      
+      .illustration {
+        padding: 30px;
+      }
+      
+      .illustration img {
+        max-width: 200px;
+      }
+      
+      .form-container {
+        padding: 30px;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+      
+      .tab {
+        padding: 12px 20px;
+        font-size: 1rem;
+      }
+      
+      .form-title {
+        font-size: 1.5rem;
+      }
+    }
+    
+    /* Email Verification Modal */
+    .verification-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .verification-modal.show {
+      display: flex;
+    }
+    
+    .verification-container {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+      animation: modalFadeIn 0.5s ease;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .verification-icon {
+      font-size: 4rem;
+      color: #3498db;
+      margin-bottom: 20px;
+    }
+    
+    .verification-title {
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      color: #2c3e50;
+    }
+    
+    .verification-text {
+      color: #7f8c8d;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+    
+    .verification-code {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+    
+    .code-input {
+      width: 50px;
+      height: 60px;
+      border: 2px solid #ecf0f1;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    
+    .code-input:focus {
+      border-color: #3498db;
+      outline: none;
+    }
+    
+    .resend-link {
+      color: #3498db;
+      cursor: pointer;
+      margin-top: 20px;
+      display: inline-block;
+    }
+    
+    /* Error Message */
+    .error-message {
+      color: #e74c3c;
+      font-size: 0.9rem;
+      margin-top: 5px;
+      display: none;
+    }
+    
+    .input-error .form-control {
+      border-color: #e74c3c;
+    }
+    
+    .input-error .error-message {
+      display: block;
+    }
+    /* Password toggle right align for all password fields */
+    .input-icon .password-toggle {
+      right: 15px;
+      left: auto;
+      top: 50%;
+      transform: translateY(-50%);
+      position: absolute;
+      z-index: 2;
+    }
+    /* Add border and shadow to registration form */
+    #registerForm {
+      border: 1.5px solid #e0e0e0;
+      border-radius: 18px;
+      box-shadow: 0 4px 18px rgba(52,152,219,0.08), 0 1.5px 6px rgba(44,62,80,0.04);
+      background: #fff;
+      padding: 35px 30px 30px 30px;
+      margin-top: 10px;
+    }
+    @media (max-width: 576px) {
+      #registerForm {
+        padding: 18px 5px 18px 5px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="left-section">
-            <div class="logo">
-                <i class="fas fa-eye"></i>
-                Alice Moist Daily
-            </div>
-            <h1>ยินดีต้อนรับ</h1>
-            <p>เข้าสู่ระบบเพื่อสัมผัสประสบการณ์การซื้อเลนส์สัมผัสรายวันคุณภาพสูง พร้อมบริการและโปรโมชั่นพิเศษ</p>
-            
-            <div class="features">
-                <div class="feature">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span>ซื้อสินค้าได้สะดวกรวดเร็ว</span>
-                </div>
-                <div class="feature">
-                    <i class="fas fa-history"></i>
-                    <span>ตรวจสอบประวัติการสั่งซื้อ</span>
-                </div>
-                <div class="feature">
-                    <i class="fas fa-star"></i>
-                    <span>สะสมแต้มและรับสิทธิพิเศษ</span>
-                </div>
-                <div class="feature">
-                    <i class="fas fa-tag"></i>
-                    <span>รับส่วนพิเศษสำหรับสมาชิก</span>
-                </div>
-            </div>
+  <div class="container">
+    <div class="illustration">
+    <img src="images/logo.png" style="background-color: #ffffff;height: 100px; width: auto;border-radius: 35px;box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+      <h1>Alice Moist Daily</h1>
+      <p>พบกับประสบการณ์การมองเห็นที่สมบูรณ์แบบด้วยเลนส์สัมผัสรายวันคุณภาพสูงจาก Alice Moist</p>
+    </div>
+    
+    <div class="form-container">
+      <div class="tabs">
+        <div class="tab active" data-tab="login">เข้าสู่ระบบ</div>
+        <div class="tab" data-tab="register">สมัครสมาชิก</div>
+      </div>
+      
+      <!-- Login Form -->
+      <div class="form-section active" id="loginForm">
+        <h2 class="form-title">ยินดีต้อนรับกลับ</h2>
+        <p class="form-subtitle">กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ</p>
+        
+        <div class="form-group">
+          <label for="loginUsername">อีเมลหรือเบอร์โทรศัพท์</label>
+          <div class="input-icon">
+            <i class="fas fa-user"></i>
+            <input type="text" id="loginUsername" class="form-control" placeholder="อีเมลหรือเบอร์โทรศัพท์">
+          </div>
+          <div class="error-message" id="loginUsernameError"></div>
         </div>
         
-        <div class="right-section">
-            <h2>เข้าสู่ระบบ ผู้ซื้อ</h2>
-            <form id="loginForm">
-                <div class="input-group">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" id="loginEmail" placeholder="อีเมล" required>
-                </div>
-                
-                <div class="input-group">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" id="loginPassword" placeholder="รหัสผ่าน" required>
-                </div>
-                
-                <button type="submit">
-                    <i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ
-                </button>
-
-                <div class="actions">
-                    <button type="button" onclick="resetPassword()">
-                        <i class="fas fa-key"></i> รีเซ็ตรหัสผ่าน
-                    </button>
-                    <button type="button" onclick="goToRegister()">
-                        <i class="fas fa-user-plus"></i> สมัครสมาชิก
-                    </button>
-                </div>
-                
-                <button type="button" class="back-button" onclick="goBack()">
-                    <i class="fas fa-arrow-left"></i> ย้อนกลับ
-                </button>
-            </form>
+        <div class="form-group">
+          <label for="loginPassword">รหัสผ่าน</label>
+          <div class="input-icon" style="position: relative;">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="loginPassword" class="form-control" placeholder="รหัสผ่าน">
+            <span style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%);">
+              <i class="fas fa-eye password-toggle" id="loginPasswordToggle"></i>
+            </span>
+          </div>
+          <div class="error-message" id="loginPasswordError"></div>
         </div>
+        
+        <button class="btn" id="loginBtn">เข้าสู่ระบบ</button>
+        
+        <div class="form-footer">
+          ลืมรหัสผ่าน? <a href="#" id="forgotPassword">รีเซ็ตรหัสผ่าน</a>
+        </div>
+      </div>
+      
+      <!-- Registration Form -->
+      <div class="form-section" id="registerForm">
+        <div class="progress-bar">
+          <div class="progress" id="registrationProgress"></div>
+        </div>
+        <div class="step-indicator">
+          <div class="step active" data-step="1">
+            <div class="step-number">1</div>
+            <div class="step-title">ข้อมูลส่วนตัว</div>
+          </div>
+          <div class="step" data-step="2">
+            <div class="step-number">2</div>
+            <div class="step-title">ข้อมูลที่อยู่</div>
+          </div>
+          <div class="step" data-step="3">
+            <div class="step-number">3</div>
+            <div class="step-title">ข้อมูลล็อกอิน</div>
+          </div>
+        </div>
+        
+        <!-- Step 1: Personal Information -->
+        <div class="form-step active" id="step1" style="display: block;">
+          <h2 class="form-title">ข้อมูลส่วนตัว</h2>
+          <p class="form-subtitle">กรุณากรอกข้อมูลส่วนตัวของคุณ</p>
+          
+          <div class="form-group">
+            <label for="fullName">ชื่อ-นามสกุล</label>
+            <div class="input-icon">
+              <i class="fas fa-user"></i>
+              <input type="text" id="fullName" class="form-control" placeholder="ชื่อ-นามสกุล">
+            </div>
+            <div class="error-message" id="fullNameError"></div>
+          </div>
+          
+          <div class="form-group">
+            <label for="phone">เบอร์โทรศัพท์</label>
+            <div class="input-icon">
+              <i class="fas fa-phone"></i>
+              <input type="tel" id="phone" class="form-control" placeholder="เบอร์โทรศัพท์">
+            </div>
+            <div class="error-message" id="phoneError"></div>
+          </div>
+          
+          <button class="btn next-step" data-next="2">ต่อไป</button>
+        </div>
+        
+        <!-- Step 2: Address Information -->
+        <div class="form-step" id="step2" style="display: none;">
+          <h2 class="form-title">ข้อมูลที่อยู่</h2>
+          <p class="form-subtitle">กรุณากรอกข้อมูลที่อยู่สำหรับจัดส่งสินค้า</p>
+          
+          <div class="form-group">
+            <label for="address">ที่อยู่</label>
+            <div class="input-icon">
+              <i class="fas fa-home"></i>
+              <input type="text" id="address" class="form-control" placeholder="ที่อยู่">
+            </div>
+            <div class="error-message" id="addressError"></div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="province">จังหวัด</label>
+              <div class="input-icon">
+                <i class="fas fa-map-marker-alt"></i>
+                <input type="text" id="province" class="form-control" placeholder="จังหวัด">
+              </div>
+              <div class="error-message" id="provinceError"></div>
+            </div>
+            
+            <div class="form-group">
+              <label for="district">อำเภอ/เขต</label>
+              <div class="input-icon">
+                <i class="fas fa-map"></i>
+                <input type="text" id="district" class="form-control" placeholder="อำเภอ/เขต">
+              </div>
+              <div class="error-message" id="districtError"></div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="postalCode">รหัสไปรษณีย์</label>
+            <div class="input-icon">
+              <i class="fas fa-envelope"></i>
+              <input type="text" id="postalCode" class="form-control" placeholder="รหัสไปรษณีย์">
+            </div>
+            <div class="error-message" id="postalCodeError"></div>
+          </div>
+          
+          <div class="form-row">
+            <button class="btn prev-step" data-prev="1">ย้อนกลับ</button>
+            <button class="btn next-step" data-next="3">ต่อไป</button>
+          </div>
+        </div>
+        
+        <!-- Step 3: Login Information -->
+        <div class="form-step" id="step3" style="display: none;">
+          <h2 class="form-title">ข้อมูลล็อกอิน</h2>
+          <p class="form-subtitle">กรุณากรอกข้อมูลสำหรับเข้าสู่ระบบ</p>
+          
+          <div class="form-group">
+            <label for="email">อีเมล</label>
+            <div class="input-icon">
+              <i class="fas fa-envelope"></i>
+              <input type="email" id="email" class="form-control" placeholder="อีเมล">
+            </div>
+            <div class="error-message" id="emailError"></div>
+          </div>
+          
+          <div class="form-group">
+            <label for="password">รหัสผ่าน</label>
+            <div class="input-icon" style="position: relative;">
+              <i class="fas fa-lock"></i>
+              <input type="password" id="password" class="form-control" placeholder="รหัสผ่าน (6 ตัวขึ้นไป)">
+              <span style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%);">
+                <i class="fas fa-eye password-toggle"></i>
+              </span>
+            </div>
+            <div class="error-message" id="passwordError"></div>
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">ยืนยันรหัสผ่าน</label>
+            <div class="input-icon" style="position: relative;">
+              <i class="fas fa-lock"></i>
+              <input type="password" id="confirmPassword" class="form-control" placeholder="ยืนยันรหัสผ่าน">
+              <span style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%);">
+                <i class="fas fa-eye password-toggle"></i>
+              </span>
+            </div>
+            <div class="error-message" id="confirmPasswordError"></div>
+          </div>
+          
+          <div class="form-row">
+            <button class="btn prev-step" data-prev="2">ย้อนกลับ</button>
+            <button class="btn next-step" data-next="4">สมัครสมาชิก</button>
+          </div>
+        </div>
+        
+        <!-- Step 4: Email Verification (handled by modal, so just trigger) -->
+      </div>
     </div>
-
-    <script>
-        document.getElementById("loginForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-            loginUser();
+  </div>
+  
+  <!-- Email Verification Modal -->
+  <div class="verification-modal" id="verificationModal">
+    <div class="verification-container">
+      <div class="verification-icon">
+        <i class="fas fa-envelope-open-text"></i>
+      </div>
+      
+      <h2 class="verification-title">ยืนยันอีเมลของคุณ</h2>
+      <p class="verification-text">เราได้ส่งรหัสยืนยันไปยังอีเมล <span id="userEmail">user@example.com</span> กรุณากรอกรหัสยืนยัน 6 หลักที่ได้รับในอีเมลของคุณ</p>
+      
+      <div class="verification-code">
+        <input type="text" class="code-input" maxlength="1">
+        <input type="text" class="code-input" maxlength="1">
+        <input type="text" class="code-input" maxlength="1">
+        <input type="text" class="code-input" maxlength="1">
+        <input type="text" class="code-input" maxlength="1">
+        <input type="text" class="code-input" maxlength="1">
+      </div>
+      
+      <button class="btn" id="verifyBtn">ยืนยัน</button>
+      
+      <div class="form-footer">
+        ไม่ได้รับอีเมล? <span class="resend-link" id="resendLink">ส่งอีกครั้ง</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Reset Password Modal -->
+  <div class="verification-modal" id="resetPasswordModal">
+    <div class="verification-container">
+      <div class="verification-icon">
+        <i class="fas fa-key"></i>
+      </div>
+      <h2 class="verification-title">รีเซ็ตรหัสผ่าน</h2>
+      <p class="verification-text">กรอกอีเมล รหัสผ่านใหม่ และยืนยันรหัสผ่าน</p>
+      <div class="form-group">
+        <input type="email" id="resetEmail" class="form-control" placeholder="อีเมล" required>
+      </div>
+      <div class="form-group">
+        <input type="password" id="resetNewPassword" class="form-control" placeholder="รหัสผ่านใหม่ (6 ตัวขึ้นไป)" required>
+      </div>
+      <div class="form-group">
+        <input type="password" id="resetConfirmPassword" class="form-control" placeholder="ยืนยันรหัสผ่านใหม่" required>
+      </div>
+      <button class="btn" id="resetPasswordBtn">รีเซ็ตรหัสผ่าน</button>
+      <div class="form-footer">
+        <a href="#" id="closeResetPasswordModal">ยกเลิก</a>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Database simulation using localStorage
+    if (!localStorage.getItem('users')) {
+      localStorage.setItem('users', JSON.stringify([]));
+    }
+    
+    // DOM Elements
+    const tabs = document.querySelectorAll('.tab');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const steps = document.querySelectorAll('.step');
+    const formSteps = document.querySelectorAll('.form-step');
+    const progressBar = document.getElementById('registrationProgress');
+    const verificationModal = document.getElementById('verificationModal');
+    const userEmailSpan = document.getElementById('userEmail');
+    const resendLink = document.getElementById('resendLink');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const codeInputs = document.querySelectorAll('.code-input');
+    
+    // Toggle between login and register
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Update tabs
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        // Update forms
+        if (tab.dataset.tab === 'login') {
+          loginForm.classList.add('active');
+          registerForm.classList.remove('active');
+          resetRegistration();
+        } else {
+          loginForm.classList.remove('active');
+          registerForm.classList.add('active');
+        }
+      });
+    });
+    
+    // Registration Form Navigation
+    function goToStep(stepNumber) {
+      // Update steps
+      steps.forEach(step => {
+        if (parseInt(step.dataset.step) <= stepNumber && parseInt(step.dataset.step) <= 3) {
+          step.classList.add('active');
+        } else {
+          step.classList.remove('active');
+        }
+      });
+      // Update form steps
+      formSteps.forEach(step => {
+        if (step.id === `step${stepNumber}`) {
+          step.classList.add('active');
+          step.style.display = 'block';
+        } else {
+          step.classList.remove('active');
+          step.style.display = 'none';
+        }
+      });
+      // Update progress bar (divide by 2 for 3 steps)
+      progressBar.style.width = `${((stepNumber - 1) / 2) * 100}%`;
+    }
+    
+    // Next Step Button
+    document.querySelectorAll('.next-step').forEach(button => {
+      button.addEventListener('click', () => {
+        const nextStep = parseInt(button.dataset.next);
+        // Validate current step before proceeding
+        if (validateStep(nextStep - 1)) {
+          if (nextStep === 4) {
+            // Show modal only, do not go to step 4
+            submitRegistration();
+          } else {
+            goToStep(nextStep);
+          }
+        }
+      });
+    });
+    
+    // Previous Step Button
+    document.querySelectorAll('.prev-step').forEach(button => {
+      button.addEventListener('click', () => {
+        const prevStep = parseInt(button.dataset.prev);
+        goToStep(prevStep);
+      });
+    });
+    
+    // Reset registration form
+    function resetRegistration() {
+      goToStep(1);
+      
+      // Clear form fields
+      document.getElementById('fullName').value = '';
+      document.getElementById('phone').value = '';
+      document.getElementById('address').value = '';
+      document.getElementById('province').value = '';
+      document.getElementById('district').value = '';
+      document.getElementById('postalCode').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('password').value = '';
+      document.getElementById('confirmPassword').value = '';
+      
+      // Clear errors
+      document.querySelectorAll('.error-message').forEach(el => {
+        el.style.display = 'none';
+      });
+      
+      document.querySelectorAll('.form-control').forEach(input => {
+        input.classList.remove('input-error');
+      });
+    }
+    
+    // Form Validation
+    function validateStep(step) {
+      let isValid = true;
+      
+      if (step === 1) {
+        // Validate personal info
+        if (!document.getElementById('fullName').value.trim()) {
+          showError('fullName', 'กรุณากรอกชื่อ-นามสกุล');
+          isValid = false;
+        }
+        
+        const phone = document.getElementById('phone').value.trim();
+        if (!phone) {
+          showError('phone', 'กรุณากรอกเบอร์โทรศัพท์');
+          isValid = false;
+        } else if (!/^[0-9]{10}$/.test(phone)) {
+          showError('phone', 'เบอร์โทรศัพท์ต้องเป็นตัวเลข 10 หลัก');
+          isValid = false;
+        }
+      } else if (step === 2) {
+        // Validate address info
+        if (!document.getElementById('address').value.trim()) {
+          showError('address', 'กรุณากรอกที่อยู่');
+          isValid = false;
+        }
+        
+        if (!document.getElementById('province').value.trim()) {
+          showError('province', 'กรุณากรอกจังหวัด');
+          isValid = false;
+        }
+        
+        if (!document.getElementById('district').value.trim()) {
+          showError('district', 'กรุณากรอกอำเภอ/เขต');
+          isValid = false;
+        }
+        
+        const postalCode = document.getElementById('postalCode').value.trim();
+        if (!postalCode) {
+          showError('postalCode', 'กรุณากรอกรหัสไปรษณีย์');
+          isValid = false;
+        } else if (!/^[0-9]{5}$/.test(postalCode)) {
+          showError('postalCode', 'รหัสไปรษณีย์ต้องเป็นตัวเลข 5 หลัก');
+          isValid = false;
+        }
+      } else if (step === 3) {
+        // Validate login info
+        const email = document.getElementById('email').value.trim();
+        if (!email) {
+          showError('email', 'กรุณากรอกอีเมล');
+          isValid = false;
+        } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+          showError('email', 'รูปแบบอีเมลไม่ถูกต้อง');
+          isValid = false;
+        }
+        
+        const password = document.getElementById('password').value;
+        if (!password) {
+          showError('password', 'กรุณากรอกรหัสผ่าน');
+          isValid = false;
+        } else if (password.length < 6) {
+          showError('password', 'รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัว');
+          isValid = false;
+        } else if (!/\d/.test(password)) {
+          showError('password', 'รหัสผ่านต้องมีตัวเลขอย่างน้อย 1 ตัว');
+          isValid = false;
+        }
+        
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        if (!confirmPassword) {
+          showError('confirmPassword', 'กรุณายืนยันรหัสผ่าน');
+          isValid = false;
+        } else if (password !== confirmPassword) {
+          showError('confirmPassword', 'รหัสผ่านไม่ตรงกัน');
+          isValid = false;
+        }
+      }
+      
+      return isValid;
+    }
+    
+    // Show error message
+    function showError(fieldId, message) {
+      const errorElement = document.getElementById(`${fieldId}Error`);
+      const inputElement = document.getElementById(fieldId);
+      
+      errorElement.textContent = message;
+      errorElement.style.display = 'block';
+      inputElement.classList.add('input-error');
+    }
+    
+    // Submit registration
+    async function submitRegistration() {
+      if (validateStep(3)) {
+        const user = {
+          fullName: document.getElementById('fullName').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          address: document.getElementById('address').value.trim(),
+          province: document.getElementById('province').value.trim(),
+          district: document.getElementById('district').value.trim(),
+          postalCode: document.getElementById('postalCode').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          password: document.getElementById('password').value
+        };
+        try {
+          const res = await fetch('http://localhost:3000/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(user)
+          });
+          const data = await res.json();
+          if (data.success) {
+            showVerificationModal(user.email);
+          } else {
+            alert(data.error || 'เกิดข้อผิดพลาด');
+          }
+        } catch (e) {
+          alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
+        }
+      }
+    }
+    
+    // Show verification modal
+    function showVerificationModal(email) {
+      userEmailSpan.textContent = email;
+      verificationModal.classList.add('show');
+      
+      // Clear code inputs
+      codeInputs.forEach(input => input.value = '');
+      
+      // Focus first input
+      codeInputs[0].focus();
+    }
+    
+    // Verify email
+    verifyBtn.addEventListener('click', async () => {
+      let code = '';
+      codeInputs.forEach(input => { code += input.value; });
+      if (code.length === 6 && /^\d{6}$/.test(code)) {
+        const email = userEmailSpan.textContent;
+        try {
+          const res = await fetch('http://localhost:3000/api/verify-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, code })
+          });
+          const data = await res.json();
+          if (data.success) {
+            verificationModal.classList.remove('show');
+            alert('ยืนยันอีเมลสำเร็จ! คุณสามารถเข้าสู่ระบบได้แล้ว');
+            tabs[0].click();
+          } else {
+            alert(data.error || 'รหัสยืนยันไม่ถูกต้อง');
+          }
+        } catch (e) {
+          alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
+        }
+      } else {
+        alert('กรุณากรอกรหัสยืนยัน 6 หลัก');
+      }
+    });
+    
+    // Resend verification code
+    resendLink.addEventListener('click', () => {
+      alert('ส่งรหัสยืนยันใหม่ไปยังอีเมลของคุณแล้ว');
+    });
+    
+    // Auto-tab between code inputs
+    codeInputs.forEach((input, index) => {
+      input.addEventListener('input', () => {
+        if (input.value.length === 1 && index < codeInputs.length - 1) {
+          codeInputs[index + 1].focus();
+        }
+      });
+      
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && input.value === '' && index > 0) {
+          codeInputs[index - 1].focus();
+        }
+      });
+    });
+    
+    // Password toggle visibility
+    document.querySelectorAll('.password-toggle').forEach(toggle => {
+      toggle.addEventListener('click', function() {
+        const input = this.closest('.input-icon').querySelector('input');
+        const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+        input.setAttribute('type', type);
+        this.classList.toggle('fa-eye');
+        this.classList.toggle('fa-eye-slash');
+      });
+    });
+    
+    // Login functionality
+    document.getElementById('loginBtn').addEventListener('click', async () => {
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      // ...validate...
+      // Clear errors
+      document.querySelectorAll('#loginForm .error-message').forEach(el => {
+        el.style.display = 'none';
+      });
+      document.querySelectorAll('#loginForm .form-control').forEach(input => {
+        input.classList.remove('input-error');
+      });
+      if (!username) {
+        showError('loginUsername', 'กรุณากรอกอีเมลหรือเบอร์โทรศัพท์');
+        return;
+      }
+      if (!password) {
+        showError('loginPassword', 'กรุณากรอกรหัสผ่าน');
+        return;
+      }
+      try {
+        const res = await fetch('http://localhost:3000/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
         });
-
-        function loginUser() {
-            const loginEmail = document.getElementById("loginEmail").value;
-            const loginPassword = document.getElementById("loginPassword").value;
-
-            const registeredEmail = localStorage.getItem("registeredEmail");
-            const registeredPassword = localStorage.getItem("registeredPassword");
-
-            if (loginEmail === registeredEmail && loginPassword === registeredPassword) {
-                alert("เข้าสู่ระบบสำเร็จ!");
-                window.location.href = "buyer-dashboard.html";
-            } else {
-                alert("อีเมลหรือรหัสผ่านไม่ถูกต้อง");
-            }
+        const data = await res.json();
+        if (res.ok) {
+          // บันทึกข้อมูล user ใน sessionStorage
+          sessionStorage.setItem('currentUser', JSON.stringify(data));
+          alert('เข้าสู่ระบบสำเร็จ! จะนำคุณไปยังหน้าหลัก');
+          window.location.href = 'buyer-dashboard.html';
+        } else {
+          alert(data.error || 'เข้าสู่ระบบไม่สำเร็จ');
         }
-
-        function resetPassword() {
-            const email = prompt("กรุณากรอกอีเมลที่ใช้สมัคร:");
-            const registeredEmail = localStorage.getItem("registeredEmail");
-
-            if (email === registeredEmail) {
-                const newPassword = prompt("กรอกรหัสผ่านใหม่:");
-                if (newPassword) {
-                    // ตรวจสอบความยาวรหัสผ่าน
-                    if (newPassword.length < 6) {
-                        alert('รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร');
-                        return;
-                    }
-                    
-                    localStorage.setItem("registeredPassword", newPassword);
-                    alert("รีเซ็ตรหัสผ่านเรียบร้อยแล้ว");
-                }
-            } else {
-                alert("ไม่พบอีเมลนี้ในระบบ");
-            }
+      } catch (e) {
+        alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
+      }
+    });
+    
+    // Forgot password
+    document.getElementById('forgotPassword').addEventListener('click', (e) => {
+      e.preventDefault();
+      document.getElementById('resetPasswordModal').classList.add('show');
+    });
+    document.getElementById('closeResetPasswordModal').addEventListener('click', (e) => {
+      e.preventDefault();
+      document.getElementById('resetPasswordModal').classList.remove('show');
+    });
+    document.getElementById('resetPasswordBtn').addEventListener('click', async () => {
+      const email = document.getElementById('resetEmail').value.trim();
+      const newPassword = document.getElementById('resetNewPassword').value;
+      const confirmPassword = document.getElementById('resetConfirmPassword').value;
+      if (!email || !newPassword || !confirmPassword) {
+        alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+        return;
+      }
+      if (newPassword !== confirmPassword) {
+        alert('รหัสผ่านใหม่ไม่ตรงกัน');
+        return;
+      }
+      if (newPassword.length < 6) {
+        alert('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร');
+        return;
+      }
+      try {
+        const res = await fetch('http://localhost:3000/api/reset-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, newPassword, confirmPassword })
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert('รีเซ็ตรหัสผ่านสำเร็จ! คุณสามารถเข้าสู่ระบบด้วยรหัสผ่านใหม่');
+          document.getElementById('resetPasswordModal').classList.remove('show');
+        } else {
+          alert(data.error || 'เกิดข้อผิดพลาดในการรีเซ็ตรหัสผ่าน');
         }
-
-        function goToRegister() {
-            window.location.href = "buyer-register.html";
-        }
-
-        function goBack() {
-            window.location.href = "buyer-dashboard.html";
-        }
-    </script>
+      } catch (e) {
+        alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
+      }
+    });
+  </script>
 </body>
 </html>

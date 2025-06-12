@@ -700,6 +700,9 @@
           <button class="add-address-btn" onclick="openAddressModal('new')">
             <i class="fas fa-plus"></i> เพิ่มที่อยู่ใหม่
           </button>
+          <button class="add-address-btn" style="background:#f39c12;margin-left:10px;" onclick="autofillSenderAddress()">
+            <i class="fas fa-user"></i> ใช้ข้อมูลผู้ส่งของฉัน
+          </button>
         </h2>
         <div id="addressList" class="address-list">
           <!-- Addresses will be displayed here -->
@@ -1343,6 +1346,21 @@
     // Go to dashboard
     function goDashboard() {
       window.location.href = 'buyer-dashboard.html';
+    }
+
+    // Autofill sender address
+    function autofillSenderAddress() {
+      // ดึงข้อมูลจาก localStorage
+      const name = localStorage.getItem('registeredUsername') || '';
+      const phone = localStorage.getItem('registeredPhone') || '';
+      const address = localStorage.getItem('registeredAddress') || '';
+      // เปิด modal เพิ่มที่อยู่ใหม่
+      openAddressModal('new');
+      setTimeout(() => {
+        document.getElementById('name').value = name;
+        document.getElementById('phone').value = phone;
+        document.getElementById('address').value = address;
+      }, 200);
     }
   </script>
 </body>
