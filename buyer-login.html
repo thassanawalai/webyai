@@ -720,7 +720,7 @@
     }
     
     // ====== ตั้งค่า BASE API URL ให้แก้ไขตรงนี้ ======
-    const API_BASE_URL = 'https://acquerello11.github.io/webyai'; // เปลี่ยนเป็น IP ของเครื่องที่รัน Node.js
+    const API_BASE_URL = window.location.origin; // ใช้ base URL เดียวกับที่เปิดเว็บ
     
     // DOM Elements
     const tabs = document.querySelectorAll('.tab');
