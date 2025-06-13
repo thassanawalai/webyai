@@ -1660,9 +1660,10 @@
     </div>
     <div class="nav-links">
       <a href="#" class="nav-item" onclick="goHome()">หน้าแรก</a>
-      <a href="#" class="nav-item" onclick="viewProduct()">สินค้า</a>
-      <a href="#" class="nav-item" onclick="viewHowtouse()">วิธีใช้งาน</a>
-      <a href="#" class="nav-item" onclick="viewAboutus()">เกี่ยวกับเรา</a>
+      <a href="buyer-product.html" class="nav-item">สินค้า</a>
+      <a href="buyer-howtouse.html" class="nav-item">วิธีใช้งาน</a>
+      <a href="buyer-about.html" class="nav-item">เกี่ยวกับเรา</a>
+
     </div>
     <div class="nav-buttons">
       <div class="profile" onclick="toggleDropdown(event)">
@@ -1699,9 +1700,9 @@
 
   <div class="mobile-menu" id="mobileMenu">
       <a href="#" class="nav-item" onclick="goHome()">หน้าแรก</a>
-      <a href="#" class="nav-item" onclick="viewProduct()">สินค้า</a>
-      <a href="#" class="nav-item" onclick="viewHowtouse()">วิธีใช้งาน</a>
-      <a href="#" class="nav-item" onclick="viewAboutus()">เกี่ยวกับเรา</a>
+      <a href="buyer-product.html" class="nav-item">สินค้า</a>
+      <a href="buyer-howtouse.html" class="nav-item">วิธีใช้งาน</a>
+      <a href="buyer-about.html" class="nav-item">เกี่ยวกับเรา</a>
   </div>
   
 <section class="banner">
@@ -1728,12 +1729,12 @@
             <p class="product-subtitle">ความสบายตาระดับพรีเมียมในราคาประหยัด</p>
             
             <div class="price">
-                เริ่มต้นเพียง 35¢ ต่อชิ้น* <br>
-                <small>*12.50 USD ต่อกล่อง (เลนส์รายวัน 12 กล่อง)</small>
+                เริ่มต้นกล่องละ 700 บาท <br>
+                <small>2 กล่อง 1300</small>
             </div>
             
             <div class="shipping-notice">
-                <i class="fas fa-truck"></i> ส่งฟรีทุกออเดอร์
+                <i class="fas fa-truck"></i> 2 กล่องขึ้นไปส่งฟรีทุกออเดอร์
             </div>
             
             <div class="prescription-selection">
@@ -1792,17 +1793,41 @@
           <h3>ค่าสายตาสั้น</h3>
           <table class="prescription-grid">
             <tr>
-              <td>0.00</td><td>-1.00</td><td>-2.00</td><td>-3.00</td>
-            </tr>
-            <tr>
-              <td>-0.25</td><td>-1.25</td><td>-2.25</td><td>-3.25</td>
-            </tr>
-            <tr>
-              <td>-0.50</td><td>-1.50</td><td>-2.50</td><td>-3.50</td>
-            </tr>
-            <tr>
-              <td>-0.75</td><td>-1.75</td><td>-2.75</td><td>-3.75</td>
-            </tr>
+              <td>-1.00</td><td>-1.25</td><td>-1.50</td><td>-1.75</td>
+        </tr>
+      <tr>
+        <td>-2.00</td><td>-2.25</td><td>-2.50</td><td>-2.75</td>
+      </tr>
+      <tr>
+        <td>-3.00</td><td>-3.25</td><td>-3.50</td><td>-3.75</td>
+      </tr>
+      <tr>
+        <td>-4.00</td><td>-4.25</td><td>-4.50</td><td>-4.75</td>
+      </tr>
+      <tr>
+        <td>-5.00</td><td>-5.25</td><td>-5.50</td><td>-5.75</td>
+      </tr>
+      <tr>
+        <td>-6.00</td><td>-6.25</td><td>-6.50</td><td>-6.75</td>
+      </tr>
+      <tr>
+        <td>-7.00</td><td>-7.25</td><td>-7.50</td><td>-7.75</td>
+      </tr>
+      <tr>
+        <td>-8.00</td><td>-8.25</td><td>-8.50</td><td>-8.75</td>
+      </tr>
+      <tr>
+        <td>-9.00</td><td>-9.25</td><td>-9.50</td><td>-9.75</td>
+      </tr>
+      <tr>
+        <td>-10.00</td><td>-10.25</td><td>-10.50</td><td>-10.75</td>
+      </tr>
+      <tr>
+        <td>-11.00</td><td>-11.25</td><td>-11.50</td><td>-11.75</td>
+      </tr>
+      <tr>
+        <td>-12.00</td>
+      </tr>
           </table>
         </div>
         
@@ -2453,7 +2478,7 @@
   function calculateTotal() {
     if (rightEyeSelected.textContent !== 'ยังไม่ได้เลือก' && 
         leftEyeSelected.textContent !== 'ยังไม่ได้เลือก') {
-      totalPriceElement.textContent = '450 บาท';
+      totalPriceElement.textContent = '700 บาท';
     } else {
       totalPriceElement.textContent = 'XXX บาท';
     }

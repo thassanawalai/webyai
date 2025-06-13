@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alice Moist Daily - สินค้า</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css"> <!-- แนะนำให้แยก CSS ไปไฟล์นี้ -->
+  <style>
+    body {
+      font-family: 'Kanit', sans-serif;
+      background: linear-gradient(135deg, #f0f8ff, #e6f7ff);
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 50px auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+    }
+    h1 {
+      color: #3498db;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .product-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+    .product-item {
+      background: #f9f9f9;
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      transition: 0.3s;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    .product-item img {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    .product-item h2 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: #2c3e50;
+    }
+    .product-item p {
+      color: #7f8c8d;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>สินค้า Alice Moist Daily</h1>
+    <div class="product-list">
+      <div class="product-item">
+        <img src="images/lens1.png" alt="เลนส์ 1">
+        <h2>Alice Moist Daily Brown</h2>
+        <p>เลนส์สีใสรายเดือน ใส่สบาย</p>
+      </div>
+      <div class="product-item">
+        <img src="images/lens2.png" alt="เลนส์ 2">
+        <h2>Alice Moist Daily Gray</h2>
+        <p>เลนส์สีใสรายวัน ปลอดภัยกับดวงตา</p>
+      </div>
+      <!-- เพิ่มสินค้าอื่น ๆ ตามต้องการ -->
+    </div>
+  </div>
+</body>
+</html>
