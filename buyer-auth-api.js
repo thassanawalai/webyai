@@ -4,10 +4,12 @@ const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
+const helmet = require('helmet');
 require('dotenv').config();
 
 const app = express();
 app.use(express.json());
+app.use(helmet());
 app.use(cors({
   origin: '*', // อนุญาตทุก origin (หรือจะระบุ origin เฉพาะก็ได้)
 }));
@@ -17,6 +19,17 @@ const db = mysql.createConnection({
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASS || '',
   database: process.env.DB_NAME || 'alice_moist',
+});
+
+// สร้าง pool แทนการใช้ connection เดียว
+const pool = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
 db.connect((err) => {
@@ -36,33 +49,47 @@ const transporter = nodemailer.createTransport({
 });
 
 // Register
+// Register
 app.post('/api/register', async (req, res) => {
   const { fullName, phone, address, province, district, postalCode, email, password } = req.body;
+  
   if (!fullName || !phone || !address || !province || !district || !postalCode || !email || !password) {
-    return res.status(400).json({ error: 'Missing required fields' });
+    return res.status(400).json({ error: 'กรุณากรอกข้อมูลให้ครบทุกช่อง' });
   }
+
   try {
+    const [existing] = await pool.query(
+      'SELECT id FROM users WHERE email = ? OR phone = ?', 
+      [email, phone]
+    );
+    
+    if (existing.length > 0) {
+      return res.status(409).json({ error: 'อีเมลหรือเบอร์โทรศัพท์นี้ถูกใช้แล้ว' });
+    }
+
     const hash = await bcrypt.hash(password, 10);
     const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-    db.query(
-      'INSERT INTO users (full_name, phone, address, province, district, postal_code, email, password, verification_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      [fullName, phone, address, province, district, postalCode, email, hash, verificationCode],
-      (err, result) => {
-        if (err) return res.status(400).json({ error: 'Email already exists or invalid data.' });
-        // send email
-        transporter.sendMail({
-          from: `"Alice Moist" <${process.env.EMAIL_USER}>`,
-          to: email,
-          subject: 'ยืนยันอีเมล Alice Moist',
-          html: `<p>รหัสยืนยันของคุณคือ <b>${verificationCode}</b></p>`
-        }, (err, info) => {
-          if (err) return res.status(500).json({ error: 'ส่งอีเมลไม่สำเร็จ' });
-          res.json({ success: true });
-        });
-      }
+    
+    await pool.query(
+      `INSERT INTO users (
+        full_name, phone, address, province, 
+        district, postal_code, email, password, verification_code
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [fullName, phone, address, province, district, postalCode, email, hash, verificationCode]
     );
-  } catch (e) {
-    res.status(500).json({ error: 'Server error' });
+
+    // ส่งอีเมลยืนยัน
+    await transporter.sendMail({
+      from: `"Alice Moist" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: 'ยืนยันอีเมล Alice Moist',
+      html: `<p>รหัสยืนยัน 6 หลักของคุณคือ: <strong>${verificationCode}</strong></p>`
+    });
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Registration error:', err);
+    res.status(500).json({ error: 'เกิดข้อผิดพลาดในระบบ' });
   }
 });
 
