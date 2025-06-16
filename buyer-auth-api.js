@@ -161,5 +161,25 @@ app.post('/api/reset-password', async (req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
+// Check duplicate email or phone
+app.post('/api/check-duplicate', (req, res) => {
+  const { email, phone } = req.body;
+  if (!email && !phone) return res.status(400).json({ duplicate: false, message: 'No data provided' });
+  db.query(
+    'SELECT * FROM users WHERE email = ? OR phone = ?',
+    [email, phone],
+    (err, results) => {
+      if (err) return res.status(500).json({ duplicate: false, message: 'Database error' });
+      if (results.length > 0) {
+        let msg = 'ข้อมูลนี้ถูกใช้ไปแล้ว';
+        if (results[0].email === email) msg = 'อีเมลนี้ถูกใช้ไปแล้ว';
+        else if (results[0].phone === phone) msg = 'เบอร์โทรศัพท์นี้ถูกใช้ไปแล้ว';
+        return res.json({ duplicate: true, message: msg });
+      }
+      res.json({ duplicate: false });
+    }
+  );
+});
+
+const PORT = process.env.PORT || 5500;
 app.listen(PORT, () => console.log('API running on port', PORT));
