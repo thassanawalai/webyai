@@ -208,7 +208,5 @@ app.post('/api/check-duplicate', (req, res) => {
   );
 });
 
-const PORT = process.env.PORT || 5500;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log('API running on port', PORT);
-});
+const PORT = process.env.PORT || 5501;
+app.listen(PORT, () => console.log('API running on port', PORT));
