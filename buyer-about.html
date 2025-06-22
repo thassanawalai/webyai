@@ -4,982 +4,526 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>เกี่ยวกับเรา - Alice Moist Daily</title>
-  <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="navbar-footer-style.css">
-  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --primary: #3498db;
+      --primary-dark: #2980b9;
+      --secondary: #2ecc71;
+      --accent: #9b59b6;
+      --light: #f8f9fa;
+      --dark: #2c3e50;
+      --gray: #7f8c8d;
+      --light-blue: #e6f7ff;
+      --card-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+      --element-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Kanit', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f0f8ff, #e6f7ff);
+      color: var(--dark);
+      line-height: 1.6;
+      min-height: 100vh;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(173, 216, 230, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(135, 206, 250, 0.1) 0%, transparent 20%);
+    }
+
+    /* Banner Section */
+    .banner {
+      background: linear-gradient(135deg, #f0f8ff, #e6f7ff);
+      color: white;
+      padding: 80px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .banner::before {
+      content: "";
+      position: absolute;
+      top: -50px;
+      left: -50px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      z-index: 1;
+    }
+
+    .banner::after {
+      content: "";
+      position: absolute;
+      bottom: -80px;
+      right: -80px;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      z-index: 1;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .banner-content {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      animation: fadeInUp 1s ease;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .banner h1 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      letter-spacing: 1px;
+    }
+
+    .banner p {
+      font-size: 1.3rem;
+      opacity: 0.9;
+      max-width: 700px;
+      margin: 0 auto;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
+    /* Features Section - Updated to 2x2 Grid */
+    .features {
+      padding: 80px 20px;
+      background: white;
+    }
+
+    .features .container {
+      max-width: 1000px;
+    }
+
+    .features h2 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 60px;
+      color: var(--primary-dark);
+      position: relative;
+      padding-bottom: 15px;
+    }
+
+    .features h2::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      border-radius: 2px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition);
+      text-align: center;
+      border: 1px solid #e0f0ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(52, 152, 219, 0.2);
+    }
+
+    .feature-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 25px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2.2rem;
+      flex-shrink: 0;
+    }
+
+    .feature-card h3 {
+      font-size: 1.5rem;
+      color: var(--dark);
+      margin-bottom: 15px;
+    }
+
+    .feature-card p {
+      color: var(--gray);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    /* Product Info Section - Fixed list styling */
+    .product-info {
+      padding: 80px 20px;
+      background: linear-gradient(135deg, #f8faff, #e6f0ff);
+    }
+
+    .product-info .container {
+      max-width: 1000px;
+    }
+
+    .product-info h2 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: var(--primary-dark);
+    }
+
+    .product-info > p {
+      text-align: center;
+      font-size: 1.2rem;
+      color: var(--gray);
+      max-width: 700px;
+      margin: 0 auto 50px;
+    }
+
+    .info-boxes {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+    }
+
+    .info-box {
+      background: white;
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #e0f0ff;
+    }
+
+    .info-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(52, 152, 219, 0.2);
+    }
+
+    .info-box h3 {
+      font-size: 1.6rem;
+      color: var(--primary-dark);
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .info-box h3 i {
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+    }
+
+    /* แก้ไขปัญหาตัวเลขซ้อนกัน */
+    .info-box ul, .info-box ol {
+      padding-left: 25px;
+    }
+
+    .info-box ul li {
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+      color: var(--dark);
+      position: relative;
+      padding-left: 10px;
+      list-style-type: disc; /* กำหนดรูปแบบ bullet จริง */
+    }
+
+    .info-box ol li {
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+      color: var(--dark);
+      position: relative;
+      padding-left: 10px;
+      list-style-type: decimal; /* กำหนดรูปแบบตัวเลขจริง */
+    }
+
+    /* ลบ ::before ที่กำหนดเองเพราะทำให้ซ้อนกัน */
+    .info-box ul li::before,
+    .info-box ol li::before {
+      content: none !important;
+    }
+
+    /* ปรับสไตล์ bullet และตัวเลขใหม่ */
+    .info-box ul li::marker {
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    .info-box ol li::marker {
+      color: var(--primary);
+      font-weight: normal;
+    }
+
+    /* CTA Section */
+    .cta {
+      padding: 100px 20px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: "";
+      position: absolute;
+      top: -50px;
+      left: -50px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      z-index: 1;
+    }
+
+    .cta::after {
+      content: "";
+      position: absolute;
+      bottom: -80px;
+      right: -80px;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      z-index: 1;
+    }
+
+    .cta .container {
+      max-width: 800px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .cta h2 {
+      font-size: 2.8rem;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .cta p {
+      font-size: 1.3rem;
+      max-width: 600px;
+      margin: 0 auto 40px;
+      opacity: 0.9;
+    }
+
+    .cta-button {
+      display: inline-block;
+      padding: 16px 40px;
+      background: white;
+      color: var(--primary);
+      border: none;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+      text-decoration: none;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      background: var(--secondary);
+      color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .banner h1 {
+        font-size: 3rem;
+      }
+      
+      .features, .product-info {
+        padding: 60px 20px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .banner h1 {
+        font-size: 2.5rem;
+      }
+      
+      .banner p, .cta p {
+        font-size: 1.1rem;
+      }
+      
+      .feature-grid,
+      .info-boxes {
+        grid-template-columns: 1fr;
+      }
+      
+      .cta h2 {
+        font-size: 2.2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .banner {
+        padding: 60px 20px;
+      }
+      
+      .banner h1 {
+        font-size: 2rem;
+      }
+      
+      .feature-card, .info-box {
+        padding: 25px;
+      }
+      
+      .cta {
+        padding: 60px 20px;
+      }
+      
+      .cta h2 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
 </head>
 <body>
 <div id="navbar"></div>
 
+<!-- Banner Section -->
 <section class="banner">
   <div class="container">
     <div class="banner-content">
-      </div>
-      <div class="banner-content">
-        <h1>เกี่ยวกับ Alice Moist Daily</h1>
-        <p> Alice Moist Daily เป็นคอนแทคเลนส์รายวันที่ออกแบบมาเพื่อให้ความรู้สึกสบายตาและดูเป็นธรรมชาติ ด้วยเทคโนโลยีการผลิตคุณภาพสูง ให้ความชุ่มชื้นยาวนานตลอดวัน เหมาะกับผู้ใช้ที่ใส่ใจในสุขภาพดวงตาและต้องการเสริมบุคลิกให้ดูดีทุกวัน</p>
-      </div>
+      <h1><i class="fas fa-eye" style="margin-right: 15px;"></i>เกี่ยวกับ Alice Moist Daily</h1>
+      <p>Alice Moist Daily เป็นคอนแทคเลนส์รายวันที่ออกแบบมาเพื่อให้ความรู้สึกสบายตาและดูเป็นธรรมชาติ ด้วยเทคโนโลยีการผลิตคุณภาพสูง ให้ความชุ่มชื้นยาวนานตลอดวัน เหมาะกับผู้ใช้ที่ใส่ใจในสุขภาพดวงตาและต้องการเสริมบุคลิกให้ดูดีทุกวัน</p>
+    </div>
   </div>
 </section>
 
-  <section class="features">
-    <div class="container">
-      <h2>คุณสมบัติเด่น</h2>
-      <ul>
-        <li>วัสดุคุณภาพสูง ให้ความชุ่มชื้นตลอดวัน</li>
-        <li>ดีไซน์บางเบา สวมใส่สบาย</li>
-        <li>เหมาะสำหรับผู้ที่มีสายตาสั้นและยาว</li>
-        <li>มีให้เลือกหลายสีและขนาด</li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="cta">
-    <div class="container">
-      <h2>พร้อมที่จะเปลี่ยนลุคของคุณแล้วหรือยัง?</h2>
-      <p>สั่งซื้อ Alice Moist Daily วันนี้เพื่อประสบการณ์การมองเห็นที่ดีที่สุด!</p>
-    </div>
-  </section>
-  
-    <!-- Modal สำหรับตะกร้าสินค้า -->
-    <div id="cartModal" class="cart-modal">
-      <div class="cart-content" style="position:relative;">
-        <span class="close-btn" onclick="closeCartModal()" title="ปิดตะกร้า">&times;</span>
-        <div class="cart-header">
-          <h2>ตะกร้าสินค้า</h2>
+<!-- Features Section - Updated to 2x2 Grid -->
+<section class="features">
+  <div class="container">
+    <h2>คุณสมบัติเด่น</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-tint"></i>
         </div>
-        <div id="cartItemsContainer" class="cart-items">
-          <!-- รายการสินค้าจะแสดงที่นี่ -->
-        </div>
-        
-        <div class="login-alert" id="loginAlert">
-          <i class="fas fa-exclamation-triangle"></i>
-          คุณต้องล็อกอินก่อนดำเนินการชำระเงิน
-        </div>
-        
-        <div class="cart-summary">
-          <div class="cart-total">
-            <span>ยอดรวมทั้งหมด:</span>
-            <span id="cartTotalPrice">0 บาท</span>
-          </div>
-          <div class="cart-actions">
-            <button class="continue-shopping" onclick="closeCartModal()">ดำเนินการต่อ</button>
-            <button class="checkout" onclick="checkout()">ชำระเงิน</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="orderHistoryModal" class="modal">
-    <div class="modal-content order-history-modal" style="position:relative;">
-      <span class="close-btn" onclick="closeOrderHistoryModal()" title="ปิดหน้าต่าง">&times;</span>
-      <div class="order-history-header">
-        <h2 class="order-history-title">
-          <i class="fas fa-history"></i> ประวัติการสั่งซื้อ
-        </h2>
+        <h3>วัสดุคุณภาพสูง</h3>
+        <p>ให้ความชุ่มชื้นยาวนานตลอดวัน ด้วยเทคโนโลยี HydraMax ที่ช่วยกักเก็บความชุ่มชื้น</p>
       </div>
       
-      <div class="order-history-controls">
-        <div class="filter-group">
-          <label for="statusFilter"><i class="fas fa-filter"></i> กรองตามสถานะ</label>
-          <select id="statusFilter" class="filter-select" onchange="filterOrders()">
-            <option value="all">ทั้งหมด</option>
-            <option value="pending">รอดำเนินการ</option>
-            <option value="processing">กำลังเตรียมสินค้า</option>
-            <option value="shipped">จัดส่งแล้ว</option>
-            <option value="delivered">จัดส่งสำเร็จ</option>
-            <option value="cancelled">ยกเลิก</option>
-          </select>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-feather"></i>
         </div>
-        
-        <div class="filter-group">
-          <label for="sortOrder"><i class="fas fa-sort"></i> เรียงตาม</label>
-          <select id="sortOrder" class="filter-select" onchange="sortOrders()">
-            <option value="newest">ใหม่ล่าสุด</option>
-            <option value="oldest">เก่าที่สุด</option>
-            <option value="price-high">ราคาสูงสุด</option>
-            <option value="price-low">ราคาต่ำสุด</option>
-          </select>
-        </div>
-        
-        <div class="filter-group">
-          <label for="orderSearch"><i class="fas fa-search"></i> ค้นหาคำสั่งซื้อ</label>
-          <div class="search-input">
-            <input type="text" id="orderSearch" placeholder="ค้นหาด้วยรหัสคำสั่งซื้อ...">
-            <button onclick="searchOrders()"><i class="fas fa-search"></i></button>
-          </div>
-        </div>
+        <h3>ดีไซน์บางเบา</h3>
+        <p>สวมใส่สบายเหมือนไม่มีอะไรอยู่ ดีไซน์บางเบาพิเศษช่วยให้คุณลืมไปเลยว่ากำลังใส่เลนส์</p>
       </div>
       
-      <div id="orderHistoryContainer" class="order-history-container">
-        <!-- รายการประวัติการสั่งซื้อจะแสดงที่นี่ -->
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-eye"></i>
+        </div>
+        <h3>เหมาะกับทุกสายตา</h3>
+        <p>เหมาะสำหรับผู้ที่มีสายตาสั้นและยาว มีกำลังขยายให้เลือกตามความต้องการ</p>
       </div>
       
-      <div class="pagination" id="pagination">
-        <!-- ปุ่ม pagination จะถูกสร้างโดย JavaScript -->
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-palette"></i>
+        </div>
+        <h3>สีสันหลากหลาย</h3>
+        <p>มีให้เลือกหลายสีและขนาด ให้คุณสามารถเปลี่ยนลุคได้ตามสไตล์ที่ต้องการ</p>
       </div>
     </div>
   </div>
-    <section class="product-info">
-        <div class="container">
-            <h2>Alice Moist Daily เลนส์สัมผัสรายวัน</h2>
-            <p>เลนส์ Alice Moist Daily บรรจุในน้ำยาเกลือแร่ที่ช่วยเพิ่มความชุ่มชื่นและความสบายตาตลอดวัน</p>
-            
-            <div class="info-boxes">
-                <div class="whats-included">
-                    <h3><i class="fas fa-box-open"></i> สิ่งที่คุณจะได้รับในแต่ละกล่อง:</h3>
-                    <ul>
-                        <li>เลนส์สัมผัสรายวัน Alice Moist Daily (HEMA+GMMA 58%)</li>
-                        <li>น้ำยาเกลือแร่สำหรับแช่เลนส์</li>
-                        <li>คู่มือการใช้งาน</li>
-                        <li>กล่องบรรจุภัณฑ์คุณภาพ</li>
-                    </ul>
-                </div>
-                
-                <div class="how-to-use">
-                    <h3><i class="fas fa-question-circle"></i> วิธีการใช้งาน:</h3>
-                    <ol>
-                        <li>ล้างมือให้สะอาดก่อนสัมผัสเลนส์</li>
-                        <li>นำเลนส์ออกจากบรรจุภัณฑ์</li>
-                        <li>ใส่เลนส์ตามวิธีที่แนะนำ</li>
-                        <li>ทิ้งเลนส์หลังใช้แล้ววันเดียว</li>
-                        <li>ทำความสะอาดที่เก็บเลนส์เป็นประจำ</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </section>
-</main>
+</section>
+
+<!-- Product Info Section -->
+<section class="product-info">
+  <div class="container">
+    <h2>Alice Moist Daily เลนส์สัมผัสรายวัน</h2>
+    <p>เลนส์ Alice Moist Daily บรรจุในน้ำยาเกลือแร่ที่ช่วยเพิ่มความชุ่มชื่นและความสบายตาตลอดวัน</p>
+    
+    <div class="info-boxes">
+      <div class="info-box">
+        <h3><i class="fas fa-box-open"></i> สิ่งที่คุณจะได้รับในแต่ละกล่อง:</h3>
+        <ul>
+          <li>เลนส์สัมผัสรายวัน Alice Moist Daily (HEMA+GMMA 58%)</li>
+          <li>น้ำยาเกลือแร่สำหรับแช่เลนส์</li>
+          <li>คู่มือการใช้งานอย่างละเอียด</li>
+          <li>กล่องบรรจุภัณฑ์คุณภาพพรีเมียม</li>
+          <li>ที่ใส่เลนส์พกพาสะดวก</li>
+          <li>คูปองส่วนลดสำหรับการซื้อครั้งต่อไป</li>
+        </ul>
+      </div>
+      
+      <div class="info-box">
+        <h3><i class="fas fa-question-circle"></i> วิธีการใช้งาน:</h3>
+        <ol>
+          <li>ล้างมือให้สะอาดด้วยสบู่และเช็ดให้แห้งก่อนสัมผัสเลนส์</li>
+          <li>นำเลนส์ออกจากบรรจุภัณฑ์โดยใช้ปลายนิ้วอย่างนุ่มนวล</li>
+          <li>ตรวจสอบให้แน่ใจว่าเลนส์อยู่ในด้านที่ถูกต้อง</li>
+          <li>สวมใส่เลนส์โดยใช้เทคนิคที่แนะนำในคู่มือ</li>
+          <li>ทิ้งเลนส์หลังใช้แล้ววันเดียว ไม่ควรนำกลับมาใช้อีก</li>
+          <li>ทำความสะอาดที่เก็บเลนส์เป็นประจำด้วยน้ำยาฆ่าเชื้อ</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta">
+  <div class="container">
+    <h2>พร้อมที่จะเปลี่ยนลุคของคุณแล้วหรือยัง?</h2>
+    <p>สั่งซื้อ Alice Moist Daily วันนี้เพื่อประสบการณ์การมองเห็นที่ดีที่สุด!</p>
+    <a href="buyer-dashboard.html" class="cta-button">
+      <i class="fas fa-shopping-cart"></i> สั่งซื้อทันที
+    </a>
+  </div>
+</section>    
 
 <div id="footer"></div>
 <script src="navbar-footer.js"></script>
-<script>
-  // ตัวแปรสำหรับระบบตะกร้าสินค้า
-  let cart = JSON.parse(localStorage.getItem('cart')) || [];
-  const cartBadge = document.getElementById('cartBadge');
-  
-  // ฟังก์ชันสำหรับตะกร้าสินค้า
-  function addToCart() {
-    if (rightEyeSelected.textContent === 'ยังไม่ได้เลือก' || 
-        leftEyeSelected.textContent === 'ยังไม่ได้เลือก') {
-      showNotification('กรุณาเลือกค่าสายตาทั้งสองข้างก่อน');
-      return;
-    }
-    
-    // สร้างสินค้า
-    const newProduct = {
-      id: Date.now(),
-      name: 'Alice Moist Daily เลนส์สัมผัสรายวัน',
-      price: 700, // ราคาเริ่มต้น
-      image: 'images/product1.png',
-      rightEye: rightEyeSelected.textContent,
-      leftEye: leftEyeSelected.textContent,
-      quantity: 1,
-      timestamp: new Date().toISOString()
-    };
-    
-    // ตรวจสอบว่ามีสินค้าซ้ำในตะกร้าหรือไม่
-    const existingItemIndex = cart.findIndex(item => 
-      item.name === newProduct.name &&
-      item.rightEye === newProduct.rightEye &&
-      item.leftEye === newProduct.leftEye
-    );
-    
-    if (existingItemIndex !== -1) {
-      // เพิ่มจำนวนสินค้าที่มีอยู่
-      cart[existingItemIndex].quantity += 1;
-    } else {
-      // เพิ่มรายการใหม่
-      cart.push(newProduct);
-    }
-    
-    localStorage.setItem('cart', JSON.stringify(cart));
-    
-    // อัพเดทจำนวนสินค้าในตะกร้า
-    updateCartBadge();
-    
-    // แจ้งเตือน
-    showNotification('เพิ่มสินค้าในตะกร้าเรียบร้อยแล้ว', 'success');
-  }
-  
-  // ฟังก์ชันเพิ่ม/ลดจำนวนสินค้า
-  function updateQuantity(itemId, change) {
-    const itemIndex = cart.findIndex(item => item.id === itemId);
-    
-    if (itemIndex !== -1) {
-      cart[itemIndex].quantity += change;
-      
-      // ตรวจสอบว่าจำนวนไม่ต่ำกว่า 1
-      if (cart[itemIndex].quantity < 1) {
-        cart[itemIndex].quantity = 1;
-      }
-      
-      localStorage.setItem('cart', JSON.stringify(cart));
-      openCartModal(); // รีเฟรชตะกร้า
-    }
-  }
-  
-  function updateCartBadge() {
-    // แสดงจำนวนชิ้นสินค้าทั้งหมดใน badge
-    const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-    cartBadge.textContent = totalItems;
-  }
-  
-  function buyNow() {
-    if (rightEyeSelected.textContent === 'ยังไม่ได้เลือก' || 
-        leftEyeSelected.textContent === 'ยังไม่ได้เลือก') {
-      showNotification('กรุณาเลือกค่าสายตาทั้งสองข้างก่อน');
-      return;
-    }
-    
-    // เพิ่มลงตะกร้า
-    addToCart();
-    
-    // เปิดตะกร้าเพื่อชำระเงิน
-    openCartModal();
-  }
-  
-  function openCartModal() {
-    const cartModal = document.getElementById('cartModal');
-    const cartItemsContainer = document.getElementById('cartItemsContainer');
-    const cartTotalPrice = document.getElementById('cartTotalPrice');
-    const loginAlert = document.getElementById('loginAlert');
-    
-    // ล้างรายการสินค้าเก่า
-    cartItemsContainer.innerHTML = '';
-    
-    // คำนวณยอดรวม
-    let total = 0;
-    
-    if (cart.length === 0) {
-      cartItemsContainer.innerHTML = `
-        <div class="empty-cart">
-          <i class="fas fa-shopping-cart"></i>
-          <h3>ไม่มีสินค้าในตะกร้า</h3>
-          <p>กรุณาเพิ่มสินค้าในตะกร้าก่อน</p>
-        </div>
-      `;
-      cartTotalPrice.textContent = '0 บาท';
-      loginAlert.style.display = 'none';
-    } else {
-      // เพิ่มสินค้าแต่ละรายการ
-      cart.forEach(item => {
-        const itemTotal = item.price * item.quantity;
-        total += itemTotal;
-        
-        const cartItem = document.createElement('div');
-        cartItem.className = 'cart-item';
-        cartItem.innerHTML = `
-          <img src="${item.image}" alt="${item.name}">
-          <div class="cart-item-details">
-            <div class="cart-item-title">${item.name}</div>
-            <div class="cart-item-prescription">
-              ตาขวา: ${item.rightEye || 'N/A'}, ตาซ้าย: ${item.leftEye || 'N/A'}
-            </div>
-            <div class="cart-item-price">${item.price} บาท × ${item.quantity} = ${itemTotal} บาท</div>
-            <div class="quantity-controls">
-              <button class="quantity-btn minus" onclick="updateQuantity(${item.id}, -1)">
-                <i class="fas fa-minus"></i>
-              </button>
-              <span class="quantity-display">${item.quantity}</span>
-              <button class="quantity-btn plus" onclick="updateQuantity(${item.id}, 1)">
-                <i class="fas fa-plus"></i>
-              </button>
-            </div>
-          </div>
-          <div class="cart-item-actions">
-            <button class="cart-item-remove" onclick="removeFromCart(${item.id})">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        `;
-        
-        cartItemsContainer.appendChild(cartItem);
-      });
-      
-      cartTotalPrice.textContent = `${total} บาท`;
-      loginAlert.style.display = localStorage.getItem('registeredUsername') ? 'none' : 'block';
-    }
-    
-    // แสดงตะกร้า
-    cartModal.style.display = 'block';
-  }
-  
-  function closeCartModal() {
-    document.getElementById('cartModal').style.display = 'none';
-  }
-  
-  function removeFromCart(id) {
-    // ค้นหาดัชนีของสินค้า
-    const index = cart.findIndex(item => item.id === parseInt(id));
-    
-    if (index !== -1) {
-      // ลบสินค้าออกจากตะกร้า
-      cart.splice(index, 1);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      
-      // อัพเดทตะกร้า
-      openCartModal();
-      updateCartBadge();
-    }
-  }
-  
-  function checkout() {
-    if (cart.length === 0) {
-      showNotification('ไม่มีสินค้าในตะกร้า', 'error');
-      return;
-    }
-    let user = null;
-    try {
-      user = JSON.parse(sessionStorage.getItem('currentUser'));
-    } catch (e) {}
-    if (!user || !user.fullName) {
-      closeCartModal();
-      window.location.href = 'buyer-login.html';
-      return;
-    }
-    showNotification('กำลังนำคุณไปยังหน้าชำระเงิน', 'success');
-    setTimeout(() => {
-      window.location.href = "buyer-checkout.html";
-    }, 1500);
-  }
-  
-  // ตัวแปรสำหรับระบบเลือกค่าสายตา
-  let currentEye = ''; 
-  let selectedValue = '';
-  
-  const rightEyeBtn = document.getElementById('rightEyeBtn');
-  const leftEyeBtn = document.getElementById('leftEyeBtn');
-  const rightEyeSelected = document.getElementById('rightEyeSelected');
-  const leftEyeSelected = document.getElementById('leftEyeSelected');
-  const rightEyeValue = document.getElementById('rightEyeValue');
-  const leftEyeValue = document.getElementById('leftEyeValue');
-  const modal = document.getElementById('prescriptionModal');
-  const closeBtn = document.querySelector('.close-btn');
-  const modalTitle = document.getElementById('modalTitle');
-  const minusBtn = document.getElementById('minusBtn');
-  const plusBtn = document.getElementById('plusBtn');
-  const minusPrescription = document.getElementById('minusPrescription');
-  const plusPrescription = document.getElementById('plusPrescription');
-  const currentSelection = document.getElementById('currentSelection');
-  const confirmSelection = document.getElementById('confirmSelection');
-  const totalPriceElement = document.getElementById('totalPrice');
-  
-  // ตัวแปรสำหรับระบบผู้ใช้งาน
-  const username = localStorage.getItem("registeredUsername");
-  const email = localStorage.getItem("registeredEmail") || "example@email.com";
-  
-  const usernameDisplay = document.getElementById("usernameDisplay");
-  const dropdownUsername = document.getElementById("dropdownUsername");
-  const dropdownEmail = document.getElementById("dropdownEmail");
-  const dropdown = document.getElementById("dropdownMenu");
-  const hamburger = document.getElementById("hamburger");
-  const mobileMenu = document.getElementById("mobileMenu");
-  const overlay = document.getElementById("overlay");
-  
-  // อัพเดทตะกร้าเมื่อโหลดหน้า
-  updateCartBadge();
-  
-  // แสดงชื่อผู้ใช้งานถ้ามี
-  if (username) {
-    usernameDisplay.textContent = username;
-    dropdownUsername.textContent = username;
-    dropdownEmail.textContent = email;
-  }
-  
-  function toggleDropdown(event) {
-    event.stopPropagation();
-    let user = null;
-    try {
-      user = JSON.parse(sessionStorage.getItem('currentUser'));
-    } catch (e) {}
-    if (!user || !user.fullName) {
-      window.location.href = 'buyer-login.html';
-      return;
-    }
-    dropdown.classList.toggle("show");
-  }
-  
-   
-  document.addEventListener("click", function (event) {
-    if (!event.target.closest(".profile")) {
-      dropdown.classList.remove("show");
-    }
-  });
-  
-  function toggleMobileMenu() {
-    hamburger.classList.toggle("active");
-    mobileMenu.classList.toggle("show");
-    overlay.classList.toggle("show");
-  }
-  
-  function logout() {
-    // ลบข้อมูลการล็อกอิน
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('registeredUsername');
-    localStorage.removeItem('registeredEmail');
-    localStorage.removeItem('registeredPassword');
-    
-    // ล้างตะกร้าสินค้า
-    localStorage.removeItem('cart');
-    cart = [];
-    updateCartBadge();
-    
-    const dropdown = document.getElementById('dropdownMenu');
-    dropdown.classList.remove('show');
-    // Clear buyer session
-    sessionStorage.removeItem('currentUser');
-
-    // แจ้งเตือน
-    showNotification('ออกจากระบบสำเร็จ', 'success');
-    
-    // อัพเดท UI
-    updateUserUI();
-  }
-  
-  function setAccount() {
-    window.location.href = "buyer-setting.html";
-  }
-  
-  function viewAboutus() {
-    window.location.href = "buyer-aboutus.html";
-  }
-  
-  function viewHowtouse() {
-    window.location.href = "buyer-howtouse.html";
-  }
-  
-  function viewProduct() {
-    window.location.href = "buyer-products.html";
-  }
-  
-  function viewCart() {
-    openCartModal();
-  }
-  
-  function goHome() {
-    window.location.href = "buyer-dashboard.html";
-  }
-  
-  // เปิด Modal สำหรับตาขวา
-  rightEyeBtn.addEventListener('click', function() {
-    currentEye = 'right';
-    modalTitle.textContent = 'เลือกค่าสายตา - ตาขวา';
-    modal.style.display = 'block';
-    selectedValue = rightEyeSelected.textContent === 'ยังไม่ได้เลือก' ? '' : rightEyeSelected.textContent;
-    updateSelectionDisplay();
-  });
-  
-  // เปิด Modal สำหรับตาซ้าย
-  leftEyeBtn.addEventListener('click', function() {
-    currentEye = 'left';
-    modalTitle.textContent = 'เลือกค่าสายตา - ตาซ้าย';
-    modal.style.display = 'block';
-    selectedValue = leftEyeSelected.textContent === 'ยังไม่ได้เลือก' ? '' : leftEyeSelected.textContent;
-    updateSelectionDisplay();
-  });
-  
-  // ปิด Modal
-  closeBtn.addEventListener('click', function() {
-    modal.style.display = 'none';
-  });
-  
-  // คลิกนอก Modal เพื่อปิด
-  window.addEventListener('click', function(event) {
-    if (event.target === modal) {
-      modal.style.display = 'none';
-    }
-    if (event.target.classList.contains('cart-modal')) {
-      closeCartModal();
-    }
-    if (event.target.classList.contains('auth-modal')) {
-      closeAuthModal();
-    }
-    if (event.target.classList.contains('modal')) {
-      closeOrderHistoryModal();
-    }
-  });
-  
-  // สลับระหว่าง MINUS และ PLUS
-  minusBtn.addEventListener('click', function() {
-    minusBtn.classList.add('active');
-    plusBtn.classList.remove('active');
-    minusPrescription.style.display = 'block';
-    plusPrescription.style.display = 'none';
-  });
-  
-  plusBtn.addEventListener('click', function() {
-    plusBtn.classList.add('active');
-    minusBtn.classList.remove('active');
-    minusPrescription.style.display = 'none';
-    plusPrescription.style.display = 'block';
-  });
-  
-  // เลือกค่าสายตา
-  document.querySelectorAll('.prescription-grid td').forEach(cell => {
-    cell.addEventListener('click', function() {
-      selectedValue = this.textContent;
-      updateSelectionDisplay();
-    });
-  });
-  
-  // ยืนยันการเลือก
-  confirmSelection.addEventListener('click', function() {
-    if (selectedValue) {
-      if (currentEye === 'right') {
-        rightEyeSelected.textContent = selectedValue;
-        rightEyeValue.style.display = 'block';
-      } else {
-        leftEyeSelected.textContent = selectedValue;
-        leftEyeValue.style.display = 'block';
-      }
-      modal.style.display = 'none';
-      calculateTotal();
-    } else {
-      showNotification('กรุณาเลือกค่าสายตาก่อน', 'error');
-    }
-  });
-  
-  // อัพเดทการแสดงผลค่าที่เลือกใน Modal
-  function updateSelectionDisplay() {
-    if (selectedValue) {
-      currentSelection.textContent = selectedValue;
-    } else {
-      currentSelection.textContent = 'ยังไม่ได้เลือก';
-    }
-  }
-  
-  // คำนวณราคารวม
-  function calculateTotal() {
-    if (rightEyeSelected.textContent !== 'ยังไม่ได้เลือก' && 
-        leftEyeSelected.textContent !== 'ยังไม่ได้เลือก') {
-      totalPriceElement.textContent = `${(parseFloat(rightEyeSelected.textContent) + parseFloat(leftEyeSelected.textContent)) * 700} บาท`;
-    } else {
-      totalPriceElement.textContent = 'XXX บาท';
-    }
-  }
-  // ฟังก์ชันอัพเดท UI หลังจากล็อกอิน
-  function updateUserUI() {
-    const usernameDisplay = document.getElementById('usernameDisplay');
-    const dropdownUsername = document.getElementById('dropdownUsername');
-    const dropdownEmail = document.getElementById('dropdownEmail');
-    const dropdown = document.getElementById('dropdownMenu');
-    let user = null;
-    try {
-      user = JSON.parse(sessionStorage.getItem('currentUser'));
-    } catch (e) {}
-    if (user && user.fullName) {
-      usernameDisplay.textContent = user.fullName;
-      dropdownUsername.textContent = user.fullName;
-      dropdownEmail.textContent = user.email;
-      dropdown.classList.remove('show');
-    } else {
-      usernameDisplay.textContent = 'ล็อกอิน';
-      dropdown.classList.remove('show');
-    }
-    updateCartBadge();
-  }
-  
-  // ฟังก์ชันแสดงการแจ้งเตือน
-  function showNotification(message, type) {
-    let icon = 'fa-info-circle';
-    if (type === 'success') icon = 'fa-check-circle';
-    else if (type === 'error') icon = 'fa-times-circle';
-    else if (type === 'warning') icon = 'fa-exclamation-triangle';
-    // info is default
-
-    const notification = document.createElement('div');
-    notification.className = `notification ${type || 'info'}`;
-    notification.innerHTML = `
-      <div class="notification-content">
-        <i class="fas ${icon}"></i>
-        <span>${message}</span>
-      </div>
-    `;
-    document.body.appendChild(notification);
-    setTimeout(() => {
-      notification.classList.add('show');
-    }, 100);
-    setTimeout(() => {
-      notification.classList.remove('show');
-      notification.classList.add('hide');
-      setTimeout(() => {
-        document.body.removeChild(notification);
-      }, 300);
-    }, 1800);
-  }
-  
-  // เพิ่มการคลิกที่แท็บ
-  document.querySelectorAll('.auth-tab').forEach(tab => {
-    tab.addEventListener('click', function() {
-      // ลบ active จากแท็บทั้งหมด
-      document.querySelectorAll('.auth-tab').forEach(t => {
-        t.classList.remove('active');
-      });
-      
-      // เพิ่ม active ให้แท็บที่คลิก
-      this.classList.add('active');
-      
-      // ซ่อนฟอร์มทั้งหมด
-      document.querySelectorAll('.auth-form').forEach(form => {
-        form.classList.remove('active');
-      });
-      
-      // แสดงฟอร์มที่ตรงกับแท็บ
-      const tabId = this.dataset.tab;
-      document.getElementById(`${tabId}Form`).classList.add('active');
-    });
-  });
-  
-  // อัพเดท UI เมื่อโหลดหน้า
-  window.addEventListener('DOMContentLoaded', function() {
-    updateUserUI();
-  });
-  
-  // ตัวแปรสำหรับระบบประวัติการสั่งซื้อ
-  let orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
-  let filteredOrders = [];
-  const ordersPerPage = 4;
-  let currentPage = 1;
-  
-  // ฟังก์ชันเปิด modal ประวัติการสั่งซื้อ
-  function openOrderHistoryModal() {
-    // อ่านข้อมูลใหม่จาก localStorage ทุกครั้ง
-    orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
-    filteredOrders = [...orders];
-
-    const modal = document.getElementById('orderHistoryModal');
-    modal.style.display = 'block';
-    
-    // เรียกฟังก์ชันแสดงประวัติใหม่
-    displayOrderHistory();
-    
-    // สร้าง pagination
-    generatePagination();
-    
-    document.body.style.overflow = 'hidden';
-  }
-  
-  // ฟังก์ชันปิด modal
-  function closeOrderHistoryModal() {
-    document.getElementById('orderHistoryModal').style.display = 'none';
-    
-    // คืนค่าการสกรอลของ body
-    document.body.style.overflow = 'auto';
-  }
-  
-  // ฟังก์ชันกรองคำสั่งซื้อตามสถานะ
-  function filterOrders() {
-    const status = document.getElementById('statusFilter').value;
-    
-    if (status === 'all') {
-      filteredOrders = [...orders];
-    } else {
-      filteredOrders = orders.filter(order => order.status === status);
-    }
-    
-    currentPage = 1;
-    displayOrderHistory();
-    generatePagination();
-  }
-  
-  // ฟังก์ชันเรียงลำดับคำสั่งซื้อ
-  function sortOrders() {
-    const sortBy = document.getElementById('sortOrder').value;
-    
-    filteredOrders.sort((a, b) => {
-      if (sortBy === 'newest') {
-        return new Date(b.date) - new Date(a.date);
-      } else if (sortBy === 'oldest') {
-        return new Date(a.date) - new Date(b.date);
-      } else if (sortBy === 'price-high') {
-        return b.total - a.total;
-      } else if (sortBy === 'price-low') {
-        return a.total - b.total;
-      }
-      return 0;
-    });
-    
-    currentPage = 1;
-    displayOrderHistory();
-    generatePagination();
-  }
-  
-  // ฟังก์ชันค้นหาคำสั่งซื้อ
-  function searchOrders() {
-    const searchTerm = document.getElementById('orderSearch').value.toLowerCase();
-    
-    if (!searchTerm) {
-      filteredOrders = [...orders];
-    } else {
-      filteredOrders = orders.filter(order => 
-        order.id.toLowerCase().includes(searchTerm) ||
-        order.date.toLowerCase().includes(searchTerm)
-      );
-    }
-    
-    currentPage = 1;
-    displayOrderHistory();
-    generatePagination();
-  }
-  
-  // ฟังก์ชันแสดงประวัติการสั่งซื้อ
-  function displayOrderHistory() {
-    const container = document.getElementById('orderHistoryContainer');
-    
-    // ตรวจสอบว่ามีคำสั่งซื้อหรือไม่
-    if (filteredOrders.length === 0) {
-      container.innerHTML = `
-        <div class="empty-orders">
-          <i class="fas fa-box-open"></i>
-          <h3>ไม่พบประวัติการสั่งซื้อ</h3>
-          <p>คุณยังไม่ได้ทำการสั่งซื้อสินค้าใด ๆ</p>
-        </div>
-      `;
-      return;
-    }
-    
-    // คำนวณคำสั่งซื้อที่จะแสดงในหน้าปัจจุบัน
-    const startIndex = (currentPage - 1) * ordersPerPage;
-    const endIndex = startIndex + ordersPerPage;
-    const ordersToShow = filteredOrders.slice(startIndex, endIndex);
-    
-    let html = '';
-    
-    ordersToShow.forEach(order => {
-      // สร้างรายการสินค้า
-      let productsHtml = '';
-      order.items.forEach(item => {
-        productsHtml += `
-          <div class="order-product-item">
-            <img src="${item.image}" alt="${item.name}">
-            <div class="order-product-details">
-              <div class="order-product-title">${item.name}</div>
-              <div class="order-product-prescription">
-                ตาขวา: ${item.rightEye || 'N/A'}, ตาซ้าย: ${item.leftEye || 'N/A'}
-              </div>
-              <div class="order-product-price">
-                ${item.quantity} × ${item.price} บาท = ${item.quantity * item.price} บาท
-              </div>
-            </div>
-          </div>
-        `;
-      });
-  
-      // สร้างสถานะ
-      let statusHtml = '';
-      let statusClass = 'status-pending';
-      let statusText = 'รอดำเนินการ';
-      
-      if (order.status) {
-        switch(order.status) {
-          case 'pending':
-            statusClass = 'status-pending';
-            statusText = 'รอดำเนินการ';
-            break;
-          case 'processing':
-            statusClass = 'status-processing';
-            statusText = 'กำลังเตรียมสินค้า';
-            break;
-          case 'shipped':
-            statusClass = 'status-shipped';
-            statusText = 'จัดส่งแล้ว';
-            break;
-          case 'delivered':
-            statusClass = 'status-delivered';
-            statusText = 'จัดส่งสำเร็จ';
-            break;
-          case 'cancelled':
-            statusClass = 'status-cancelled';
-            statusText = 'ยกเลิก';
-            break;
-        }
-      } else {
-        // สำหรับข้อมูลเดิมที่ไม่มีสถานะ
-        const orderDate = new Date(order.date);
-        const daysAgo = Math.floor((new Date() - orderDate) / (1000 * 60 * 60 * 24));
-        
-        if (daysAgo > 7) {
-          statusClass = 'status-delivered';
-          statusText = 'จัดส่งสำเร็จ';
-        } else if (daysAgo > 3) {
-          statusClass = 'status-shipped';
-          statusText = 'จัดส่งแล้ว';
-        } else if (daysAgo > 1) {
-          statusClass = 'status-processing';
-          statusText = 'กำลังเตรียมสินค้า';
-        }
-      }
-      
-      statusHtml = `<span class="order-status ${statusClass}"><i class="fas fa-circle"></i> ${statusText}</span>`;
-      
-      const paymentMethod = getPaymentMethodName(order.payment);
-    
-      html += `
-        <div class="order-item">
-          <div class="order-header">
-            <div>
-              <div class="order-id">คำสั่งซื้อ #${order.id}</div>
-              <div class="order-date">${order.date}</div>
-            </div>
-            ${statusHtml}
-          </div>
-          
-          <div class="order-details">
-            <div class="order-products">
-              <div class="order-summary-title">รายการสินค้า</div>
-              ${productsHtml}
-            </div>
-            
-            <div class="order-summary">
-              <div class="order-summary-title">สรุปการสั่งซื้อ</div>
-              <div class="order-summary-row">
-                <span>ยอดรวมสินค้า:</span>
-                <span>${Number(order.subtotal).toFixed(2)} บาท</span>
-              </div>
-              <div class="order-summary-row">
-                <span>ค่าจัดส่ง:</span>
-                <span>${Number(order.shippingFee).toFixed(2)} บาท</span>
-              </div>
-              <div class="order-summary-row">
-                <span>ส่วนลด:</span>
-                <span>${Number(order.discount).toFixed(2)} บาท</span>
-              </div>
-              <div class="order-summary-row order-total">
-                <span>ยอดชำระทั้งหมด:</span>
-                <span>${Number(order.total).toFixed(2)} บาท</span>
-              </div>
-              
-              <div class="order-payment">
-                <div class="order-summary-title">วิธีการชำระเงิน</div>
-                <p>${paymentMethod}</p>
-              </div>
-              
-              <div class="order-address">
-                <div class="order-summary-title">ที่อยู่จัดส่ง</div>
-                <div class="address-details">
-                  <p>${order.address.name}</p>
-                  <p>${order.address.address}, ${order.address.district}</p>
-                  <p>${order.address.province} ${order.address.postalCode}</p>
-                  <p>${order.address.phone}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="order-actions">
-            <button class="order-action-btn view-details" onclick="viewOrderDetails('${order.id}')">
-              <i class="fas fa-eye"></i> ดูรายละเอียด
-            </button>
-            <button class="order-action-btn reorder" onclick="reorder('${order.id}')">
-              <i class="fas fa-redo"></i> สั่งซื้ออีกครั้ง
-            </button>
-            <button class="order-action-btn delete-order" onclick="deleteOrder('${order.id}')">
-              <i class="fas fa-trash"></i> ลบ
-            </button>
-          </div>
-        </div>
-      `;
-    });
-    
-    container.innerHTML = html;
-  }
-  
-  // ฟังก์ชันสร้าง pagination
-  function generatePagination() {
-    const pagination = document.getElementById('pagination');
-    const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
-    
-    if (totalPages <= 1) {
-      pagination.innerHTML = '';
-      return;
-    }
-    
-    let html = '';
-    const maxVisiblePages = 5;
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-    
-    if (endPage - startPage < maxVisiblePages - 1) {
-      startPage = Math.max(1, endPage - maxVisiblePages + 1);
-    }
-    
-    // ปุ่มก่อนหน้า
-    if (currentPage > 1) {
-      html += `<div class="page-btn" onclick="changePage(${currentPage - 1})"><i class="fas fa-chevron-left"></i></div>`;
-    }
-    
-    // ปุ่มหน้า
-    for (let i = startPage; i <= endPage; i++) {
-      html += `<div class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</div>`;
-    }
-    
-    // ปุ่มถัดไป
-    if (currentPage < totalPages) {
-      html += `<div class="page-btn" onclick="changePage(${currentPage + 1})"><i class="fas fa-chevron-right"></i></div>`;
-    }
-    
-    pagination.innerHTML = html;
-  }
-  
-  // ฟังก์ชันเปลี่ยนหน้า
-  function changePage(page) {
-    currentPage = page;
-    displayOrderHistory();
-    generatePagination();
-    document.getElementById('orderHistoryContainer').scrollTop = 0;
-  }
-  
-  // ฟังก์ชันแปลงชื่อวิธีการชำระเงิน
-  function getPaymentMethodName(method) {
-    switch(method) {
-      case 'bank': return 'โอนเงินผ่านธนาคาร';
-      case 'credit': return 'บัตรเครดิต/เดบิต';
-      case 'promptpay': return 'พร้อมเพย์';
-      case 'cod': return 'เก็บเงินปลายทาง (COD)';
-      default: return method || 'ไม่ระบุ';
-    }
-  }
-  
-  // ฟังก์ชันดูรายละเอียดคำสั่งซื้อ
-  function viewOrderDetails(orderId) {
-    const order = orders.find(o => o.id === orderId);
-    if (order) {
-      alert(`ดูรายละเอียดคำสั่งซื้อ #${orderId}\n\nสถานะ: ${getStatusText(order.status)}\nวันที่สั่งซื้อ: ${order.date}\nยอดรวม: ${order.total} บาท`);
-    }
-  }
-  
-  // ฟังก์ชันสั่งซื้ออีกครั้ง
-  function reorder(orderId) {
-    const order = orders.find(o => o.id === orderId);
-    if (order) {
-      // เพิ่มสินค้าในตะกร้า
-      cart = [...order.items];
-      localStorage.setItem('cart', JSON.stringify(cart));
-      updateCartBadge();
-      
-      // ปิด modal และเปิดตะกร้า
-      closeOrderHistoryModal();
-      openCartModal();
-      
-      showNotification('เพิ่มสินค้าในตะกร้าเรียบร้อยแล้ว', 'success');
-    }
-  }
-  
-  // ฟังก์ชันแปลงสถานะเป็นข้อความ
-  function getStatusText(status) {
-    switch(status) {
-      case 'pending': return 'รอดำเนินการ';
-      case 'processing': return 'กำลังเตรียมสินค้า';
-      case 'shipped': return 'จัดส่งแล้ว';
-      case 'delivered': return 'จัดส่งสำเร็จ';
-      case 'cancelled': return 'ยกเลิก';
-      default: return 'ไม่ระบุ';
-    }
-  }
-
-  
-</script>
 </body>
 </html>

@@ -96,7 +96,7 @@ app.post('/api/register', async (req, res) => {
 // Login
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
-  db.query(
+  pool.query(
     'SELECT * FROM users WHERE email = ? OR phone = ?',
     [username, username],
     async (err, results) => {
@@ -122,10 +122,10 @@ app.post('/api/login', (req, res) => {
 // Email verification
 app.post('/api/verify-email', (req, res) => {
   const { email, code } = req.body;
-  db.query('SELECT verification_code FROM users WHERE email = ?', [email], (err, results) => {
+  pool.query('SELECT verification_code FROM users WHERE email = ?', [email], (err, results) => {
     if (err || results.length === 0) return res.status(400).json({ error: 'ไม่พบผู้ใช้' });
     if (results[0].verification_code === code) {
-      db.query('UPDATE users SET is_verified = 1, verification_code = NULL WHERE email = ?', [email], (err2) => {
+      pool.query('UPDATE users SET is_verified = 1, verification_code = NULL WHERE email = ?', [email], (err2) => {
         if (err2) return res.status(400).json({ error: 'อัปเดตสถานะไม่สำเร็จ' });
         res.json({ success: true });
       });
@@ -138,7 +138,7 @@ app.post('/api/verify-email', (req, res) => {
 // Get user by email
 app.get('/api/user', (req, res) => {
   const { email } = req.query;
-  db.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {
+  pool.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {
     if (err || results.length === 0) return res.status(404).json({ error: 'User not found' });
     const user = results[0];
     res.json({
@@ -157,7 +157,7 @@ app.get('/api/user', (req, res) => {
 // Update user info
 app.post('/api/user-update', (req, res) => {
   const { email, fullName, phone, address } = req.body;
-  db.query('UPDATE users SET full_name=?, phone=?, address=? WHERE email=?', [fullName, phone, address, email], (err, result) => {
+  pool.query('UPDATE users SET full_name=?, phone=?, address=? WHERE email=?', [fullName, phone, address, email], (err, result) => {
     if (err) return res.status(400).json({ error: 'Update failed' });
     res.json({ success: true });
   });
@@ -169,10 +169,10 @@ app.post('/api/reset-password', async (req, res) => {
   if (!email || !newPassword || !confirmPassword) return res.status(400).json({ error: 'กรุณากรอกข้อมูลให้ครบถ้วน' });
   if (newPassword !== confirmPassword) return res.status(400).json({ error: 'รหัสผ่านใหม่ไม่ตรงกัน' });
   if (newPassword.length < 6) return res.status(400).json({ error: 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร' });
-  db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
+  pool.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
     if (err || results.length === 0) return res.status(404).json({ error: 'ไม่พบอีเมลนี้ในระบบ' });
     const hash = await bcrypt.hash(newPassword, 10);
-    db.query('UPDATE users SET password = ? WHERE email = ?', [hash, email], (err2) => {
+    pool.query('UPDATE users SET password = ? WHERE email = ?', [hash, email], (err2) => {
       if (err2) return res.status(500).json({ error: 'อัปเดตรหัสผ่านไม่สำเร็จ' });
       // ส่งอีเมลแจ้งเตือน (optional)
       transporter.sendMail({
@@ -192,7 +192,7 @@ app.post('/api/reset-password', async (req, res) => {
 app.post('/api/check-duplicate', (req, res) => {
   const { email, phone } = req.body;
   if (!email && !phone) return res.status(400).json({ duplicate: false, message: 'No data provided' });
-  db.query(
+  pool.query(
     'SELECT * FROM users WHERE email = ? OR phone = ?',
     [email, phone],
     (err, results) => {
@@ -207,7 +207,18 @@ app.post('/api/check-duplicate', (req, res) => {
     }
   );
 });
+// เพิ่ม endpoint สำหรับตรวจสอบสุขภาพระบบ
+app.get('/api/health', (req, res) => {
+  pool.query('SELECT 1', (err) => {
+    if (err) {
+      console.error('MySQL health check failed:', err);
+      return res.status(500).json({ status: 'DOWN', error: err.message });
+    }
+    res.json({ status: 'UP' });
+  });
+});
 const PORT = 5500;
 app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
+  console.log(`API base URL: http://localhost:${PORT}`);
 });
