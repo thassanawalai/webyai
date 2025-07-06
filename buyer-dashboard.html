@@ -20,8 +20,8 @@
         <img src="images/banner1.png" alt="Alice Moist Daily">
       </div>
       <div class="banner-text">
-        <h1>Alice Moist Daily เลนส์สัมผัสรายวันคุณภาพสูง</h1>
-        <p>สัมผัสความสบายตาตลอดวันด้วยเลนส์สัมผัสที่อ่อนโยนและชุ่มชื่น</p>
+        <h1>Alice Moist Daily เลนส์สัมผัสชนิดนิ่ม</h1>
+        <p>เป็นคอนแทคเลนส์ใสรายวันที่ใช้ GMMA เป็นตัวรักษาความชุ่มชื่นตลอดวันที่สวมใส่</p>
       </div>
     </div>
   </div>
@@ -38,11 +38,6 @@
             
             <div class="price">
                 เริ่มต้นกล่องละ 700 บาท <br>
-                <small>2 กล่อง 1300</small>
-            </div>
-            
-            <div class="shipping-notice">
-                <i class="fas fa-truck"></i> 2 กล่องขึ้นไปส่งฟรีทุกออเดอร์
             </div>
             
             <div class="prescription-selection">
@@ -50,21 +45,91 @@
                 
                 <div class="eye-selection">
                     <div class="eye-option">
-                        <button id="rightEyeBtn" class="eye-btn">
-                            <i class="fas fa-eye"></i> เลือกตาขวา
-                        </button>
-                        <div id="rightEyeValue" class="selected-value">
-                            เลือกแล้ว: <span id="rightEyeSelected">ยังไม่ได้เลือก</span>
-                        </div>
+                        <label for="rightEyeSelect">
+                            <i class="fas fa-eye"></i> ตาขวา
+                        </label>
+                        <select id="rightEyeSelect" class="eye-dropdown">
+                            <option value="">-- เลือกค่าสายตา --</option>
+                            <option value="-0.25">-0.25</option>
+                            <option value="-0.50">-0.50</option>
+                            <option value="-0.75">-0.75</option>
+                            <option value="-1.00">-1.00</option>
+                            <option value="-1.25">-1.25</option>
+                            <option value="-1.50">-1.50</option>
+                            <option value="-1.75">-1.75</option>
+                            <option value="-2.00">-2.00</option>
+                            <option value="-2.25">-2.25</option>
+                            <option value="-2.50">-2.50</option>
+                            <option value="-2.75">-2.75</option>
+                            <option value="-3.00">-3.00</option>
+                            <option value="-3.25">-3.25</option>
+                            <option value="-3.50">-3.50</option>
+                            <option value="-3.75">-3.75</option>
+                            <option value="-4.00">-4.00</option>
+                            <option value="-4.25">-4.25</option>
+                            <option value="-4.50">-4.50</option>
+                            <option value="-4.75">-4.75</option>
+                            <option value="-5.00">-5.00</option>
+                            <option value="-5.25">-5.25</option>
+                            <option value="-5.50">-5.50</option>
+                            <option value="-5.75">-5.75</option>
+                            <option value="-6.00">-6.00</option>
+                        </select>
                     </div>
                     
                     <div class="eye-option">
-                        <button id="leftEyeBtn" class="eye-btn">
-                            <i class="fas fa-eye"></i> เลือกตาซ้าย
-                        </button>
-                        <div id="leftEyeValue" class="selected-value">
-                            เลือกแล้ว: <span id="leftEyeSelected">ยังไม่ได้เลือก</span>
+                        <label for="leftEyeSelect">
+                            <i class="fas fa-eye"></i> ตาซ้าย
+                        </label>
+                        <select id="leftEyeSelect" class="eye-dropdown">
+                            <option value="">-- เลือกค่าสายตา --</option>
+                            <option value="-0.25">-0.25</option>
+                            <option value="-0.50">-0.50</option>
+                            <option value="-0.75">-0.75</option>
+                            <option value="-1.00">-1.00</option>
+                            <option value="-1.25">-1.25</option>
+                            <option value="-1.50">-1.50</option>
+                            <option value="-1.75">-1.75</option>
+                            <option value="-2.00">-2.00</option>
+                            <option value="-2.25">-2.25</option>
+                            <option value="-2.50">-2.50</option>
+                            <option value="-2.75">-2.75</option>
+                            <option value="-3.00">-3.00</option>
+                            <option value="-3.25">-3.25</option>
+                            <option value="-3.50">-3.50</option>
+                            <option value="-3.75">-3.75</option>
+                            <option value="-4.00">-4.00</option>
+                            <option value="-4.25">-4.25</option>
+                            <option value="-4.50">-4.50</option>
+                            <option value="-4.75">-4.75</option>
+                            <option value="-5.00">-5.00</option>
+                            <option value="-5.25">-5.25</option>
+                            <option value="-5.50">-5.50</option>
+                            <option value="-5.75">-5.75</option>
+                            <option value="-6.00">-6.00</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="quantity-selection" id="quantitySelection" style="display: none;">
+                <h3>เลือกจำนวนกล่อง</h3>
+                <div class="quantity-dropdown-wrapper">
+                    <select id="quantitySelect" class="quantity-dropdown">
+                        <option value="1">1 กล่อง (30 เลนส์)</option>
+                        <option value="2" selected>2 กล่อง (60 เลนส์) - ประหยัด 7.14%</option>
+                        <option value="4">4 กล่อง (120 เลนส์) - ประหยัด 14.28%</option>
+                    </select>
+                </div>
+                <div class="quantity-details" id="quantityDetails">
+                    <div class="quantity-info">
+                        <div class="quantity-price">
+                            <span class="current-price">1,300 บาท</span>
+                            <span class="original-price">1,400 บาท</span>
                         </div>
+                        <div class="quantity-note">ตาขวา + ตาซ้าย</div>
+                        <div class="quantity-savings">ประหยัด 100 บาท</div>
+                        <div class="shipping-badge">ส่งฟรี!</div>
                     </div>
                 </div>
             </div>
@@ -117,5 +182,250 @@
     </section>
 </main>
 <div id="footer"></div>
+<script>
+// ฟังก์ชันสำหรับจัดการการเลือกค่าสายตา
+function handleEyeSelection() {
+    const rightEyeSelect = document.getElementById('rightEyeSelect');
+    const leftEyeSelect = document.getElementById('leftEyeSelect');
+    const totalPriceSpan = document.getElementById('totalPrice');
+    const quantitySelection = document.getElementById('quantitySelection');
+    const quantitySelect = document.getElementById('quantitySelect');
+    const quantityDetails = document.getElementById('quantityDetails');
+    
+    // ข้อมูลราคาและส่วนลด
+    const priceData = {
+        1: { price: 700, originalPrice: 700, savings: 0, discount: 0 },
+        2: { price: 1300, originalPrice: 1400, savings: 100, discount: 7.14 },
+        4: { price: 2400, originalPrice: 2800, savings: 400, discount: 14.28 }
+    };
+    
+    function updateQuantityOptions() {
+        const rightEyeValue = rightEyeSelect.value;
+        const leftEyeValue = leftEyeSelect.value;
+        
+        // แสดงส่วนเลือกจำนวนกล่องเมื่อมีการเลือกค่าสายตา
+        if (rightEyeValue || leftEyeValue) {
+            quantitySelection.style.display = 'block';
+            
+            // อัปเดตตัวเลือกใน dropdown ตามค่าสายตาที่เลือก
+            if ((rightEyeValue && !leftEyeValue) || (!rightEyeValue && leftEyeValue)) {
+                // เลือกแค่ข้างเดียว - ซ่อนตัวเลือก 2 กล่อง
+                quantitySelect.innerHTML = `
+                    <option value="1">1 กล่อง (30 เลนส์)</option>
+                    <option value="4">4 กล่อง (120 เลนส์) - ประหยัด 14.28%</option>
+                `;
+                quantitySelect.value = "1";
+            } else if (rightEyeValue && leftEyeValue) {
+                // เลือกทั้งสองข้าง - แสดงทุกตัวเลือก
+                quantitySelect.innerHTML = `
+                    <option value="1">1 กล่อง (30 เลนส์)</option>
+                    <option value="2" selected>2 กล่อง (60 เลนส์) - ประหยัด 7.14%</option>
+                    <option value="4">4 กล่อง (120 เลนส์) - ประหยัด 14.28%</option>
+                `;
+                quantitySelect.value = "2";
+            }
+        } else {
+            quantitySelection.style.display = 'none';
+        }
+        
+        updateQuantityDetails();
+        updateTotalPrice();
+    }
+    
+    function updateQuantityDetails() {
+        const rightEyeValue = rightEyeSelect.value;
+        const leftEyeValue = leftEyeSelect.value;
+        const selectedQuantity = parseInt(quantitySelect.value);
+        const data = priceData[selectedQuantity];
+        
+        if (!data) return;
+        
+        let note = '';
+        if (selectedQuantity === 1) {
+            const eyeSide = rightEyeValue ? 'ตาขวา' : 'ตาซ้าย';
+            note = `ยึดค่าสายตา${eyeSide}เป็นหลัก`;
+        } else if (selectedQuantity === 2) {
+            note = 'ตาขวา + ตาซ้าย';
+        } else if (selectedQuantity === 4) {
+            note = 'เหมาะสำหรับใช้ระยะยาว (4 เดือน)';
+        }
+        
+        let priceHTML = `<span class="current-price">${data.price.toLocaleString()} บาท</span>`;
+        if (data.savings > 0) {
+            priceHTML += `<span class="original-price">${data.originalPrice.toLocaleString()} บาท</span>`;
+        }
+        
+        let savingsHTML = '';
+        if (data.savings > 0) {
+            savingsHTML = `<div class="quantity-savings">ประหยัด ${data.savings.toLocaleString()} บาท</div>`;
+        }
+        
+        quantityDetails.innerHTML = `
+            <div class="quantity-info">
+                <div class="quantity-price">${priceHTML}</div>
+                <div class="quantity-note">${note}</div>
+                ${savingsHTML}
+            </div>
+        `;
+    }
+    
+    function updateTotalPrice() {
+        const rightEyeValue = rightEyeSelect.value;
+        const leftEyeValue = leftEyeSelect.value;
+        const selectedQuantity = parseInt(quantitySelect.value);
+        
+        let totalPrice = 0;
+        
+        if (selectedQuantity && (rightEyeValue || leftEyeValue)) {
+            const data = priceData[selectedQuantity];
+            if (data) {
+                totalPrice = data.price;
+            }
+        }
+        
+        // แสดงราคา
+        if (totalPrice > 0) {
+            totalPriceSpan.textContent = totalPrice.toLocaleString() + ' บาท';
+        } else {
+            totalPriceSpan.textContent = 'กรุณาเลือกค่าสายตา';
+        }
+    }
+    
+    // เพิ่ม event listener
+    rightEyeSelect.addEventListener('change', updateQuantityOptions);
+    leftEyeSelect.addEventListener('change', updateQuantityOptions);
+    quantitySelect.addEventListener('change', function() {
+        updateQuantityDetails();
+        updateTotalPrice();
+    });
+    
+    // เรียกใช้ครั้งแรก
+    updateQuantityOptions();
+}
+
+// ฟังก์ชันสำหรับเพิ่มลงตะกร้า
+function addToCart() {
+    const rightEyeValue = document.getElementById('rightEyeSelect').value;
+    const leftEyeValue = document.getElementById('leftEyeSelect').value;
+    const quantitySelect = document.getElementById('quantitySelect');
+    
+    if (!rightEyeValue && !leftEyeValue) {
+        alert('กรุณาเลือกค่าสายตาอย่างน้อย 1 ตา');
+        return;
+    }
+    
+    if (!quantitySelect.value) {
+        alert('กรุณาเลือกจำนวนกล่อง');
+        return;
+    }
+    
+    const quantity = parseInt(quantitySelect.value);
+    const lensCount = quantity * 30;
+    let orderDetails = '';
+    
+    if (quantity === 1) {
+        const eyeValue = rightEyeValue || leftEyeValue;
+        const eyeSide = rightEyeValue ? 'ตาขวา' : 'ตาซ้าย';
+        orderDetails = `${quantity} กล่อง (${lensCount} เลนส์) - ${eyeSide}: ${eyeValue}`;
+    } else if (quantity === 2) {
+        orderDetails = `${quantity} กล่อง (${lensCount} เลนส์) - ตาขวา: ${rightEyeValue}, ตาซ้าย: ${leftEyeValue}`;
+    } else if (quantity === 4) {
+        if (rightEyeValue && leftEyeValue) {
+            orderDetails = `${quantity} กล่อง (${lensCount} เลนส์) - ตาขวา: ${rightEyeValue}, ตาซ้าย: ${leftEyeValue}`;
+        } else {
+            const eyeValue = rightEyeValue || leftEyeValue;
+            const eyeSide = rightEyeValue ? 'ตาขวา' : 'ตาซ้าย';
+            orderDetails = `${quantity} กล่อง (${lensCount} เลนส์) - ${eyeSide}: ${eyeValue}`;
+        }
+    }
+    
+    // ข้อมูลการประหยัด
+    const priceData = {
+        1: { price: 700, savings: 0 },
+        2: { price: 1300, savings: 100 },
+        4: { price: 2400, savings: 400 }
+    };
+    
+    const data = priceData[quantity];
+    let savingsText = '';
+    if (data.savings > 0) {
+        savingsText = `\nประหยัด ${data.savings.toLocaleString()} บาท!`;
+    }
+    
+    // ที่นี่คุณสามารถเพิ่มโค้ดสำหรับบันทึกลงตะกร้าได้
+    const cartItem = {
+        product: 'Alice Moist Daily เลนส์สัมผัสรายวัน',
+        quantity: quantity,
+        lensCount: lensCount,
+        rightEye: rightEyeValue,
+        leftEye: leftEyeValue,
+        orderDetails: orderDetails,
+        totalPrice: data.price,
+        savings: data.savings
+    };
+    
+    console.log('เพิ่มลงตะกร้า:', cartItem);
+    alert(`เพิ่มสินค้าลงตะกร้าเรียบร้อยแล้ว!\n${orderDetails}\nราคา: ${data.price.toLocaleString()} บาท${savingsText}`);
+}
+
+// ฟังก์ชันสำหรับสั่งซื้อทันที
+function buyNow() {
+    const rightEyeValue = document.getElementById('rightEyeSelect').value;
+    const leftEyeValue = document.getElementById('leftEyeSelect').value;
+    const quantitySelect = document.getElementById('quantitySelect');
+    
+    if (!rightEyeValue && !leftEyeValue) {
+        alert('กรุณาเลือกค่าสายตาอย่างน้อย 1 ตา');
+        return;
+    }
+    
+    if (!quantitySelect.value) {
+        alert('กรุณาเลือกจำนวนกล่อง');
+        return;
+    }
+    
+    const quantity = parseInt(quantitySelect.value);
+    const lensCount = quantity * 30;
+    let orderDetails = '';
+    
+    if (quantity === 1) {
+        const eyeValue = rightEyeValue || leftEyeValue;
+        const eyeSide = rightEyeValue ? 'ตาขวา' : 'ตาซ้าย';
+        orderDetails = `${quantity} กล่อง (${lensCount} เลนส์) - ${eyeSide}: ${eyeValue}`;
+    } else if (quantity === 2) {
+        orderDetails = `${quantity} กล่อง (${lensCount} เลนส์) - ตาขวา: ${rightEyeValue}, ตาซ้าย: ${leftEyeValue}`;
+    } else if (quantity === 4) {
+        if (rightEyeValue && leftEyeValue) {
+            orderDetails = `${quantity} กล่อง (${lensCount} เลนส์) - ตาขวา: ${rightEyeValue}, ตาซ้าย: ${leftEyeValue}`;
+        } else {
+            const eyeValue = rightEyeValue || leftEyeValue;
+            const eyeSide = rightEyeValue ? 'ตาขวา' : 'ตาซ้าย';
+            orderDetails = `${quantity} กล่อง (${lensCount} เลนส์) - ${eyeSide}: ${eyeValue}`;
+        }
+    }
+    
+    // ข้อมูลการประหยัด
+    const priceData = {
+        1: { price: 700, savings: 0 },
+        2: { price: 1300, savings: 100 },
+        4: { price: 2400, savings: 400 }
+    };
+    
+    const data = priceData[quantity];
+    let savingsText = '';
+    if (data.savings > 0) {
+        savingsText = `\nประหยัด ${data.savings.toLocaleString()} บาท!`;
+    }
+    
+    // ที่นี่คุณสามารถเพิ่มโค้ดสำหรับการสั่งซื้อทันทีได้
+    alert(`กำลังดำเนินการสั่งซื้อ...\n${orderDetails}\nราคา: ${data.price.toLocaleString()} บาท${savingsText}`);
+    // window.location.href = 'buyer-checkout.html';
+}
+
+// เรียกใช้ฟังก์ชันเมื่อหน้าเว็บโหลดเสร็จ
+document.addEventListener('DOMContentLoaded', function() {
+    handleEyeSelection();
+});
+</script>
 </body>
 </html>
