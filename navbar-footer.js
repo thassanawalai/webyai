@@ -1,3 +1,173 @@
+// --- ระบบตะกร้าสินค้า (Cart) ---
+window.addEventListener('DOMContentLoaded', function() {
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const cartBadge = document.getElementById('cartBadge');
+
+  window.addToCart = function(product) {
+    let rightEye = '', leftEye = '', quantity = 1;
+    if (product && typeof product === 'object') {
+      rightEye = product.rightEye || '';
+      leftEye = product.leftEye || '';
+      quantity = product.quantity || 1;
+    } else if (typeof rightEyeSelected !== 'undefined' && rightEyeSelected && typeof leftEyeSelected !== 'undefined' && leftEyeSelected) {
+      if (rightEyeSelected.textContent === 'ยังไม่ได้เลือก' || leftEyeSelected.textContent === 'ยังไม่ได้เลือก') {
+        showNotification('กรุณาเลือกค่าสายตาทั้งสองข้างก่อน');
+        return;
+      }
+      rightEye = rightEyeSelected.textContent;
+      leftEye = leftEyeSelected.textContent;
+    }
+    let price = 700;
+    if (quantity === 2) price = 1300;
+    else if (quantity === 4) price = 2400;
+    const newProduct = {
+      id: Date.now(),
+      name: (product && product.name) ? product.name : 'Alice Moist Daily เลนส์สัมผัสรายวัน',
+      price: price,
+      image: 'images/product1.png',
+      rightEye: rightEye,
+      leftEye: leftEye,
+      quantity: quantity,
+      timestamp: new Date().toISOString()
+    };
+    const existingItemIndex = cart.findIndex(item => 
+      item.name === newProduct.name &&
+      item.rightEye === newProduct.rightEye &&
+      item.leftEye === newProduct.leftEye &&
+      item.price === newProduct.price
+    );
+    if (existingItemIndex !== -1) {
+      cart[existingItemIndex].quantity += quantity;
+    } else {
+      cart.push(newProduct);
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartBadge();
+    showNotification('เพิ่มสินค้าในตะกร้าเรียบร้อยแล้ว', 'success');
+  }
+
+  window.updateQuantity = function(itemId, change) {
+    const itemIndex = cart.findIndex(item => item.id === itemId);
+    if (itemIndex !== -1) {
+      cart[itemIndex].quantity += change;
+      if (cart[itemIndex].quantity < 1) cart[itemIndex].quantity = 1;
+      localStorage.setItem('cart', JSON.stringify(cart));
+      openCartModal();
+    }
+  }
+
+  function updateCartBadge() {
+    const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+    if (cartBadge) cartBadge.textContent = totalItems;
+  }
+
+  window.buyNow = function() {
+    if (typeof rightEyeSelected !== 'undefined' && rightEyeSelected && typeof leftEyeSelected !== 'undefined' && leftEyeSelected) {
+      if (rightEyeSelected.textContent === 'ยังไม่ได้เลือก' || leftEyeSelected.textContent === 'ยังไม่ได้เลือก') {
+        showNotification('กรุณาเลือกค่าสายตาทั้งสองข้างก่อน');
+        return;
+      }
+    }
+    addToCart();
+    showNotification('เพิ่มสินค้าในตะกร้าเรียบร้อยแล้ว', 'success');
+    openCartModal();
+  }
+
+  window.openCartModal = function() {
+    const cartModal = document.getElementById('cartModal');
+    const cartItemsContainer = document.getElementById('cartItemsContainer');
+    const cartTotalPrice = document.getElementById('cartTotalPrice');
+    const loginAlert = document.getElementById('loginAlert');
+    if (!cartModal || !cartItemsContainer || !cartTotalPrice || !loginAlert) {
+      console.error('Cart modal elements not found in DOM');
+      return;
+    }
+    cartItemsContainer.innerHTML = '';
+    let total = 0;
+    if (cart.length === 0) {
+      cartItemsContainer.innerHTML = `
+        <div class="empty-cart">
+          <i class="fas fa-shopping-cart"></i>
+          <h3>ไม่มีสินค้าในตะกร้า</h3>
+          <p>กรุณาเพิ่มสินค้าในตะกร้าก่อน</p>
+        </div>
+      `;
+      cartTotalPrice.textContent = '0 บาท';
+      loginAlert.style.display = 'none';
+    } else {
+      cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        const cartItem = document.createElement('div');
+        cartItem.className = 'cart-item';
+        cartItem.innerHTML = `
+          <img src="${item.image}" alt="${item.name}">
+          <div class="cart-item-details">
+            <div class="cart-item-title">${item.name}</div>
+            <div class="cart-item-prescription">
+              ตาขวา: ${item.rightEye || 'N/A'}, ตาซ้าย: ${item.leftEye || 'N/A'}
+            </div>
+            <div class="cart-item-price">${item.price} บาท × ${item.quantity} = ${itemTotal} บาท</div>
+            <div class="quantity-controls">
+              <button class="quantity-btn minus" onclick="updateQuantity(${item.id}, -1)">
+                <i class="fas fa-minus"></i>
+              </button>
+              <span class="quantity-display">${item.quantity}</span>
+              <button class="quantity-btn plus" onclick="updateQuantity(${item.id}, 1)">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+          </div>
+          <div class="cart-item-actions">
+            <button class="cart-item-remove" onclick="removeFromCart(${item.id})">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        `;
+        cartItemsContainer.appendChild(cartItem);
+      });
+      cartTotalPrice.textContent = `${total} บาท`;
+      loginAlert.style.display = localStorage.getItem('registeredUsername') ? 'none' : 'block';
+    }
+    cartModal.classList.add('show');
+    const overlay = document.querySelector('.cart-modal-overlay');
+    if (overlay) overlay.classList.add('show');
+  }
+
+  window.closeCartModal = function() {
+    const cartModal = document.getElementById('cartModal');
+    cartModal.classList.remove('show');
+    const overlay = document.querySelector('.cart-modal-overlay');
+    if (overlay) overlay.classList.remove('show');
+  }
+
+  window.removeFromCart = function(id) {
+    const index = cart.findIndex(item => item.id === parseInt(id));
+    if (index !== -1) {
+      cart.splice(index, 1);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      openCartModal();
+      updateCartBadge();
+      showNotification('ลบสินค้าออกจากตะกร้าแล้ว', 'success');
+    } else {
+      showNotification('ไม่พบสินค้านี้ในตะกร้า', 'error');
+    }
+  }
+
+  window.checkout = function() {
+    if (cart.length === 0) {
+      showNotification('ไม่มีสินค้าในตะกร้า', 'error');
+      return;
+    }
+    showNotification('กำลังนำคุณไปยังหน้าชำระเงิน', 'success');
+    setTimeout(() => {
+      window.location.href = "buyer-checkout.html";
+    }, 1500);
+  }
+
+  updateCartBadge();
+});
+window.bindPrescriptionAndProfileEvents = function() {};
 // โหลด navbar และ footer อัตโนมัติ (ใช้ในทุกหน้า)
 (function() {
   function loadHTML(id, file) {
@@ -687,214 +857,3 @@ function checkout() {
     window.location.href = "buyer-checkout.html";
   }, 1500);
 }
-// ตัวแปรสำหรับระบบเลือกค่าสายตา
-let currentEye = ''; 
-let selectedValue = '';
-const rightEyeBtn = document.getElementById('rightEyeBtn');
-const leftEyeBtn = document.getElementById('leftEyeBtn');
-const rightEyeSelected = document.getElementById('rightEyeSelected');
-const leftEyeSelected = document.getElementById('leftEyeSelected');
-const rightEyeValue = document.getElementById('rightEyeValue');
-const leftEyeValue = document.getElementById('leftEyeValue');
-const modal = document.getElementById('prescriptionModal');
-const closeBtn = document.querySelector('.close-btn');
-const modalTitle = document.getElementById('modalTitle');
-const minusBtn = document.getElementById('minusBtn');
-const plusBtn = document.getElementById('plusBtn');
-const minusPrescription = document.getElementById('minusPrescription');
-const plusPrescription = document.getElementById('plusPrescription');
-const currentSelection = document.getElementById('currentSelection');
-const confirmSelection = document.getElementById('confirmSelection');
-const totalPriceElement = document.getElementById('totalPrice');
-// อัพเดทตะกร้าเมื่อโหลดหน้า
-updateCartBadge();
-// เปิด Modal สำหรับตาขวา
-if(rightEyeBtn) rightEyeBtn.addEventListener('click', function() {
-  currentEye = 'right';
-  modalTitle.textContent = 'เลือกค่าสายตา - ตาขวา';
-  modal.style.display = 'block';
-  selectedValue = rightEyeSelected.textContent === 'ยังไม่ได้เลือก' ? '' : rightEyeSelected.textContent;
-  updateSelectionDisplay();
-});
-// เปิด Modal สำหรับตาซ้าย
-if(leftEyeBtn) leftEyeBtn.addEventListener('click', function() {
-  currentEye = 'left';
-  modalTitle.textContent = 'เลือกค่าสายตา - ตาซ้าย';
-  modal.style.display = 'block';
-  selectedValue = leftEyeSelected.textContent === 'ยังไม่ได้เลือก' ? '' : leftEyeSelected.textContent;
-  updateSelectionDisplay();
-});
-// ปิด Modal
-if(closeBtn) closeBtn.addEventListener('click', function() {
-  modal.style.display = 'none';
-});
-// คลิกนอก Modal เพื่อปิด
-window.addEventListener('click', function(event) {
-  if (event.target === modal) modal.style.display = 'none';
-  if (event.target.classList.contains('cart-modal')) closeCartModal();
-  if (event.target.classList.contains('modal')) closeOrderHistoryModal && closeOrderHistoryModal();
-});
-// สลับระหว่าง MINUS และ PLUS
-if(minusBtn) minusBtn.addEventListener('click', function() {
-  minusBtn.classList.add('active');
-  plusBtn.classList.remove('active');
-  minusPrescription.style.display = 'block';
-  plusPrescription.style.display = 'none';
-});
-if(plusBtn) plusBtn.addEventListener('click', function() {
-  plusBtn.classList.add('active');
-  minusBtn.classList.remove('active');
-  minusPrescription.style.display = 'none';
-  plusPrescription.style.display = 'block';
-});
-// เลือกค่าสายตา
-if(document.querySelectorAll('.prescription-grid td').length) {
-  document.querySelectorAll('.prescription-grid td').forEach(cell => {
-    cell.addEventListener('click', function() {
-      selectedValue = this.textContent;
-      updateSelectionDisplay();
-    });
-  });
-}
-// ยืนยันการเลือก
-if(confirmSelection) confirmSelection.addEventListener('click', function() {
-  if (selectedValue) {
-    if (currentEye === 'right') {
-      rightEyeSelected.textContent = selectedValue;
-      rightEyeValue.style.display = 'block';
-    } else {
-      leftEyeSelected.textContent = selectedValue;
-      leftEyeValue.style.display = 'block';
-    }
-    modal.style.display = 'none';
-    calculateTotal();
-  } else {
-    showNotification('กรุณาเลือกค่าสายตาก่อน', 'error');
-  }
-});
-
-// ฟังก์ชันสำหรับ bind event หลัง navbar โหลดเสร็จ
-function bindPrescriptionAndProfileEvents() {
-  // ตัวแปร prescription modal
-  const rightEyeBtn = document.getElementById('rightEyeBtn');
-  const leftEyeBtn = document.getElementById('leftEyeBtn');
-  const rightEyeSelected = document.getElementById('rightEyeSelected');
-  const leftEyeSelected = document.getElementById('leftEyeSelected');
-  const rightEyeValue = document.getElementById('rightEyeValue');
-  const leftEyeValue = document.getElementById('leftEyeValue');
-  const modal = document.getElementById('prescriptionModal');
-  const closeBtn = modal ? modal.querySelector('.close-btn') : null;
-  const modalTitle = document.getElementById('modalTitle');
-  const minusBtn = document.getElementById('minusBtn');
-  const plusBtn = document.getElementById('plusBtn');
-  const minusPrescription = document.getElementById('minusPrescription');
-  const plusPrescription = document.getElementById('plusPrescription');
-  const currentSelection = document.getElementById('currentSelection');
-  const confirmSelection = document.getElementById('confirmSelection');
-  const totalPriceElement = document.getElementById('totalPrice');
-
-  // เปิด Modal สำหรับตาขวา
-  if (rightEyeBtn) rightEyeBtn.onclick = function() {
-    currentEye = 'right';
-    if (modalTitle) modalTitle.textContent = 'เลือกค่าสายตา - ตาขวา';
-    if (modal) modal.style.display = 'block';
-    if (rightEyeSelected) selectedValue = rightEyeSelected.textContent === 'ยังไม่ได้เลือก' ? '' : rightEyeSelected.textContent;
-    updateSelectionDisplay();
-  };
-  // เปิด Modal สำหรับตาซ้าย
-  if (leftEyeBtn) leftEyeBtn.onclick = function() {
-    currentEye = 'left';
-    if (modalTitle) modalTitle.textContent = 'เลือกค่าสายตา - ตาซ้าย';
-    if (modal) modal.style.display = 'block';
-    if (leftEyeSelected) selectedValue = leftEyeSelected.textContent === 'ยังไม่ได้เลือก' ? '' : leftEyeSelected.textContent;
-    updateSelectionDisplay();
-  };
-  // ปิด Modal
-  if (closeBtn && modal) closeBtn.onclick = function() { modal.style.display = 'none'; };
-  // คลิกนอก Modal เพื่อปิด
-  window.addEventListener('click', function(event) {
-    if (event.target === modal) modal.style.display = 'none';
-    if (event.target.classList.contains('cart-modal')) closeCartModal();
-  });
-  // สลับระหว่าง MINUS และ PLUS
-  if (minusBtn && plusBtn && minusPrescription && plusPrescription) {
-    minusBtn.onclick = function() {
-      minusBtn.classList.add('active');
-      plusBtn.classList.remove('active');
-      minusPrescription.style.display = 'block';
-      plusPrescription.style.display = 'none';
-    };
-    plusBtn.onclick = function() {
-      plusBtn.classList.add('active');
-      minusBtn.classList.remove('active');
-      minusPrescription.style.display = 'none';
-      plusPrescription.style.display = 'block';
-    };
-  }
-  // เลือกค่าสายตา
-  if (modal) {
-    modal.querySelectorAll('.prescription-grid td').forEach(cell => {
-      cell.onclick = function() {
-        selectedValue = this.textContent;
-        updateSelectionDisplay();
-      };
-    });
-  }
-  // ยืนยันการเลือก
-  if (confirmSelection) confirmSelection.onclick = function() {
-    if (selectedValue) {
-      if (currentEye === 'right' && rightEyeSelected && rightEyeValue) {
-        rightEyeSelected.textContent = selectedValue;
-        rightEyeValue.style.display = 'block';
-      } else if (leftEyeSelected && leftEyeValue) {
-        leftEyeSelected.textContent = selectedValue;
-        leftEyeValue.style.display = 'block';
-      }
-      if (modal) modal.style.display = 'none';
-      calculateTotal();
-    } else {
-      showNotification('กรุณาเลือกค่าสายตาก่อน', 'error');
-    }
-  };
-  // Profile button
-  const profile = document.querySelector('.profile');
-  if (profile) {
-    profile.onclick = function(event) {
-      event.stopPropagation();
-      let user = null;
-      try { user = JSON.parse(sessionStorage.getItem('currentUser')); } catch (e) {}
-      if (!user || !user.fullName) {
-        showNotification('กำลังนำคุณไปยังหน้าเข้าสู่ระบบ', 'success');
-        setTimeout(function() {
-          window.location.href = 'buyer-login.html';
-        }, 1200);
-        return;
-      }
-      document.getElementById('dropdownMenu')?.classList.toggle('show');
-    };
-  }
-  // ฟังก์ชันอัพเดทการแสดงผลค่าที่เลือก
-  function updateSelectionDisplay() {
-    if (currentSelection) {
-      currentSelection.textContent = selectedValue || 'ยังไม่ได้เลือก';
-    }
-  }
-  // ฟังก์ชันคำนวณราคารวม
-  function calculateTotal() {
-    if (rightEyeSelected && leftEyeSelected && totalPriceElement) {
-      if (rightEyeSelected.textContent !== 'ยังไม่ได้เลือก' && leftEyeSelected.textContent !== 'ยังไม่ได้เลือก') {
-        totalPriceElement.textContent = `${(parseFloat(rightEyeSelected.textContent) + parseFloat(leftEyeSelected.textContent)) * 700} บาท`;
-      } else {
-        totalPriceElement.textContent = 'XXX บาท';
-      }
-    }
-  }
-}
-// เรียก bind หลัง navbar โหลด (delay เล็กน้อยให้ DOM มี navbar แล้ว)
-window.addEventListener('DOMContentLoaded', function() {
-  setTimeout(function() {
-    const profile = document.querySelector('.profile');
-    if (profile) profile.removeAttribute('onclick');
-    bindPrescriptionAndProfileEvents();
-  }, 300);
-});

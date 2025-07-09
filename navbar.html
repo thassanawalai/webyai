@@ -46,9 +46,9 @@
   <a href="buyer-about.html" class="nav-item">เกี่ยวกับเรา</a>
 </div>
 
-<!-- Cart/Order Modal (รวมจาก cart-order.html) -->
+<!-- Cart/Order Modal (Sidepanel) -->
 <div id="cartModal" class="cart-modal">
-  <div class="cart-content" style="position:relative;">
+  <div class="cart-content" style="position:relative; min-height:100vh;">
     <span class="close-btn" onclick="closeCartModal()" title="ปิดตะกร้า">&times;</span>
     <div class="cart-header">
       <h2>ตะกร้าสินค้า</h2>
@@ -72,6 +72,8 @@
     </div>
   </div>
 </div>
+<!-- Cart Sidepanel Overlay (คลิกปิด) -->
+<div class="cart-modal-overlay" onclick="closeCartModal()"></div>
 
 <div id="orderHistoryModal" class="modal">
   <div class="modal-content order-history-modal" style="position:relative;">
@@ -116,80 +118,6 @@
     <div class="pagination" id="pagination">
       <!-- ปุ่ม pagination จะถูกสร้างโดย JavaScript -->
     </div>
-  </div>
-</div>
-
-<!-- Modal สำหรับเลือกค่าสายตา (Prescription Modal) -->
-<div id="prescriptionModal" class="modal">
-  <div class="modal-content" style="position:relative;">
-    <span class="close-btn" onclick="document.getElementById('prescriptionModal').style.display='none'" title="ปิดหน้าต่าง">&times;</span>
-    <h2 id="modalTitle">เลือกค่าสายตา</h2>
-    <div class="prescription-type">
-      <button id="minusBtn" class="active">MINUS (-)</button>
-      <button id="plusBtn">PLUS (+)</button>
-    </div>
-    <div id="minusPrescription" class="prescription-section">
-      <h3>ค่าสายตาสั้น</h3>
-      <table class="prescription-grid">
-        <tr>
-          <td>-1.00</td><td>-1.25</td><td>-1.50</td><td>-1.75</td>
-        </tr>
-        <tr>
-          <td>-2.00</td><td>-2.25</td><td>-2.50</td><td>-2.75</td>
-        </tr>
-        <tr>
-          <td>-3.00</td><td>-3.25</td><td>-3.50</td><td>-3.75</td>
-        </tr>
-        <tr>
-          <td>-4.00</td><td>-4.25</td><td>-4.50</td><td>-4.75</td>
-        </tr>
-        <tr>
-          <td>-5.00</td><td>-5.25</td><td>-5.50</td><td>-5.75</td>
-        </tr>
-        <tr>
-          <td>-6.00</td><td>-6.25</td><td>-6.50</td><td>-6.75</td>
-        </tr>
-        <tr>
-          <td>-7.00</td><td>-7.25</td><td>-7.50</td><td>-7.75</td>
-        </tr>
-        <tr>
-          <td>-8.00</td><td>-8.25</td><td>-8.50</td><td>-8.75</td>
-        </tr>
-        <tr>
-          <td>-9.00</td><td>-9.25</td><td>-9.50</td><td>-9.75</td>
-        </tr>
-        <tr>
-          <td>-10.00</td><td>-10.25</td><td>-10.50</td><td>-10.75</td>
-        </tr>
-        <tr>
-          <td>-11.00</td><td>-11.25</td><td>-11.50</td><td>-11.75</td>
-        </tr>
-        <tr>
-          <td>-12.00</td>
-        </tr>
-      </table>
-    </div>
-    <div id="plusPrescription" class="prescription-section" style="display:none">
-      <h3>ค่าสายตายาว</h3>
-      <table class="prescription-grid">
-        <tr>
-          <td>+0.00</td><td>+1.00</td><td>+2.00</td><td>+3.00</td>
-        </tr>
-        <tr>
-          <td>+0.25</td><td>+1.25</td><td>+2.25</td><td>+3.25</td>
-        </tr>
-        <tr>
-          <td>+0.50</td><td>+1.50</td><td>+2.50</td><td>+3.50</td>
-        </tr>
-        <tr>
-          <td>+0.75</td><td>+1.75</td><td>+2.75</td><td>+3.75</td>
-        </tr>
-      </table>
-    </div>
-    <div class="current-selection">
-      <p>ค่าที่เลือก: <span id="currentSelection">ยังไม่ได้เลือก</span></p>
-    </div>
-    <button id="confirmSelection" class="confirm-btn">ยืนยันการเลือก</button>
   </div>
 </div>
 
