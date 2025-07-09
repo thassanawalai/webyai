@@ -228,7 +228,8 @@ document.addEventListener('DOMContentLoaded', function() {
         let user = null;
         try { user = JSON.parse(sessionStorage.getItem('currentUser')); } catch (e) {}
         if (!user || !user.fullName) {
-          window.location.href = 'buyer-login.html';
+          // DEV NOTE: ปิดระบบ redirect ไปหน้าล็อกอินชั่วคราว (login redirect disabled)
+          // window.location.href = 'buyer-login.html';
           return;
         }
         document.getElementById('dropdownMenu')?.classList.toggle('show');
@@ -243,7 +244,8 @@ function toggleDropdown(event) {
   let user = null;
   try { user = JSON.parse(sessionStorage.getItem('currentUser')); } catch (e) {}
   if (!user || !user.fullName) {
-    window.location.href = 'buyer-login.html';
+    // DEV NOTE: ปิดระบบ redirect ไปหน้าล็อกอินชั่วคราว (login redirect disabled)
+    // window.location.href = 'buyer-login.html';
     return;
   }
   document.getElementById('dropdownMenu')?.classList.toggle("show");
@@ -848,8 +850,9 @@ function checkout() {
   let user = null;
   try { user = JSON.parse(sessionStorage.getItem('currentUser')); } catch (e) {}
   if (!user || !user.fullName) {
+    // DEV NOTE: ปิดระบบ redirect ไปหน้าล็อกอินชั่วคราว (login redirect disabled)
     closeCartModal();
-    window.location.href = 'buyer-login.html';
+    // window.location.href = 'buyer-login.html';
     return;
   }
   showNotification('กำลังนำคุณไปยังหน้าชำระเงิน', 'success');
