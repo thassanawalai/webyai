@@ -19,48 +19,7 @@ function updateCartBadge() {
   }
 }
 
-function addToCart(product) {
-  let rightEye = '', leftEye = '', quantity = 1;
-  if (product && typeof product === 'object') {
-    rightEye = product.rightEye || '';
-    leftEye = product.leftEye || '';
-    quantity = product.quantity || 1;
-  } else if (typeof rightEyeSelected !== 'undefined' && rightEyeSelected && typeof leftEyeSelected !== 'undefined' && leftEyeSelected) {
-    if (rightEyeSelected.textContent === 'ยังไม่ได้เลือก' || leftEyeSelected.textContent === 'ยังไม่ได้เลือก') {
-      showNotification('กรุณาเลือกค่าสายตาทั้งสองข้างก่อน');
-      return;
-    }
-    rightEye = rightEyeSelected.textContent;
-    leftEye = leftEyeSelected.textContent;
-  }
-  let price = 700;
-  if (quantity === 2) price = 1300;
-  else if (quantity === 4) price = 2400;
-  const newProduct = {
-    id: Date.now(),
-    name: (product && product.name) ? product.name : 'Alice Moist Daily เลนส์สัมผัสรายวัน',
-    price: price,
-    image: 'images/product1.png',
-    rightEye: rightEye,
-    leftEye: leftEye,
-    quantity: quantity,
-    timestamp: new Date().toISOString()
-  };
-  const existingItemIndex = cart.findIndex(item => 
-    item.name === newProduct.name &&
-    item.rightEye === newProduct.rightEye &&
-    item.leftEye === newProduct.leftEye &&
-    item.price === newProduct.price
-  );
-  if (existingItemIndex !== -1) {
-    cart[existingItemIndex].quantity += quantity;
-  } else {
-    cart.push(newProduct);
-  }
-  localStorage.setItem('cart', JSON.stringify(cart));
-  updateCartBadge();
-  showNotification('เพิ่มสินค้าในตะกร้าเรียบร้อยแล้ว', 'success');
-}
+// ...existing code...
 
 function updateQuantity(itemId, change) {
   const itemIndex = cart.findIndex(item => item.id === itemId);
@@ -72,17 +31,7 @@ function updateQuantity(itemId, change) {
   }
 }
 
-function buyNow() {
-  if (typeof rightEyeSelected !== 'undefined' && rightEyeSelected && typeof leftEyeSelected !== 'undefined' && leftEyeSelected) {
-    if (rightEyeSelected.textContent === 'ยังไม่ได้เลือก' || leftEyeSelected.textContent === 'ยังไม่ได้เลือก') {
-      showNotification('กรุณาเลือกค่าสายตาทั้งสองข้างก่อน');
-      return;
-    }
-  }
-  addToCart();
-  showNotification('เพิ่มสินค้าในตะกร้าเรียบร้อยแล้ว', 'success');
-  openCartModal();
-}
+// ...existing code...
 
 function openCartModal() {
   const cartModal = document.getElementById('cartModal');
@@ -103,17 +52,17 @@ function openCartModal() {
     2: { price: 1300, original: 1400, savings: 100 },
     4: { price: 2400, original: 2800, savings: 400 }
   };
-  if (cart.length === 0) {
-    cartItemsContainer.innerHTML = `
-      <div class="empty-cart">
-        <i class="fas fa-shopping-cart"></i>
-        <h3>ไม่มีสินค้าในตะกร้า</h3>
-        <p>กรุณาเพิ่มสินค้าในตะกร้าก่อน</p>
-      </div>
-    `;
-    cartTotalPrice.textContent = '0 บาท';
-    loginAlert.style.display = 'none';
-  } else {
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = `
+          <div class="empty-cart">
+            <i class="fas fa-shopping-cart"></i>
+            <h3>ไม่มีสินค้าในตะกร้า</h3>
+            <p>กรุณาเพิ่มสินค้าในตะกร้าก่อน</p>
+          </div>
+        `;
+        cartTotalPrice.textContent = '0 บาท';
+        loginAlert.style.display = 'none';
+    } else {
     cart.forEach(item => {
       // ใช้ business rule จริงในการคำนวณ
       const pd = priceData[item.quantity] || priceData[1];
@@ -205,7 +154,8 @@ function openCartModal() {
     } else {
       cartTotalPrice.textContent = `${total.toLocaleString()} บาท`;
     }
-    loginAlert.style.display = localStorage.getItem('registeredUsername') ? 'none' : 'block';
+    // ไม่ต้องแสดง loginAlert อีกต่อไป
+    loginAlert.style.display = 'none';
   }
   cartModal.classList.add('show');
   const overlay = document.querySelector('.cart-modal-overlay');
@@ -440,25 +390,62 @@ function addToCart() {
         quantity: quantity,
         timestamp: new Date().toISOString()
     };
-    // ตรวจสอบว่ามีสินค้าแบบเดียวกันในตะกร้าหรือยัง
-    const existingItemIndex = cart.findIndex(item =>
-        item.name === newProduct.name &&
-        item.rightEye === newProduct.rightEye &&
-        item.leftEye === newProduct.leftEye &&
-        item.price === newProduct.price
-    );
-    if (existingItemIndex !== -1) {
-        cart[existingItemIndex].quantity += quantity;
-    } else {
-        cart.push(newProduct);
+    // จำกัดให้มีสินค้าได้แค่ 1 อย่างในตะกร้า (addToCart: แค่ noti, buyNow: modal)
+    if (cart.length > 0) {
+        showCartLimitModal();
+        return false;
     }
+
+// --- Modal เตือนเมื่อมีสินค้าในตะกร้าแล้ว ---
+function showCartLimitModal() {
+    // ลบ modal เดิมถ้ามี
+    const oldModal = document.getElementById('cartLimitModal');
+    if (oldModal) oldModal.remove();
+    // overlay
+    let overlay = document.getElementById('cartLimitModalOverlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'cartLimitModalOverlay';
+        overlay.style = 'position:fixed;z-index:9998;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.18);display:flex;align-items:center;justify-content:center;';
+        document.body.appendChild(overlay);
+    }
+    overlay.style.display = 'flex';
+    // modal
+    const modal = document.createElement('div');
+    modal.id = 'cartLimitModal';
+    modal.style = 'z-index:9999;max-width:370px;width:90vw;background:#fff;border-radius:18px;box-shadow:0 4px 32px rgba(0,0,0,0.13);padding:36px 24px 28px 24px;display:flex;flex-direction:column;align-items:center;position:relative;';
+    modal.innerHTML = `
+        <button id="cartLimitModalClose" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:1.5rem;color:#888;cursor:pointer;z-index:2;">&times;</button>
+        <div style="font-size:1.25rem;font-weight:700;color:#223;text-align:center;margin-bottom:10px;">คุณมีสินค้าอยู่ในตะกร้าแล้ว</div>
+        <div style="font-size:1.05rem;color:#444;text-align:center;margin-bottom:24px;">กรุณายกเลิกที่ตะกร้าหากต้องการสั่งสินค้าใหม่</div>
+        <button id="cartLimitModalGoCart" style="background:#0a2a5c;color:#fff;font-size:1.08rem;font-weight:600;padding:10px 32px;border:none;border-radius:8px;cursor:pointer;">ไปที่รถเข็น</button>
+    `;
+    overlay.appendChild(modal);
+    // ปิด modal
+    document.getElementById('cartLimitModalClose')?.addEventListener('click', () => {
+        overlay.style.display = 'none';
+        modal.remove();
+    });
+    overlay.onclick = function(e) {
+        if (e.target === overlay) {
+            overlay.style.display = 'none';
+            modal.remove();
+        }
+    };
+    document.getElementById('cartLimitModalGoCart')?.addEventListener('click', () => {
+        overlay.style.display = 'none';
+        modal.remove();
+        openCartModal();
+    });
+}
+    cart.push(newProduct);
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartBadge();
     if (typeof showNotification === 'function') {
         showNotification('เพิ่มสินค้าในตะกร้าเรียบร้อยแล้ว', 'success');
     }
-    // เปิด sidepanel modal และอัปเดตรายการทันที
-    openCartModal();
+    // ไม่ต้องเปิด cart modal ที่นี่ ให้ buyNow เป็นคนเปิดเอง
+    // openCartModal();
 }
 
 // ฟังก์ชันสำหรับสั่งซื้อทันที
@@ -484,11 +471,15 @@ function buyNow() {
         return;
     }
 
-    addToCart();
-    // ไปหน้า checkout หลังเพิ่มสินค้า (หรือจะเปิด modal ก็ได้)
-    setTimeout(() => {
-        window.location.href = 'buyer-checkout.html';
-    }, 500);
+    // จำกัดให้มีสินค้าได้แค่ 1 อย่างในตะกร้า (modal เตือนแบบ custom)
+    if (cart.length > 0) {
+        showCartLimitModal();
+        return;
+    }
+    const added = addToCart();
+    if (added !== false) {
+        openCartModal();
+    }
 }
 
 // เรียกใช้ฟังก์ชันเมื่อหน้าเว็บโหลดเสร็จ
