@@ -6,8 +6,8 @@
   <title>Alice Moist Daily</title>
   <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="navbar-footer-style.css">
-<script src="navbar-footer.js" defer></script>
+  <link rel="stylesheet" href="navbar-footer-style.css">
+  <script src="navbar-footer.js" defer></script>
 </head>
 
 <body>
@@ -140,10 +140,10 @@
                 </div>
                 
                 <div class="action-buttons">
-                    <button class="add-to-cart">
+                    <button class="add-to-cart" onclick="addToCart()">
                         <i class="fas fa-shopping-cart"></i> เพิ่มในตะกร้า
                     </button>
-                    <button class="buy-now">
+                    <button class="buy-now" onclick="buyNow()">
                         <i class="fas fa-bolt"></i> สั่งซื้อทันที
                     </button>
                 </div>
@@ -182,7 +182,5 @@
     </section>
 </main>
 <div id="footer"></div>
-// --- ย้าย JS และ CSS ไปไว้ใน navbar-footer.js / navbar-footer-style.css ---
-</script>
 </body>
 </html>

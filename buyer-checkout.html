@@ -924,29 +924,22 @@
   <script>
         // Initialize data
     document.addEventListener('DOMContentLoaded', function() {
-      // Check if user is logged in
-      const username = localStorage.getItem('registeredUsername') || 'ลูกค้าทั่วไป';
-      if (!localStorage.getItem('registeredUsername')) {
-        alert('กรุณาล็อกอินก่อนดำเนินการชำระเงิน');
-        window.location.href = 'buyer-login.html';
-      }
-      
       // Check if cart exists and has items
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
       if (cart.length === 0) {
         alert('ไม่มีสินค้าในตะกร้า กรุณาเลือกสินค้าก่อนดำเนินการชำระเงิน');
         window.location.href = 'buyer-dashboard.html';
       }
-      
+
       // Initialize addresses if not exists
       if (!localStorage.getItem('deliveryAddresses')) {
         localStorage.setItem('deliveryAddresses', JSON.stringify([]));
       }
-      
+
       // Initialize page
       displayCartItems();
       displayAddresses();
-      
+
       // Set up event listeners
       setupEventListeners();
     });

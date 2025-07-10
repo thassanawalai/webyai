@@ -1,6 +1,7 @@
-// Node.js/Express API for buyer login/register/email verify/user update with MySQL
+
+// Node.js/Express API for buyer login/register/email verify/user update with SQLite
 const express = require('express');
-const mysql = require('mysql2');
+const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcrypt');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
@@ -10,33 +11,14 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 app.use(helmet());
-app.use(cors({
-  origin: '*', // อนุญาตทุก origin (หรือจะระบุ origin เฉพาะก็ได้)
-}));
+app.use(cors({ origin: '*' }));
 
-const db = mysql.createConnection({
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASS || '',
-  database: process.env.DB_NAME || 'alice_moist',
-});
-
-// สร้าง pool แทนการใช้ connection เดียว
-const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
-});
-
-db.connect((err) => {
+// เชื่อมต่อ SQLite
+const db = new sqlite3.Database('./e_commerce_alice_test1.db', (err) => {
   if (err) {
-    console.error('MySQL connection error:', err);
+    console.error('SQLite connection error:', err);
   } else {
-    console.log('Connected to MySQL');
+    console.log('Connected to SQLite');
   }
 });
 
@@ -52,41 +34,36 @@ const transporter = nodemailer.createTransport({
 // Register
 app.post('/api/register', async (req, res) => {
   const { fullName, phone, address, province, district, postalCode, email, password } = req.body;
-  
   if (!fullName || !phone || !address || !province || !district || !postalCode || !email || !password) {
     return res.status(400).json({ error: 'กรุณากรอกข้อมูลให้ครบทุกช่อง' });
   }
-
   try {
-    const [existing] = await pool.query(
-      'SELECT id FROM users WHERE email = ? OR phone = ?', 
-      [email, phone]
-    );
-    
-    if (existing.length > 0) {
-      return res.status(409).json({ error: 'อีเมลหรือเบอร์โทรศัพท์นี้ถูกใช้แล้ว' });
-    }
-
-    const hash = await bcrypt.hash(password, 10);
-    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-    
-    await pool.query(
-      `INSERT INTO users (
-        full_name, phone, address, province, 
-        district, postal_code, email, password, verification_code
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [fullName, phone, address, province, district, postalCode, email, hash, verificationCode]
-    );
-
-    // ส่งอีเมลยืนยัน
-    await transporter.sendMail({
-      from: `"Alice Moist" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: 'ยืนยันอีเมล Alice Moist',
-      html: `<p>รหัสยืนยัน 6 หลักของคุณคือ: <strong>${verificationCode}</strong></p>`
+    db.get('SELECT id FROM users WHERE email = ? OR phone = ?', [email, phone], async (err, existing) => {
+      if (err) return res.status(500).json({ error: 'Database error' });
+      if (existing) {
+        return res.status(409).json({ error: 'อีเมลหรือเบอร์โทรศัพท์นี้ถูกใช้แล้ว' });
+      }
+      const hash = await bcrypt.hash(password, 10);
+      const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+      db.run(
+        `INSERT INTO users (
+          full_name, phone, address, province, 
+          district, postal_code, email, password, verification_code
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [fullName, phone, address, province, district, postalCode, email, hash, verificationCode],
+        async function (err2) {
+          if (err2) return res.status(500).json({ error: 'เกิดข้อผิดพลาดในระบบ' });
+          // ส่งอีเมลยืนยัน
+          await transporter.sendMail({
+            from: `"Alice Moist" <${process.env.EMAIL_USER}>`,
+            to: email,
+            subject: 'ยืนยันอีเมล Alice Moist',
+            html: `<p>รหัสยืนยัน 6 หลักของคุณคือ: <strong>${verificationCode}</strong></p>`
+          });
+          res.json({ success: true });
+        }
+      );
     });
-
-    res.json({ success: true });
   } catch (err) {
     console.error('Registration error:', err);
     res.status(500).json({ error: 'เกิดข้อผิดพลาดในระบบ' });
@@ -96,12 +73,11 @@ app.post('/api/register', async (req, res) => {
 // Login
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
-  pool.query(
+  db.get(
     'SELECT * FROM users WHERE email = ? OR phone = ?',
     [username, username],
-    async (err, results) => {
-      if (err || results.length === 0) return res.status(401).json({ error: 'User not found' });
-      const user = results[0];
+    async (err, user) => {
+      if (err || !user) return res.status(401).json({ error: 'User not found' });
       const match = await bcrypt.compare(password, user.password);
       if (!match) return res.status(401).json({ error: 'Incorrect password' });
       if (!user.is_verified) return res.status(403).json({ error: 'Email not verified' });
@@ -122,10 +98,10 @@ app.post('/api/login', (req, res) => {
 // Email verification
 app.post('/api/verify-email', (req, res) => {
   const { email, code } = req.body;
-  pool.query('SELECT verification_code FROM users WHERE email = ?', [email], (err, results) => {
-    if (err || results.length === 0) return res.status(400).json({ error: 'ไม่พบผู้ใช้' });
-    if (results[0].verification_code === code) {
-      pool.query('UPDATE users SET is_verified = 1, verification_code = NULL WHERE email = ?', [email], (err2) => {
+  db.get('SELECT verification_code FROM users WHERE email = ?', [email], (err, user) => {
+    if (err || !user) return res.status(400).json({ error: 'ไม่พบผู้ใช้' });
+    if (user.verification_code === code) {
+      db.run('UPDATE users SET is_verified = 1, verification_code = NULL WHERE email = ?', [email], (err2) => {
         if (err2) return res.status(400).json({ error: 'อัปเดตสถานะไม่สำเร็จ' });
         res.json({ success: true });
       });
@@ -138,9 +114,8 @@ app.post('/api/verify-email', (req, res) => {
 // Get user by email
 app.get('/api/user', (req, res) => {
   const { email } = req.query;
-  pool.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {
-    if (err || results.length === 0) return res.status(404).json({ error: 'User not found' });
-    const user = results[0];
+  db.get('SELECT * FROM users WHERE email = ?', [email], (err, user) => {
+    if (err || !user) return res.status(404).json({ error: 'User not found' });
     res.json({
       id: user.id,
       fullName: user.full_name,
@@ -157,7 +132,7 @@ app.get('/api/user', (req, res) => {
 // Update user info
 app.post('/api/user-update', (req, res) => {
   const { email, fullName, phone, address } = req.body;
-  pool.query('UPDATE users SET full_name=?, phone=?, address=? WHERE email=?', [fullName, phone, address, email], (err, result) => {
+  db.run('UPDATE users SET full_name=?, phone=?, address=? WHERE email=?', [fullName, phone, address, email], function(err) {
     if (err) return res.status(400).json({ error: 'Update failed' });
     res.json({ success: true });
   });
@@ -169,10 +144,10 @@ app.post('/api/reset-password', async (req, res) => {
   if (!email || !newPassword || !confirmPassword) return res.status(400).json({ error: 'กรุณากรอกข้อมูลให้ครบถ้วน' });
   if (newPassword !== confirmPassword) return res.status(400).json({ error: 'รหัสผ่านใหม่ไม่ตรงกัน' });
   if (newPassword.length < 6) return res.status(400).json({ error: 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร' });
-  pool.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
-    if (err || results.length === 0) return res.status(404).json({ error: 'ไม่พบอีเมลนี้ในระบบ' });
+  db.get('SELECT * FROM users WHERE email = ?', [email], async (err, user) => {
+    if (err || !user) return res.status(404).json({ error: 'ไม่พบอีเมลนี้ในระบบ' });
     const hash = await bcrypt.hash(newPassword, 10);
-    pool.query('UPDATE users SET password = ? WHERE email = ?', [hash, email], (err2) => {
+    db.run('UPDATE users SET password = ? WHERE email = ?', [hash, email], (err2) => {
       if (err2) return res.status(500).json({ error: 'อัปเดตรหัสผ่านไม่สำเร็จ' });
       // ส่งอีเมลแจ้งเตือน (optional)
       transporter.sendMail({
@@ -192,26 +167,22 @@ app.post('/api/reset-password', async (req, res) => {
 app.post('/api/check-duplicate', (req, res) => {
   const { email, phone } = req.body;
   if (!email && !phone) return res.status(400).json({ duplicate: false, message: 'No data provided' });
-  pool.query(
-    'SELECT * FROM users WHERE email = ? OR phone = ?',
-    [email, phone],
-    (err, results) => {
-      if (err) return res.status(500).json({ duplicate: false, message: 'Database error' });
-      if (results.length > 0) {
-        let msg = 'ข้อมูลนี้ถูกใช้ไปแล้ว';
-        if (results[0].email === email) msg = 'อีเมลนี้ถูกใช้ไปแล้ว';
-        else if (results[0].phone === phone) msg = 'เบอร์โทรศัพท์นี้ถูกใช้ไปแล้ว';
-        return res.json({ duplicate: true, message: msg });
-      }
-      res.json({ duplicate: false });
+  db.get('SELECT * FROM users WHERE email = ? OR phone = ?', [email, phone], (err, user) => {
+    if (err) return res.status(500).json({ duplicate: false, message: 'Database error' });
+    if (user) {
+      let msg = 'ข้อมูลนี้ถูกใช้ไปแล้ว';
+      if (user.email === email) msg = 'อีเมลนี้ถูกใช้ไปแล้ว';
+      else if (user.phone === phone) msg = 'เบอร์โทรศัพท์นี้ถูกใช้ไปแล้ว';
+      return res.json({ duplicate: true, message: msg });
     }
-  );
+    res.json({ duplicate: false });
+  });
 });
 // เพิ่ม endpoint สำหรับตรวจสอบสุขภาพระบบ
 app.get('/api/health', (req, res) => {
-  pool.query('SELECT 1', (err) => {
+  db.get('SELECT 1', (err) => {
     if (err) {
-      console.error('MySQL health check failed:', err);
+      console.error('SQLite health check failed:', err);
       return res.status(500).json({ status: 'DOWN', error: err.message });
     }
     res.json({ status: 'UP' });
