@@ -28,7 +28,7 @@
         <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</a>
       </div>
     </div>
-    <button class="btn" onclick="openCartModal()">
+    <button class="btn" onclick="window.location.href='buyer-cart.html'">
       <i class="fas fa-shopping-cart"></i>
       <span id="cartBadge" class="cart-badge">0</span>
     </button>
@@ -63,10 +63,9 @@
     <div class="cart-summary">
       <div class="cart-total">
         <span>ยอดรวมทั้งหมด:</span>
-        <span id="cartTotalPrice">0 บาท</span>
+        <span id="cartTotalPrice">0.00 บาท</span>
       </div>
       <div class="cart-actions">
-        <button class="continue-shopping" onclick="closeCartModal()">ดำเนินการต่อ</button>
         <button class="checkout" onclick="checkout()">ชำระเงิน</button>
       </div>
     </div>

@@ -1,3 +1,46 @@
+// --- Modal เตือนเมื่อมีสินค้าในตะกร้าแล้ว ---
+window.showCartLimitModal = function showCartLimitModal() {
+    // ลบ modal เดิมถ้ามี
+    const oldModal = document.getElementById('cartLimitModal');
+    if (oldModal) oldModal.remove();
+    // overlay
+    let overlay = document.getElementById('cartLimitModalOverlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'cartLimitModalOverlay';
+        overlay.style = 'position:fixed;z-index:9998;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.18);display:flex;align-items:center;justify-content:center;';
+        document.body.appendChild(overlay);
+    }
+    overlay.style.display = 'flex';
+    // modal
+    const modal = document.createElement('div');
+    modal.id = 'cartLimitModal';
+    modal.style = 'z-index:9999;max-width:370px;width:90vw;background:#fff;border-radius:18px;box-shadow:0 4px 32px rgba(0,0,0,0.13);padding:36px 24px 28px 24px;display:flex;flex-direction:column;align-items:center;position:relative;';
+    modal.innerHTML = `
+        <button id="cartLimitModalClose" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:1.5rem;color:#888;cursor:pointer;z-index:2;">&times;</button>
+        <div style="font-size:1.25rem;font-weight:700;color:#223;text-align:center;margin-bottom:10px;">คุณมีสินค้าอยู่ในตะกร้าแล้ว</div>
+        <div style="font-size:1.05rem;color:#444;text-align:center;margin-bottom:24px;">กรุณายกเลิกที่ตะกร้าหากต้องการสั่งสินค้าใหม่</div>
+        <button id="cartLimitModalGoCart" style="background:#0a2a5c;color:#fff;font-size:1.08rem;font-weight:600;padding:10px 32px;border:none;border-radius:8px;cursor:pointer;">ไปที่รถเข็น</button>
+    `;
+    overlay.appendChild(modal);
+    // ปิด modal
+    document.getElementById('cartLimitModalClose')?.addEventListener('click', () => {
+        overlay.style.display = 'none';
+        modal.remove();
+    });
+    overlay.onclick = function(e) {
+        if (e.target === overlay) {
+            overlay.style.display = 'none';
+            modal.remove();
+        }
+    };
+    document.getElementById('cartLimitModalGoCart')?.addEventListener('click', () => {
+        overlay.style.display = 'none';
+        modal.remove();
+        openCartModal();
+    });
+}
+
 // --- ระบบตะกร้าสินค้า (Cart) ---
 // ฟังก์ชันตะกร้าสินค้าแบบรวมศูนย์ (ใช้ร่วมทุกหน้า)
 let cart = [];
@@ -19,8 +62,6 @@ function updateCartBadge() {
   }
 }
 
-// ...existing code...
-
 function updateQuantity(itemId, change) {
   const itemIndex = cart.findIndex(item => item.id === itemId);
   if (itemIndex !== -1) {
@@ -30,8 +71,6 @@ function updateQuantity(itemId, change) {
     openCartModal();
   }
 }
-
-// ...existing code...
 
 function openCartModal() {
   const cartModal = document.getElementById('cartModal');
@@ -60,7 +99,7 @@ function openCartModal() {
             <p>กรุณาเพิ่มสินค้าในตะกร้าก่อน</p>
           </div>
         `;
-        cartTotalPrice.textContent = '0 บาท';
+        cartTotalPrice.textContent = '0.00 บาท';
         loginAlert.style.display = 'none';
     } else {
     cart.forEach(item => {
@@ -116,8 +155,8 @@ function openCartModal() {
           <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
             <div style="font-size:0.97rem; color:#666; display:flex; flex-wrap:wrap; align-items:center; gap:6px;">
               <span style="background:#e3f2fd; color:#0077b6; border-radius:8px; padding:2px 8px;">${item.quantity} ชุด</span>
-              <span style="background:#eafaf1; color:#27ae60; border-radius:8px; padding:2px 8px; white-space:nowrap;">${itemTotal.toLocaleString()} บาท</span>
-              ${itemSavings > 0 ? `<span style=\"background:#ffe082;color:#f39c12;border-radius:8px;padding:2px 10px;font-size:0.93em; white-space:nowrap;\">ประหยัด ${itemSavings.toLocaleString()} บาท</span>` : ''}
+              <span style="background:#eafaf1; color:#27ae60; border-radius:8px; padding:2px 8px; white-space:nowrap;">${itemTotal.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} บาท</span>
+              ${itemSavings > 0 ? `<span style=\"background:#ffe082;color:#f39c12;border-radius:8px;padding:2px 10px;font-size:0.93em; white-space:nowrap;\">ประหยัด ${itemSavings.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} บาท</span>` : ''}
             </div>
             <button class="cart-item-remove modern" onclick="removeFromCart(${item.id})" style="background:#e74c3c; color:#fff; border:none; border-radius:6px; padding:6px 14px; font-size:0.95rem; cursor:pointer; font-weight:500;">ยกเลิก</button>
           </div>
@@ -150,9 +189,9 @@ function openCartModal() {
     });
     // แสดงผลรวม (ถ้ามีส่วนลด)
     if (totalSavings > 0) {
-      cartTotalPrice.innerHTML = `<span style="text-decoration:line-through;color:#888;font-size:1.05em;">${totalOriginal.toLocaleString()} บาท</span> <span style="color:#00bfae;font-size:1.2em;font-weight:bold;">${total.toLocaleString()} บาท</span> <span style="color:#f39c12;font-size:1em;">(ประหยัด ${totalSavings.toLocaleString()} บาท)</span>`;
+      cartTotalPrice.innerHTML = `<span style="text-decoration:line-through;color:#888;font-size:1.05em;">${totalOriginal.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} บาท</span> <span style="color:#00bfae;font-size:1.2em;font-weight:bold;">${total.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} บาท</span> <span style="color:#f39c12;font-size:1em;">(ประหยัด ${totalSavings.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} บาท)</span>`;
     } else {
-      cartTotalPrice.textContent = `${total.toLocaleString()} บาท`;
+      cartTotalPrice.textContent = `${total.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} บาท`;
     }
     // ไม่ต้องแสดง loginAlert อีกต่อไป
     loginAlert.style.display = 'none';
@@ -195,7 +234,6 @@ function checkout() {
 
 window.addToCart = addToCart;
 window.updateQuantity = updateQuantity;
-window.buyNow = buyNow;
 window.openCartModal = openCartModal;
 window.closeCartModal = closeCartModal;
 window.removeFromCart = removeFromCart;
@@ -325,6 +363,9 @@ function handleEyeSelection() {
 
 // ฟังก์ชันสำหรับเพิ่มลงตะกร้า
 function addToCart() {
+    console.log('[addToCart] เรียกใช้งาน, localStorage.cart =', localStorage.getItem('cart'));
+    cart = JSON.parse(localStorage.getItem('cart')) || [];
+    console.log('[addToCart] cart (หลัง sync) =', cart);
     const rightEyeValue = document.getElementById('rightEyeSelect').value;
     const leftEyeValue = document.getElementById('leftEyeSelect').value;
     const quantitySelect = document.getElementById('quantitySelect');
@@ -390,97 +431,23 @@ function addToCart() {
         quantity: quantity,
         timestamp: new Date().toISOString()
     };
-    // จำกัดให้มีสินค้าได้แค่ 1 อย่างในตะกร้า (addToCart: แค่ noti, buyNow: modal)
+    // sync cart กับ localStorage ทุกครั้งก่อนเช็ค
+    cart = JSON.parse(localStorage.getItem('cart')) || [];
     if (cart.length > 0) {
         showCartLimitModal();
         return false;
     }
 
-// --- Modal เตือนเมื่อมีสินค้าในตะกร้าแล้ว ---
-function showCartLimitModal() {
-    // ลบ modal เดิมถ้ามี
-    const oldModal = document.getElementById('cartLimitModal');
-    if (oldModal) oldModal.remove();
-    // overlay
-    let overlay = document.getElementById('cartLimitModalOverlay');
-    if (!overlay) {
-        overlay = document.createElement('div');
-        overlay.id = 'cartLimitModalOverlay';
-        overlay.style = 'position:fixed;z-index:9998;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.18);display:flex;align-items:center;justify-content:center;';
-        document.body.appendChild(overlay);
-    }
-    overlay.style.display = 'flex';
-    // modal
-    const modal = document.createElement('div');
-    modal.id = 'cartLimitModal';
-    modal.style = 'z-index:9999;max-width:370px;width:90vw;background:#fff;border-radius:18px;box-shadow:0 4px 32px rgba(0,0,0,0.13);padding:36px 24px 28px 24px;display:flex;flex-direction:column;align-items:center;position:relative;';
-    modal.innerHTML = `
-        <button id="cartLimitModalClose" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:1.5rem;color:#888;cursor:pointer;z-index:2;">&times;</button>
-        <div style="font-size:1.25rem;font-weight:700;color:#223;text-align:center;margin-bottom:10px;">คุณมีสินค้าอยู่ในตะกร้าแล้ว</div>
-        <div style="font-size:1.05rem;color:#444;text-align:center;margin-bottom:24px;">กรุณายกเลิกที่ตะกร้าหากต้องการสั่งสินค้าใหม่</div>
-        <button id="cartLimitModalGoCart" style="background:#0a2a5c;color:#fff;font-size:1.08rem;font-weight:600;padding:10px 32px;border:none;border-radius:8px;cursor:pointer;">ไปที่รถเข็น</button>
-    `;
-    overlay.appendChild(modal);
-    // ปิด modal
-    document.getElementById('cartLimitModalClose')?.addEventListener('click', () => {
-        overlay.style.display = 'none';
-        modal.remove();
-    });
-    overlay.onclick = function(e) {
-        if (e.target === overlay) {
-            overlay.style.display = 'none';
-            modal.remove();
-        }
-    };
-    document.getElementById('cartLimitModalGoCart')?.addEventListener('click', () => {
-        overlay.style.display = 'none';
-        modal.remove();
-        openCartModal();
-    });
-}
     cart.push(newProduct);
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartBadge();
     if (typeof showNotification === 'function') {
         showNotification('เพิ่มสินค้าในตะกร้าเรียบร้อยแล้ว', 'success');
     }
-    // ไม่ต้องเปิด cart modal ที่นี่ ให้ buyNow เป็นคนเปิดเอง
-    // openCartModal();
+    // เปิด cart modal ทันทีหลังเพิ่มสินค้า
+    openCartModal();
 }
 
-// ฟังก์ชันสำหรับสั่งซื้อทันที
-function buyNow() {
-    const rightEyeValue = document.getElementById('rightEyeSelect').value;
-    const leftEyeValue = document.getElementById('leftEyeSelect').value;
-    const quantitySelect = document.getElementById('quantitySelect');
-
-    if (!rightEyeValue && !leftEyeValue) {
-        if (typeof showNotification === 'function') {
-            showNotification('กรุณาเลือกค่าสายตาอย่างน้อย 1 ข้างก่อน', 'error');
-        } else {
-            // fallback
-        }
-        return;
-    }
-    if (!quantitySelect.value) {
-        if (typeof showNotification === 'function') {
-            showNotification('กรุณาเลือกจำนวนกล่อง', 'error');
-        } else {
-            // fallback
-        }
-        return;
-    }
-
-    // จำกัดให้มีสินค้าได้แค่ 1 อย่างในตะกร้า (modal เตือนแบบ custom)
-    if (cart.length > 0) {
-        showCartLimitModal();
-        return;
-    }
-    const added = addToCart();
-    if (added !== false) {
-        openCartModal();
-    }
-}
 
 // เรียกใช้ฟังก์ชันเมื่อหน้าเว็บโหลดเสร็จ
 document.addEventListener('DOMContentLoaded', function() {

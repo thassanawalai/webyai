@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alice Moist Daily - สินค้า</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="navbar-footer-style.css">
+</head>
+<body>
+  <div id="navbar"></div>
+  <main class="container" style="max-width:1100px; margin:auto;">
+    <h1 style="text-align:center; color:#183a7a; font-weight:700; margin:32px 0 28px 0;">ตะกร้าของคุณ</h1>
+    <div id="cartPage" style="display:flex; flex-wrap:wrap; gap:32px; justify-content:center; align-items:flex-start;">
+      <!-- Left: Cart Items -->
+      <div id="cartItemsBox" style="background:#fff; border-radius:18px; box-shadow:0 2px 16px rgba(0,0,0,0.07); padding:32px 28px; min-width:320px; max-width:420px; flex:1 1 350px;">
+        <h2 style="font-size:1.25rem; color:#223; font-weight:600; margin-bottom:18px;">คุณจะได้รับ</h2>
+        <div id="cartItemsList"></div>
+      </div>
+      <!-- Right: Summary -->
+      <div id="cartSummaryBox" style="background:#fff; border-radius:18px; box-shadow:0 2px 16px rgba(0,0,0,0.07); padding:32px 28px; min-width:220px; max-width:320px; flex:1 1 220px;">
+        <div style="font-size:1.15rem; color:#223; font-weight:600; margin-bottom:18px;">รวม</div>
+        <div id="cartTotal" style="font-size:1.6rem; color:#183a7a; font-weight:700; margin-bottom:32px;">0 บาท</div>
+        <button id="checkoutBtn" style="width:100%; background:#27ae60; color:#fff; font-size:1.15rem; font-weight:600; padding:14px 0; border:none; border-radius:8px; cursor:pointer;">ชำระเงิน</button>
+      </div>
+    </div>
+  </main>
+  <div id="footer"></div>
+  <script src="navbar-footer.js"></script>
+  <script>
+    // --- Cart Page Logic ---
+    function renderCartPage() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const cartItemsList = document.getElementById('cartItemsList');
+      const cartTotal = document.getElementById('cartTotal');
+      if (!cartItemsList || !cartTotal) return;
+      cartItemsList.innerHTML = '';
+      let total = 0;
+      // business rule: 1 กล่อง 700, 2 กล่อง 1300, 4 กล่อง 2400
+      const priceData = {
+        1: { price: 700, original: 700, savings: 0 },
+        2: { price: 1300, original: 1400, savings: 100 },
+        4: { price: 2400, original: 2800, savings: 400 }
+      };
+      if (cart.length === 0) {
+        cartItemsList.innerHTML = `<div style="text-align:center; color:#888; font-size:1.1rem; padding:32px 0;">ไม่มีสินค้าในตะกร้า</div>`;
+        cartTotal.textContent = '0 บาท';
+        document.getElementById('checkoutBtn').disabled = true;
+        document.getElementById('checkoutBtn').style.opacity = 0.5;
+        return;
+      }
+      cart.forEach(item => {
+        const pd = priceData[item.quantity] || priceData[1];
+        total += pd.price;
+        cartItemsList.innerHTML += `
+          <div style="display:flex; gap:18px; align-items:flex-start; margin-bottom:24px; border-bottom:1px solid #f0f0f0; padding-bottom:18px;">
+            <img src="${item.image}" alt="${item.name}" style="width:80px; height:80px; border-radius:12px; background:#fff; box-shadow:0 1px 4px rgba(0,0,0,0.09); object-fit:contain;">
+            <div style="flex:1;">
+              <div style="font-size:1.08rem; font-weight:600; color:#183a7a; margin-bottom:4px;">Alice <span style='color:#00bfae;font-weight:bold;'>MOIST</span> (30 เลนส์/ชุด)</div>
+              <div style="font-size:0.98rem; color:#333; margin-bottom:6px;">
+                <div>ตาขวา <span style="color:#888;">ค่าสายตา: ${item.rightEye || '-'}</span> <span style="float:right; color:#183a7a; font-weight:600;">${item.rightEye ? (pd.price/item.quantity).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})+' บาท' : ''}</span></div>
+                <div>ตาซ้าย <span style="color:#888;">ค่าสายตา: ${item.leftEye || '-'}</span> <span style="float:right; color:#183a7a; font-weight:600;">${item.leftEye ? (pd.price/item.quantity).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})+' บาท' : ''}</span></div>
+              </div>
+              <a href="#" style="color:#e74c3c; font-size:0.97rem; text-decoration:underline;" onclick="removeFromCart(${item.id}); event.preventDefault();">ยกเลิก</a>
+              <div style="margin-top:10px;">
+                <label for="cart-qty-${item.id}" style="font-size:0.97rem; color:#555;">จำนวน</label>
+                <select id="cart-qty-${item.id}" style="padding:5px 12px; border-radius:6px; border:1px solid #ddd; font-size:1rem; min-width:90px; margin-left:8px;" onchange="updateQuantityNoModal(${item.id}, this.value - ${item.quantity}); renderCartPage();">
+                  ${item.rightEye && item.leftEye ? `
+                    <option value="2" ${item.quantity==2?'selected':''}>2 ชุด (60 เลนส์)</option>
+                    <option value="4" ${item.quantity==4?'selected':''}>4 ชุด (120 เลนส์)</option>
+                  ` : `
+                    <option value="1" ${item.quantity==1?'selected':''}>1 ชุด (30 เลนส์)</option>
+                    <option value="2" ${item.quantity==2?'selected':''}>2 ชุด (60 เลนส์)</option>
+                    <option value="4" ${item.quantity==4?'selected':''}>4 ชุด (120 เลนส์)</option>
+                  `}
+                </select>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      cartTotal.textContent = total.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2}) + ' บาท';
+      document.getElementById('checkoutBtn').disabled = false;
+      document.getElementById('checkoutBtn').style.opacity = 1;
+    }
+    document.getElementById('checkoutBtn').onclick = function() {
+      if ((JSON.parse(localStorage.getItem('cart'))||[]).length === 0) return;
+      window.location.href = 'buyer-checkout.html';
+    };
+    // ป้องกันเปิด cart modal ตอนเปลี่ยนจำนวนใน cart page
+    function updateQuantityNoModal(itemId, change) {
+      // ดึง cart ปัจจุบัน
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const itemIndex = cart.findIndex(item => item.id === itemId);
+      if (itemIndex !== -1) {
+        cart[itemIndex].quantity = Math.max(1, cart[itemIndex].quantity + Number(change));
+        localStorage.setItem('cart', JSON.stringify(cart));
+      }
+    }
+    // sync UI on load
+    renderCartPage();
+    // update on cart change (optional: listen to storage event for multi-tab)
+    window.addEventListener('storage', function(e) {
+      if (e.key === 'cart') renderCartPage();
+    });
+  </script>
+</body>
+</html>

@@ -52,9 +52,9 @@
       max-width: 1200px;
       margin: 30px auto;
       padding: 20px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 30px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
       min-height: calc(100vh - 180px);
     }
     
@@ -67,7 +67,13 @@
       margin-bottom: 25px;
     }
     .checkout-left { flex: 2; min-width: 300px; }
-    .checkout-right { flex: 1; min-width: 300px; }
+    .checkout-right {
+      flex: 1;
+      min-width: 0;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
     
     /* เพิ่มระยะห่างระหว่างส่วนต่างๆ */
     .checkout-section {
@@ -623,9 +629,24 @@
     }
     
     /* Responsive */
-    @media (max-width: 880px) {
+    @media (max-width: 1200px) {
       .container {
+        display: flex;
         flex-direction: column;
+        padding: 8px 2vw 0 2vw;
+        max-width: 100vw;
+        gap: 0;
+      }
+      .checkout-left, .checkout-right {
+        border-radius: 0;
+        box-shadow: none;
+        margin-bottom: 12px;
+        padding: 16px 6px 12px 6px;
+        width: 100% !important;
+        max-width: 100vw !important;
+      }
+      .checkout-right, .checkout-left {
+        border-radius: 0;
       }
       .form-row {
         flex-direction: column;
@@ -633,7 +654,7 @@
       }
       .address-modal-content {
         margin: 10% auto;
-        padding: 20px;
+        padding: 10px;
       }
       .discount-control {
         flex-direction: column;
@@ -652,7 +673,91 @@
       .add-address-btn {
         align-self: flex-start;
       }
+      .order-details {
+        padding: 12px;
+        margin: 18px 0;
+      }
+      .thankyou-container {
+        padding: 12px 4vw;
+        margin: 18px auto;
+      }
+      .cart-item img {
+        width: 48px;
+        height: 48px;
+      }
+      .cart-item {
+        padding: 10px 0;
+        margin-bottom: 8px;
+      }
+      .cart-item-title {
+        font-size: 1rem;
+      }
+      .cart-item-prescription {
+        font-size: 0.85rem;
+      }
+      .cart-item-price {
+        font-size: 1rem;
+      }
+      .confirm-btn, .back-to-home {
+        font-size: 1rem;
+        padding: 10px 0;
+      }
+      .navbar-center img {
+        height: 44px;
+      }
+      .navbar {
+        height: 54px;
+      }
+      .section-title {
+        font-size: 1.1rem;
+      }
+      .order-summary-title, .summary-row, .summary-total {
+        font-size: 1rem !important;
+      }
+      #orderSummaryItems > div, #orderSummaryDetails > div {
+        font-size: 0.98rem !important;
+      }
+      .discount-input, #discountInput {
+        font-size: 0.95rem;
+        padding: 8px 8px;
+      }
+      #applyDiscountBtn {
+        font-size: 0.95rem;
+        padding: 8px 10px;
+      }
+      .form-group input, .form-group select {
+        font-size: 0.95rem;
+        padding: 8px 8px;
+      }
+      input, select, button {
+        font-size: 1rem;
+      }
+      .checkout-section {
+        margin-bottom: 18px;
+      }
+      .summary-total {
+        font-size: 1.08rem !important;
+      }
+      .order-summary-row {
+        font-size: 0.98rem !important;
+      }
+      .order-summary-title {
+        font-size: 1.05rem !important;
+      }
+      .order-details h3 {
+        font-size: 1.08rem;
+      }
+      .detail-label {
+        min-width: 110px;
+      }
+      .thankyou-title {
+        font-size: 1.3rem;
+      }
+      .thankyou-message {
+        font-size: 0.98rem;
+      }
     }
+    
   </style>
 </head>
 <body>
@@ -663,121 +768,331 @@
     </div>
   </div>
   
-  <!-- Checkout Page -->
-  <div id="checkoutPage" class="container">
-    <div class="checkout-left">
-      <!-- Product list -->
-      <div class="checkout-section">
-        <h2 class="section-title">รายการสินค้า</h2>
-        <div id="cartItemsContainer">
-          <!-- Products will be displayed here -->
-        </div>
+  <!-- Checkout Page (Redesigned) -->
+  <div class="container" style="max-width:1200px; margin:40px auto; display:flex; gap:40px; align-items:flex-start;">
+    <!-- ซ้าย: ที่อยู่สำหรับจัดส่ง -->
+    <form id="shippingForm" class="checkout-left" style="background:#fff; border-radius:12px; box-shadow:0 2px 16px rgba(0,0,0,0.07); padding:32px 32px 24px 32px; min-width:340px;">
+      <h2 style="font-size:1.25rem; color:#223; font-weight:700; margin-bottom:18px;">ที่อยู่สำหรับจัดส่ง</h2>
+      <div style="display:flex; gap:12px; margin-bottom:14px;">
+        <input type="text" placeholder="ชื่อจริง" style="flex:1; padding:10px; border-radius:7px; border:1px solid #ddd; font-size:1rem;">
+        <input type="text" placeholder="นามสกุล" style="flex:1; padding:10px; border-radius:7px; border:1px solid #ddd; font-size:1rem;">
       </div>
-      
-      <!-- Discount section -->
-      <div class="checkout-section">
-        <h2 class="section-title">ส่วนลด</h2>
-        <div class="discount-section">
-          <div class="discount-control">
-            <input type="text" class="discount-input" id="discountCode" placeholder="ใส่โค้ดส่วนลด">
-            <button class="apply-discount-btn" id="applyDiscount">ใช้โค้ด</button>
+      <input type="text" placeholder="บริษัท (ถ้ามี)" style="width:100%; padding:10px; border-radius:7px; border:1px solid #ddd; font-size:1rem; margin-bottom:14px;">
+      <input type="text" placeholder="ที่อยู่" style="width:100%; padding:10px; border-radius:7px; border:1px solid #ddd; font-size:1rem; margin-bottom:14px;">
+      <input type="text" placeholder="อาคาร/ห้อง/ชั้น (ถ้ามี)" style="width:100%; padding:10px; border-radius:7px; border:1px solid #ddd; font-size:1rem; margin-bottom:14px;">
+      <div style="display:flex; gap:12px; margin-bottom:14px;">
+        <input type="text" placeholder="เขต/อำเภอ" style="flex:1; min-width:0; padding:10px; border-radius:7px; border:1px solid #ddd; font-size:1rem;">
+        <select style="flex:1; min-width:0; padding:10px; border-radius:7px; border:1px solid #ddd; font-size:1rem;">
+          <option value="">เลือกจังหวัด</option>
+          <option>กระบี่</option>
+          <option>กรุงเทพมหานคร</option>
+          <option>กาญจนบุรี</option>
+          <option>กาฬสินธุ์</option>
+          <option>กำแพงเพชร</option>
+          <option>ขอนแก่น</option>
+          <option>จันทบุรี</option>
+          <option>ฉะเชิงเทรา</option>
+          <option>ชลบุรี</option>
+          <option>ชัยนาท</option>
+          <option>ชัยภูมิ</option>
+          <option>ชุมพร</option>
+          <option>เชียงราย</option>
+          <option>เชียงใหม่</option>
+          <option>ตรัง</option>
+          <option>ตราด</option>
+          <option>ตาก</option>
+          <option>นครนายก</option>
+          <option>นครปฐม</option>
+          <option>นครพนม</option>
+          <option>นครราชสีมา</option>
+          <option>นครศรีธรรมราช</option>
+          <option>นครสวรรค์</option>
+          <option>นนทบุรี</option>
+          <option>นราธิวาส</option>
+          <option>น่าน</option>
+          <option>บึงกาฬ</option>
+          <option>บุรีรัมย์</option>
+          <option>ปทุมธานี</option>
+          <option>ประจวบคีรีขันธ์</option>
+          <option>ปราจีนบุรี</option>
+          <option>ปัตตานี</option>
+          <option>พระนครศรีอยุธยา</option>
+          <option>พะเยา</option>
+          <option>พังงา</option>
+          <option>พัทลุง</option>
+          <option>พิจิตร</option>
+          <option>พิษณุโลก</option>
+          <option>เพชรบุรี</option>
+          <option>เพชรบูรณ์</option>
+          <option>แพร่</option>
+          <option>พังงา</option>
+          <option>ภูเก็ต</option>
+          <option>มหาสารคาม</option>
+          <option>มุกดาหาร</option>
+          <option>แม่ฮ่องสอน</option>
+          <option>ยโสธร</option>
+          <option>ยะลา</option>
+          <option>ร้อยเอ็ด</option>
+          <option>ระนอง</option>
+          <option>ระยอง</option>
+          <option>ราชบุรี</option>
+          <option>ลพบุรี</option>
+          <option>ลำปาง</option>
+          <option>ลำพูน</option>
+          <option>เลย</option>
+          <option>ศรีสะเกษ</option>
+          <option>สกลนคร</option>
+          <option>สงขลา</option>
+          <option>สตูล</option>
+          <option>สมุทรปราการ</option>
+          <option>สมุทรสงคราม</option>
+          <option>สมุทรสาคร</option>
+          <option>สระแก้ว</option>
+          <option>สระบุรี</option>
+          <option>สิงห์บุรี</option>
+          <option>สุโขทัย</option>
+          <option>สุพรรณบุรี</option>
+          <option>สุราษฎร์ธานี</option>
+          <option>สุรินทร์</option>
+          <option>หนองคาย</option>
+          <option>หนองบัวลำภู</option>
+          <option>อ่างทอง</option>
+          <option>อำนาจเจริญ</option>
+          <option>อุดรธานี</option>
+          <option>อุตรดิตถ์</option>
+          <option>อุทัยธานี</option>
+          <option>อุบลราชธานี</option>
+          <option>อำนาจเจริญ</option>
+          <option>อุดรธานี</option>
+          <option>อุตรดิตถ์</option>
+          <option>อุทัยธานี</option>
+          <option>อุบลราชธานี</option>
+        </select>
+        <input type="text" placeholder="รหัสไปรษณีย์" style="flex:1; min-width:0; padding:10px; border-radius:7px; border:1px solid #ddd; font-size:1rem;">
+      </div>
+      <input type="text" placeholder="เบอร์โทรศัพท์" style="width:100%; padding:10px; border-radius:7px; border:1px solid #ddd; font-size:1rem; margin-bottom:10px;">
+      <div style="font-size:0.95rem; color:#444; margin-bottom:18px;">***กรุณาเป็นเบอร์โทรที่ติดต่อได้จริง เพราะต้องใช้ในระบบขนส่ง</div>
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:18px;">
+        <a href="buyer-cart.html" style="color:#223; font-size:1.05rem; text-decoration:none; display:flex; align-items:center; gap:6px;"><i class="fas fa-chevron-left"></i> ย้อนกลับไปตะกร้า</a>
+        <button type="submit" style="background:#27ae60; color:#fff; font-size:1.08rem; font-weight:600; padding:10px 32px; border:none; border-radius:8px; cursor:pointer; margin-left:auto;">ช่องทางการชำระเงิน</button>
+      </div>
+      <div style="display:flex; gap:18px; margin-top:18px;">
+        <a href="#" style="font-size:0.92rem; color:#888; text-decoration:underline;">นโยบายการคืนเงิน</a>
+        <a href="#" style="font-size:0.92rem; color:#888; text-decoration:underline;">ข้อตกลงการใช้บริการ</a>
+      </div>
+    </form>
+    <!-- ขวา: สรุปรายการสั่งซื้อ -->
+    <div style="background:#fff; border-radius:12px; box-shadow:0 2px 16px rgba(0,0,0,0.07); padding:32px 32px 24px 32px; flex:1 1 340px; min-width:320px;">
+      <div class="checkout-right" style="background:#fff; border-radius:12px; box-shadow:0 2px 16px rgba(0,0,0,0.07); padding:32px 32px 24px 32px; min-width:320px;">
+        <div style="font-size:1.15rem; color:#223; font-weight:700; margin-bottom:18px; text-align:center;">สรุปรายการสั่งซื้อ</div>
+        <div id="orderSummaryItems"></div>
+        <div style="margin:18px 0 12px 0; display:flex; gap:8px;">
+          <input id="discountInput" type="text" placeholder="รหัสคูปองส่วนลด" style="flex:1; padding:8px 12px; border-radius:7px; border:1px solid #ddd; font-size:1rem;">
+          <button id="applyDiscountBtn" style="background:#3498db; color:#fff; font-size:1rem; font-weight:600; padding:8px 18px; border:none; border-radius:7px; cursor:pointer;">ใช้สิทธิ์</button>
+        </div>
+        <div id="orderSummaryDetails" style="margin-top:18px;"></div>
+      </div>
+      <script>
+      // --- Render Order Summary from Cart (Dynamic) ---
+      let orderSummary = {
+        total: 0,
+        qty: 0,
+        lens: 0,
+        shipping: 0,
+        discount: 0,
+        grandTotal: 0
+      };
+      function calcOrderSummary() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let total = 0, qty = 0, lens = 0;
+        const priceData = {
+          1: { price: 700, original: 700, savings: 0, lens: 30 },
+          2: { price: 1300, original: 1400, savings: 100, lens: 60 },
+          4: { price: 2400, original: 2800, savings: 400, lens: 120 }
+        };
+        cart.forEach(item => {
+          const pd = priceData[item.quantity] || priceData[1];
+          total += pd.price;
+          qty += item.quantity;
+          lens += pd.lens;
+        });
+        // Shipping: ฟรีถ้า total >= 1000, 50 บาทถ้าต่ำกว่า
+        let shipping = total >= 1000 ? 0 : 50;
+        // Discount: ใช้ window.currentDiscount/window.discountType
+        let discount = 0;
+        if (window.discountType === 'fixed') {
+          discount = window.currentDiscount || 0;
+        } else if (window.discountType === 'percentage') {
+          discount = Math.floor(total * (window.currentDiscount || 0) / 100);
+        }
+        let grandTotal = total + shipping - discount;
+        if (grandTotal < 0) grandTotal = 0;
+        orderSummary = { total, qty, lens, shipping, discount, grandTotal };
+      }
+      function renderOrderSummary() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const orderSummaryItems = document.getElementById('orderSummaryItems');
+        const orderSummaryDetails = document.getElementById('orderSummaryDetails');
+        if (!orderSummaryItems || !orderSummaryDetails) return;
+        let html = '';
+        calcOrderSummary();
+        if (cart.length === 0) {
+          orderSummaryItems.innerHTML = '<div style="text-align:center; color:#888; font-size:1.1rem; padding:32px 0;">ไม่มีสินค้าในตะกร้า</div>';
+          orderSummaryDetails.innerHTML = '';
+          return;
+        }
+        // ราคากล่องละ 700, ซื้อ 2 กล่อง 1300, 4 กล่อง 2400 (ลด 100/400)
+        // ต้องแสดงราคาต่อกล่องและยอดรวมถูกต้องตามจำนวน
+        cart.forEach(item => {
+          let unitPrice = 700;
+          let totalPrice = 0;
+          let showPrice = 700;
+          let priceText = '';
+          if (item.quantity === 2) {
+            unitPrice = 650; // 1300/2
+            totalPrice = 1300;
+            showPrice = 1300;
+            priceText = `${unitPrice.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} x 2 บาท`;
+          } else if (item.quantity === 4) {
+            unitPrice = 600; // 2400/4
+            totalPrice = 2400;
+            showPrice = 2400;
+            priceText = `${unitPrice.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} x 2 บาท`;
+          } else {
+            totalPrice = 700 * item.quantity;
+            showPrice = totalPrice;
+            priceText = `${unitPrice.toLocaleString()} บาท`;
+          }
+          // ถ้ามีทั้ง rightEye และ leftEye และไม่เท่ากัน ให้แยกแถว
+          if (item.rightEye && item.leftEye && item.rightEye !== item.leftEye) {
+            // ขวา
+            html += `
+              <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+                <img src="${item.image}" alt="${item.name}" style="width:48px; height:48px; border-radius:8px; background:#fff; box-shadow:0 1px 4px rgba(0,0,0,0.09); object-fit:contain;">
+                <div style="flex:1;">
+                  <div style="font-size:1.02rem; font-weight:600; color:#183a7a;">ตาขวา</div>
+                  <div style="font-size:0.97rem; color:#333;">ค่าสายตา: <span style="color:#888;">${item.rightEye}</span></div>
+                </div>
+                <div style="font-size:1.08rem; color:#183a7a; font-weight:700; min-width:80px; text-align:right;">${item.quantity === 4 ? '600.00 x 2 บาท' : unitPrice.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2}) + ' บาท'}</div>
+              </div>
+            `;
+            // ซ้าย
+            html += `
+              <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+                <img src="${item.image}" alt="${item.name}" style="width:48px; height:48px; border-radius:8px; background:#fff; box-shadow:0 1px 4px rgba(0,0,0,0.09); object-fit:contain;">
+                <div style="flex:1;">
+                  <div style="font-size:1.02rem; font-weight:600; color:#183a7a;">ตาซ้าย</div>
+                  <div style="font-size:0.97rem; color:#333;">ค่าสายตา: <span style="color:#888;">${item.leftEye}</span></div>
+                </div>
+                <div style="font-size:1.08rem; color:#183a7a; font-weight:700; min-width:80px; text-align:right;">${item.quantity === 4 ? '600.00 x 2 บาท' : unitPrice.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2}) + ' บาท'}</div>
+              </div>
+            `;
+          } else {
+            // กรณีเดียวกันหรือมีข้างเดียว
+            html += `
+              <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+                <img src="${item.image}" alt="${item.name}" style="width:48px; height:48px; border-radius:8px; background:#fff; box-shadow:0 1px 4px rgba(0,0,0,0.09); object-fit:contain;">
+                <div style="flex:1;">
+                  <div style="font-size:1.02rem; font-weight:600; color:#183a7a;">${item.name || ''}</div>
+                  <div style="font-size:0.97rem; color:#333;">ตาขวา: <span style="color:#888;">${item.rightEye || '-'}</span> | ตาซ้าย: <span style="color:#888;">${item.leftEye || '-'}</span></div>
+                </div>
+                <div style="font-size:1.08rem; color:#183a7a; font-weight:700; min-width:80px; text-align:right;">${item.quantity === 4 ? '600.00 x 2 บาท' : showPrice.toLocaleString() + ' บาท'}</div>
+              </div>
+            `;
+          }
+        });
+        orderSummaryItems.innerHTML = html;
+        // สรุปยอด
+        orderSummaryDetails.innerHTML = `
+          <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:1.01rem;">
+            <span>จำนวน</span>
+            <span>${orderSummary.qty} ชุด (${orderSummary.lens} เลนส์)</span>
           </div>
-          <div id="discountApplied" class="discount-applied" style="display: none;">
-            <div>
-              <i class="fas fa-tag"></i>
-              <span id="appliedDiscountText">ส่วนลด 100 บาท</span>
-            </div>
-            <button class="remove-discount" id="removeDiscount">
-              <i class="fas fa-times"></i>
-            </button>
+          <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:1.01rem;">
+            <span>ยอดรวมสินค้า</span>
+            <span>${orderSummary.total.toLocaleString()} บาท</span>
           </div>
-        </div>
-      </div>
-      
-      <!-- Delivery address -->
-      <div class="checkout-section">
-        <h2 class="section-title">สถานที่จัดส่ง</h2>
-          <button class="add-address-btn" onclick="openAddressModal('new')">
-            <i class="fas fa-plus"></i> เพิ่มที่อยู่ใหม่
-          </button>
-          <button class="add-address-btn" style="background:#f39c12;margin-left:10px;" onclick="autofillSenderAddress()">
-            <i class="fas fa-user"></i> ใช้ข้อมูลผู้ส่งของฉัน
-          </button>
-        </h2>
-        <div id="addressList" class="address-list">
-          <!-- Addresses will be displayed here -->
-        </div>
-      </div>
-      
-      <!-- Shipping method -->
-      <div class="checkout-section">
-        <h2 class="section-title">วิธีการจัดส่ง</h2>
-        <div class="shipping-option selected" data-value="standard">
-          <input type="radio" id="standard" name="shipping" value="standard" checked>
-          <label for="standard">ไปรษณีย์ธรรมดา (3-7 วัน)</label>
-          <div class="shipping-price">ฟรี</div>
-        </div>
-        <div class="shipping-option" data-value="ems">
-          <input type="radio" id="ems" name="shipping" value="ems">
-          <label for="ems">EMS (1-3 วัน)</label>
-          <div class="shipping-price">50 บาท</div>
-        </div>
-        <div class="shipping-option" data-value="kerry">
-          <input type="radio" id="kerry" name="shipping" value="kerry">
-          <label for="kerry">Kerry Express (1-2 วัน)</label>
-          <div class="shipping-price">60 บาท</div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="checkout-right">
-      <!-- Payment method -->
-      <div class="checkout-section">
-        <h2 class="section-title">วิธีการชำระเงิน</h2>
-        <div class="payment-option selected" data-value="bank">
-          <input type="radio" id="bank" name="payment" value="bank" checked>
-          <i class="fas fa-university payment-icon"></i>
-          <label for="bank">โอนเงินผ่านธนาคาร</label>
-        </div>
-        <div class="payment-option" data-value="credit">
-          <input type="radio" id="credit" name="payment" value="credit">
-          <i class="fas fa-credit-card payment-icon"></i>
-          <label for="credit">บัตรเครดิต/เดบิต</label>
-        </div>
-        <div class="payment-option" data-value="promptpay">
-          <input type="radio" id="promptpay" name="payment" value="promptpay">
-          <i class="fas fa-qrcode payment-icon"></i>
-          <label for="promptpay">พร้อมเพย์</label>
-        </div>
-        <div class="payment-option" data-value="cod">
-          <input type="radio" id="cod" name="payment" value="cod">
-          <i class="fas fa-truck payment-icon"></i>
-          <label for="cod">เก็บเงินปลายทาง (COD)</label>
-        </div>
-      </div>
-      
-      <!-- Order summary -->
-      <div class="checkout-section">
-        <h2 class="section-title">สรุปยอดชำระ</h2>
-        <div class="summary-row">
-          <span>ยอดรวมสินค้า</span>
-          <span id="subtotal">0 บาท</span>
-        </div>
-        <div class="summary-row">
-          <span>ค่าจัดส่ง</span>
-          <span id="shippingFee">0 บาท</span>
-        </div>
-        <div class="summary-row">
-          <span>ส่วนลด</span>
-          <span id="discount">0 บาท</span>
-        </div>
-        <div class="summary-row summary-total">
-          <span>ยอดชำระทั้งหมด</span>
-          <span id="total">0 บาท</span>
-        </div>
-        
-        <button id="confirmOrder" class="confirm-btn">ยืนยันการสั่งซื้อ</button>
-      </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:1.01rem;">
+            <span>ค่าจัดส่ง</span>
+            <span id="orderSummaryShipping">${orderSummary.shipping.toLocaleString()} บาท</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:1.01rem;">
+            <span>ส่วนลด</span>
+            <span id="orderSummaryDiscount">${orderSummary.discount.toLocaleString()} บาท</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:1.13rem; font-weight:700; border-top:1px solid #eee; padding-top:10px; margin-top:10px;">
+            <span>รวม</span>
+            <span id="orderSummaryTotal">${orderSummary.grandTotal.toLocaleString()} บาท</span>
+          </div>
+        `;
+      }
+      // Discount input logic
+      document.getElementById('applyDiscountBtn').onclick = function() {
+        const code = (document.getElementById('discountInput').value || '').trim().toUpperCase();
+        if (!code) { alert('กรุณากรอกรหัสคูปองส่วนลด'); return; }
+        if (code === 'SAVE100') {
+          window.currentDiscount = 100; window.discountType = 'fixed';
+        } else if (code === 'SAVE10%') {
+          window.currentDiscount = 10; window.discountType = 'percentage';
+        } else {
+          alert('รหัสคูปองไม่ถูกต้องหรือหมดอายุ'); return;
+        }
+        renderOrderSummary();
+      };
+      document.getElementById('discountInput').oninput = function() {
+        if (!this.value) { window.currentDiscount = 0; window.discountType = ''; renderOrderSummary(); }
+      };
+      // Payment button logic
+      const shippingForm = document.getElementById('shippingForm');
+      shippingForm.onsubmit = function(e) {
+        e.preventDefault();
+        if (orderSummary.qty === 0) { alert('ไม่มีสินค้าในตะกร้า'); return; }
+        // Validate address fields (minimal)
+        const inputs = shippingForm.querySelectorAll('input,select');
+        for (let i = 0; i < inputs.length; i++) {
+          if (inputs[i].hasAttribute('required') && !inputs[i].value) {
+            alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+            inputs[i].focus();
+            return;
+          }
+        }
+        // สร้างออเดอร์ (mock)
+        const order = {
+          id: 'ORD-' + Date.now(),
+          date: new Date().toLocaleString(),
+          items: JSON.parse(localStorage.getItem('cart')),
+          address: {},
+          subtotal: orderSummary.total,
+          shippingFee: orderSummary.shipping,
+          discount: orderSummary.discount,
+          total: orderSummary.grandTotal
+        };
+        // เก็บข้อมูล address (mock)
+        const addrFields = ['country','firstName','lastName','company','address','apartment','city','province','postalCode','phone'];
+        const addr = {};
+        addrFields.forEach((f,i) => {
+          const el = shippingForm.querySelectorAll('input,select')[i];
+          if (el) addr[f] = el.value;
+        });
+        order.address = addr;
+        // Save order history
+        let orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+        orderHistory.push(order);
+        localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
+        // Clear cart
+        localStorage.removeItem('cart');
+        // Show thank you page
+        document.querySelector('.container').style.display = 'none';
+        document.getElementById('thankYouPage').style.display = 'block';
+        document.getElementById('orderId').textContent = order.id;
+        document.getElementById('orderDate').textContent = order.date;
+        document.getElementById('orderTotal').textContent = order.total.toLocaleString() + ' บาท';
+        document.getElementById('paymentMethod').textContent = 'โอนเงิน/ชำระเงิน';
+        document.getElementById('shippingMethod').textContent = 'จัดส่งปกติ';
+      };
+      document.addEventListener('DOMContentLoaded', renderOrderSummary);
+      window.addEventListener('storage', function(e) { if (e.key === 'cart') renderOrderSummary(); });
+      </script>
     </div>
   </div>
   
@@ -827,100 +1142,6 @@
     </button>
   </div>
   
-  <!-- Address Modal -->
-  <div id="addressModal" class="address-modal">
-    <div class="address-modal-content">
-      <div class="address-modal-header">
-        <h2 id="addressModalTitle">เพิ่มที่อยู่จัดส่ง</h2>
-        <span class="close-btn" onclick="closeAddressModal()">&times;</span>
-      </div>
-      <form id="addressForm" class="address-form">
-        <input type="hidden" id="addressId">
-        <div class="form-group">
-          <label for="name">ชื่อผู้รับ</label>
-          <input type="text" id="name" required>
-        </div>
-        <div class="form-group">
-          <label for="phone">เบอร์โทรศัพท์</label>
-          <input type="tel" id="phone" required>
-        </div>
-        <div class="form-group">
-          <label for="address">ที่อยู่</label>
-          <input type="text" id="address" required>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="district">เขต/อำเภอ</label>
-            <input type="text" id="district" required>
-          </div>
-          <div class="form-group">
-            <label for="province">จังหวัด</label>
-            <input type="text" id="province" required>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="postalCode">รหัสไปรษณีย์</label>
-            <input type="text" id="postalCode" required>
-          </div>
-          <div class="form-group">
-            <label for="country">ประเทศ</label>
-            <select id="country" required>
-              <option value="Thailand">ไทย</option>
-              <option value="Other">อื่นๆ</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="notes">หมายเหตุ (ถ้ามี)</label>
-          <input type="text" id="notes">
-        </div>
-        <div class="form-actions">
-          <button type="button" class="cancel-btn" onclick="closeAddressModal()">ยกเลิก</button>
-          <button type="submit" class="save-btn">บันทึกที่อยู่</button>
-        </div>
-      </form>
-    </div>
-  </div>
-  
-  <!-- Footer -->
-  <footer>
-    <div class="footer-container">
-      <div class="footer-section">
-        <h3>เกี่ยวกับเรา</h3>
-        <p>Alice Moist Daily นำเข้าและจัดจำหน่ายเลนส์สัมผัสรายวันคุณภาพสูง</p>
-        <div class="social-links">
-          <a href="#"><i class="fab fa-facebook"></i></a>
-          <a href="#"><i class="fab fa-line"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
-        </div>
-      </div>
-      
-      <div class="footer-section contact-info">
-        <h3>ติดต่อเรา</h3>
-        <ul>
-          <li><i class="fas fa-envelope"></i> Email: contact@alicemoist.com</li>
-          <li><i class="fab fa-line"></i> Line: @alicemoist</li>
-          <li><i class="fab fa-facebook"></i> Facebook: Alice Moist Thailand</li>
-          <li><i class="fas fa-phone"></i> โทร: 02-XXX-XXXX</li>
-        </ul>
-      </div>
-      
-      <div class="footer-section">
-        <h3>ช่องทางการชำระเงิน</h3>
-        <div class="payment-methods">
-          <i class="fab fa-cc-visa"></i>
-          <i class="fab fa-cc-mastercard"></i>
-          <i class="fas fa-qrcode"></i>
-        </div>
-      </div>
-    </div>
-    
-    <div class="copyright">
-      © 2023 Alice Moist Thailand. All rights reserved.
-    </div>
-  </footer>
-
   <script>
         // Initialize data
     document.addEventListener('DOMContentLoaded', function() {
