@@ -14,9 +14,9 @@ app.use('/buyer', express.static(path.join(__dirname, '../buyer')));
 app.use('/seller', express.static(path.join(__dirname, '../seller')));
 app.use('/public', express.static(path.join(__dirname, '../public')));
 // Serve static assets from root for universal asset paths
-app.use('/css', express.static(path.join(__dirname, '../buyer/css')));
-app.use('/js', express.static(path.join(__dirname, '../buyer/js')));
-app.use('/images', express.static(path.join(__dirname, '../images')));
+app.use('/css', express.static(path.resolve(__dirname, '../buyer/css')));
+app.use('/js', express.static(path.resolve(__dirname, '../buyer/js')));
+app.use('/images', express.static(path.resolve(__dirname, '../images')));
 
 // Routes
 app.use('/api', require('./routes/auth'));
