@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>คำสั่งซื้อของลูกค้า</title>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #f0f6ff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            text-align: center;
+            color: #2980b9;
+        }
+
+        .order {
+            border: 2px solid #dceaff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #f9fcff;
+        }
+
+        .order h4 {
+            margin: 0 0 10px;
+            color: #34495e;
+        }
+
+        .order p {
+            margin: 6px 0;
+        }
+
+        .status-select {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-family: 'Kanit', sans-serif;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .back-btn {
+            display: block;
+            margin: 30px auto 0;
+            padding: 10px 20px;
+            font-size: 16px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(52, 152, 219, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>คำสั่งซื้อของลูกค้า</h2>
+
+        <div class="order">
+            <h4>ออเดอร์ #001</h4>
+            <p>ลูกค้า: นายสมชาย ใจดี</p>
+            <p>สินค้า: เสื้อยืดลายการ์ตูน x 2</p>
+            <p>ยอดรวม: 500.00 บาท</p>
+            <label>สถานะคำสั่งซื้อ:
+                <select class="status-select" onchange="updateStatus(this, '001')">
+                    <option value="รับออเดอร์">รับออเดอร์</option>
+                    <option value="กำลังจัดส่ง">กำลังจัดส่ง</option>
+                    <option value="ส่งสำเร็จแล้ว">ส่งสำเร็จแล้ว</option>
+                    <option value="ยกเลิก">ยกเลิก</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="order">
+            <h4>ออเดอร์ #002</h4>
+            <p>ลูกค้า: นางสาวมัลลิกา รุ่งเรือง</p>
+            <p>สินค้า: กระเป๋าผ้า Handmade x 1</p>
+            <p>ยอดรวม: 250.00 บาท</p>
+            <label>สถานะคำสั่งซื้อ:
+                <select class="status-select" onchange="updateStatus(this, '002')">
+                    <option value="รับออเดอร์">รับออเดอร์</option>
+                    <option value="กำลังจัดส่ง">กำลังจัดส่ง</option>
+                    <option value="ส่งสำเร็จแล้ว">ส่งสำเร็จแล้ว</option>
+                    <option value="ยกเลิก">ยกเลิก</option>
+                </select>
+            </label>
+        </div>
+
+        <button class="back-btn" onclick="window.location.href='seller-dashboard.html'">← กลับไปหน้าหลัก</button>
+    </div>
+
+    <script>
+        function updateStatus(selectElem, orderId) {
+            const newStatus = selectElem.value;
+            alert(`อัปเดตสถานะของออเดอร์ #${orderId} เป็น "${newStatus}" แล้ว (ตัวอย่าง)`);
+            // คุณสามารถเพิ่มโค้ดบันทึกไปยังฐานข้อมูลหรือ localStorage ได้ที่นี่
+        }
+    </script>
+</body>
+</html>

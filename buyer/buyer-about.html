@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เกี่ยวกับเรา - Alice Moist Daily</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/navbar-footer-style.css">
+  <style>
+    :root {
+      --primary: #3498db;
+      --primary-dark: #2980b9;
+      --secondary: #2ecc71;
+      --accent: #9b59b6;
+      --light: #f8f9fa;
+      --dark: #2c3e50;
+      --gray: #7f8c8d;
+      --light-blue: #e6f7ff;
+      --card-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+      --element-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Kanit', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f0f8ff, #e6f7ff);
+      color: var(--dark);
+      line-height: 1.6;
+      min-height: 100vh;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(173, 216, 230, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(135, 206, 250, 0.1) 0%, transparent 20%);
+    }
+
+    /* Banner Section */
+    .banner {
+      background: linear-gradient(135deg, #f0f8ff, #e6f7ff);
+      color: white;
+      padding: 80px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .banner::before {
+      content: "";
+      position: absolute;
+      top: -50px;
+      left: -50px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      z-index: 1;
+    }
+
+    .banner::after {
+      content: "";
+      position: absolute;
+      bottom: -80px;
+      right: -80px;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      z-index: 1;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .banner-content {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      animation: fadeInUp 1s ease;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .banner h1 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      letter-spacing: 1px;
+    }
+
+    .banner p {
+      font-size: 1.3rem;
+      opacity: 0.9;
+      max-width: 700px;
+      margin: 0 auto;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
+    /* Features Section - Updated to 2x2 Grid */
+    .features {
+      padding: 80px 20px;
+      background: white;
+    }
+
+    .features .container {
+      max-width: 1000px;
+    }
+
+    .features h2 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 60px;
+      color: var(--primary-dark);
+      position: relative;
+      padding-bottom: 15px;
+    }
+
+    .features h2::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      border-radius: 2px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition);
+      text-align: center;
+      border: 1px solid #e0f0ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(52, 152, 219, 0.2);
+    }
+
+    .feature-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 25px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2.2rem;
+      flex-shrink: 0;
+    }
+
+    .feature-card h3 {
+      font-size: 1.5rem;
+      color: var(--dark);
+      margin-bottom: 15px;
+    }
+
+    .feature-card p {
+      color: var(--gray);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    /* Product Info Section - Fixed list styling */
+    .product-info {
+      padding: 80px 20px;
+      background: linear-gradient(135deg, #f8faff, #e6f0ff);
+    }
+
+    .product-info .container {
+      max-width: 1000px;
+    }
+
+    .product-info h2 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: var(--primary-dark);
+    }
+
+    .product-info > p {
+      text-align: center;
+      font-size: 1.2rem;
+      color: var(--gray);
+      max-width: 700px;
+      margin: 0 auto 50px;
+    }
+
+    .info-boxes {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+    }
+
+    .info-box {
+      background: white;
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #e0f0ff;
+    }
+
+    .info-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(52, 152, 219, 0.2);
+    }
+
+    .info-box h3 {
+      font-size: 1.6rem;
+      color: var(--primary-dark);
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .info-box h3 i {
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+    }
+
+    /* แก้ไขปัญหาตัวเลขซ้อนกัน */
+    .info-box ul, .info-box ol {
+      padding-left: 25px;
+    }
+
+    .info-box ul li {
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+      color: var(--dark);
+      position: relative;
+      padding-left: 10px;
+      list-style-type: disc; /* กำหนดรูปแบบ bullet จริง */
+    }
+
+    .info-box ol li {
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+      color: var(--dark);
+      position: relative;
+      padding-left: 10px;
+      list-style-type: decimal; /* กำหนดรูปแบบตัวเลขจริง */
+    }
+
+    /* ลบ ::before ที่กำหนดเองเพราะทำให้ซ้อนกัน */
+    .info-box ul li::before,
+    .info-box ol li::before {
+      content: none !important;
+    }
+
+    /* ปรับสไตล์ bullet และตัวเลขใหม่ */
+    .info-box ul li::marker {
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    .info-box ol li::marker {
+      color: var(--primary);
+      font-weight: normal;
+    }
+
+    /* CTA Section */
+    .cta {
+      padding: 100px 20px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: "";
+      position: absolute;
+      top: -50px;
+      left: -50px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      z-index: 1;
+    }
+
+    .cta::after {
+      content: "";
+      position: absolute;
+      bottom: -80px;
+      right: -80px;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      z-index: 1;
+    }
+
+    .cta .container {
+      max-width: 800px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .cta h2 {
+      font-size: 2.8rem;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .cta p {
+      font-size: 1.3rem;
+      max-width: 600px;
+      margin: 0 auto 40px;
+      opacity: 0.9;
+    }
+
+    .cta-button {
+      display: inline-block;
+      padding: 16px 40px;
+      background: white;
+      color: var(--primary);
+      border: none;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+      text-decoration: none;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      background: var(--secondary);
+      color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .banner h1 {
+        font-size: 3rem;
+      }
+      
+      .features, .product-info {
+        padding: 60px 20px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .banner h1 {
+        font-size: 2.5rem;
+      }
+      
+      .banner p, .cta p {
+        font-size: 1.1rem;
+      }
+      
+      .feature-grid,
+      .info-boxes {
+        grid-template-columns: 1fr;
+      }
+      
+      .cta h2 {
+        font-size: 2.2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .banner {
+        padding: 60px 20px;
+      }
+      
+      .banner h1 {
+        font-size: 2rem;
+      }
+      
+      .feature-card, .info-box {
+        padding: 25px;
+      }
+      
+      .cta {
+        padding: 60px 20px;
+      }
+      
+      .cta h2 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div id="navbar"></div>
+
+<!-- Banner Section -->
+<section class="banner">
+  <div class="container">
+    <div class="banner-content">
+      <h1><i class="fas fa-eye" style="margin-right: 15px;"></i>เกี่ยวกับ Alice Moist Daily</h1>
+      <p>Alice Moist Daily เป็นคอนแทคเลนส์รายวันที่ออกแบบมาเพื่อให้ความรู้สึกสบายตาและดูเป็นธรรมชาติ ด้วยเทคโนโลยีการผลิตคุณภาพสูง ให้ความชุ่มชื้นยาวนานตลอดวัน เหมาะกับผู้ใช้ที่ใส่ใจในสุขภาพดวงตาและต้องการเสริมบุคลิกให้ดูดีทุกวัน</p>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section - Updated to 2x2 Grid -->
+<section class="features">
+  <div class="container">
+    <h2>คุณสมบัติเด่น</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-tint"></i>
+        </div>
+        <h3>วัสดุคุณภาพสูง</h3>
+        <p>ให้ความชุ่มชื้นยาวนานตลอดวัน ด้วยเทคโนโลยี HydraMax ที่ช่วยกักเก็บความชุ่มชื้น</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-feather"></i>
+        </div>
+        <h3>ดีไซน์บางเบา</h3>
+        <p>สวมใส่สบายเหมือนไม่มีอะไรอยู่ ดีไซน์บางเบาพิเศษช่วยให้คุณลืมไปเลยว่ากำลังใส่เลนส์</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-eye"></i>
+        </div>
+        <h3>เหมาะกับทุกสายตา</h3>
+        <p>เหมาะสำหรับผู้ที่มีสายตาสั้นและยาว มีกำลังขยายให้เลือกตามความต้องการ</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-palette"></i>
+        </div>
+        <h3>สีสันหลากหลาย</h3>
+        <p>มีให้เลือกหลายสีและขนาด ให้คุณสามารถเปลี่ยนลุคได้ตามสไตล์ที่ต้องการ</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Product Info Section -->
+<section class="product-info">
+  <div class="container">
+    <h2>Alice Moist Daily เลนส์สัมผัสรายวัน</h2>
+    <p>เลนส์ Alice Moist Daily บรรจุในน้ำยาเกลือแร่ที่ช่วยเพิ่มความชุ่มชื่นและความสบายตาตลอดวัน</p>
+    
+    <div class="info-boxes">
+      <div class="info-box">
+        <h3><i class="fas fa-box-open"></i> สิ่งที่คุณจะได้รับในแต่ละกล่อง:</h3>
+        <ul>
+          <li>เลนส์สัมผัสรายวัน Alice Moist Daily (HEMA+GMMA 58%)</li>
+          <li>น้ำยาเกลือแร่สำหรับแช่เลนส์</li>
+          <li>คู่มือการใช้งานอย่างละเอียด</li>
+          <li>กล่องบรรจุภัณฑ์คุณภาพพรีเมียม</li>
+          <li>ที่ใส่เลนส์พกพาสะดวก</li>
+          <li>คูปองส่วนลดสำหรับการซื้อครั้งต่อไป</li>
+        </ul>
+      </div>
+      
+      <div class="info-box">
+        <h3><i class="fas fa-question-circle"></i> วิธีการใช้งาน:</h3>
+        <ol>
+          <li>ล้างมือให้สะอาดด้วยสบู่และเช็ดให้แห้งก่อนสัมผัสเลนส์</li>
+          <li>นำเลนส์ออกจากบรรจุภัณฑ์โดยใช้ปลายนิ้วอย่างนุ่มนวล</li>
+          <li>ตรวจสอบให้แน่ใจว่าเลนส์อยู่ในด้านที่ถูกต้อง</li>
+          <li>สวมใส่เลนส์โดยใช้เทคนิคที่แนะนำในคู่มือ</li>
+          <li>ทิ้งเลนส์หลังใช้แล้ววันเดียว ไม่ควรนำกลับมาใช้อีก</li>
+          <li>ทำความสะอาดที่เก็บเลนส์เป็นประจำด้วยน้ำยาฆ่าเชื้อ</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta">
+  <div class="container">
+    <h2>พร้อมที่จะเปลี่ยนลุคของคุณแล้วหรือยัง?</h2>
+    <p>สั่งซื้อ Alice Moist Daily วันนี้เพื่อประสบการณ์การมองเห็นที่ดีที่สุด!</p>
+    <a href="buyer-dashboard.html" class="cta-button">
+      <i class="fas fa-shopping-cart"></i> สั่งซื้อทันที
+    </a>
+  </div>
+</section>    
+
+<div id="footer"></div>
+<script src="js/navbar-footer.js"></script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<div class="overlay" id="overlay" onclick="toggleMobileMenu()"></div> 
+<div class="navbar">
+  <div class="navbar-left" onclick="goHome()">
+    <span><img src="/images/logo.png" style="background-color: #ffffff;height: 100px; width: auto;border-radius: 35px;box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);"></span>
+  </div>
+  <div class="nav-links">
+    <a href="#" class="nav-item" onclick="goHome()">หน้าแรก</a>
+    <a href="buyer-product.html" class="nav-item">สินค้า</a>
+    <a href="buyer-howtouse.html" class="nav-item">วิธีใช้งาน</a>
+    <a href="buyer-about.html" class="nav-item">เกี่ยวกับเรา</a>
+  </div>
+  <div class="nav-buttons">
+    <div class="profile">
+      <div class="username-display">
+        <i class="fas fa-user"></i>
+        <span class="username-text" id="usernameDisplay">ล็อกอิน</span>
+      </div>
+      <div class="dropdown-menu" id="dropdownMenu">
+        <div class="dropdown-header">
+          <i class="fas fa-user-circle"></i>
+          <div>
+            <div class="dropdown-username" id="dropdownUsername">ผู้ใช้งาน</div>
+            <div class="dropdown-email" id="dropdownEmail">example@email.com</div>
+          </div>
+        </div>
+        <a href="#" onclick="setAccount()"><i class="fas fa-user-cog"></i> จัดการบัญชี</a>
+        <a href="#" onclick="openOrderHistoryModal()"><i class="fas fa-list"></i> ประวัติการสั่งซื้อ</a>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</a>
+      </div>
+    </div>
+    <button class="btn" onclick="window.location.href='buyer-cart.html'">
+      <i class="fas fa-shopping-cart"></i>
+      <span id="cartBadge" class="cart-badge">0</span>
+    </button>
+    <div class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</div>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#" class="nav-item" onclick="goHome()">หน้าแรก</a>
+  <a href="buyer-product.html" class="nav-item">สินค้า</a>
+  <a href="buyer-howtouse.html" class="nav-item">วิธีใช้งาน</a>
+  <a href="buyer-about.html" class="nav-item">เกี่ยวกับเรา</a>
+</div>
+
+<!-- Cart/Order Modal (Sidepanel) -->
+<div id="cartModal" class="cart-modal">
+  <div class="cart-content" style="position:relative; min-height:100vh;">
+    <span class="close-btn" onclick="closeCartModal()" title="ปิดตะกร้า">&times;</span>
+    <div class="cart-header">
+      <h2>ตะกร้าสินค้า</h2>
+    </div>
+    <div id="cartItemsContainer" class="cart-items">
+      <!-- รายการสินค้าจะแสดงที่นี่ -->
+    </div>
+    <div class="login-alert" id="loginAlert">
+      <i class="fas fa-exclamation-triangle"></i>
+      คุณต้องล็อกอินก่อนดำเนินการชำระเงิน
+    </div>
+    <div class="cart-summary">
+      <div class="cart-total">
+        <span>ยอดรวมทั้งหมด:</span>
+        <span id="cartTotalPrice">0.00 บาท</span>
+      </div>
+      <div class="cart-actions">
+        <button class="checkout" onclick="checkout()">ชำระเงิน</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Cart Sidepanel Overlay (คลิกปิด) -->
+<div class="cart-modal-overlay" onclick="closeCartModal()"></div>
+
+<div id="orderHistoryModal" class="modal">
+  <div class="modal-content order-history-modal" style="position:relative;">
+    <span class="close-btn" onclick="closeOrderHistoryModal()" title="ปิดหน้าต่าง">&times;</span>
+    <div class="order-history-header">
+      <h2 class="order-history-title">
+        <i class="fas fa-history"></i> ประวัติการสั่งซื้อ
+      </h2>
+    </div>
+    <div class="order-history-controls">
+      <div class="filter-group">
+        <label for="statusFilter"><i class="fas fa-filter"></i> กรองตามสถานะ</label>
+        <select id="statusFilter" class="filter-select" onchange="filterOrders()">
+          <option value="all">ทั้งหมด</option>
+          <option value="pending">รอดำเนินการ</option>
+          <option value="processing">กำลังเตรียมสินค้า</option>
+          <option value="shipped">จัดส่งแล้ว</option>
+          <option value="delivered">จัดส่งสำเร็จ</option>
+          <option value="cancelled">ยกเลิก</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="sortOrder"><i class="fas fa-sort"></i> เรียงตาม</label>
+        <select id="sortOrder" class="filter-select" onchange="sortOrders()">
+          <option value="newest">ใหม่ล่าสุด</option>
+          <option value="oldest">เก่าที่สุด</option>
+          <option value="price-high">ราคาสูงสุด</option>
+          <option value="price-low">ราคาต่ำสุด</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="orderSearch"><i class="fas fa-search"></i> ค้นหาคำสั่งซื้อ</label>
+        <div class="search-input">
+          <input type="text" id="orderSearch" placeholder="ค้นหาด้วยรหัสคำสั่งซื้อ...">
+          <button onclick="searchOrders()"><i class="fas fa-search"></i></button>
+        </div>
+      </div>
+    </div>
+    <div id="orderHistoryContainer" class="order-history-container">
+      <!-- รายการประวัติการสั่งซื้อจะแสดงที่นี่ -->
+    </div>
+    <div class="pagination" id="pagination">
+      <!-- ปุ่ม pagination จะถูกสร้างโดย JavaScript -->
+    </div>
+  </div>
+</div>
+
+<script src="cart-order.js"></script>
+<script src="js/navbar-footer.js"></script>

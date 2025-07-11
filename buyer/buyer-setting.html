@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>ตั้งค่าผู้ใช้ - Alice Moist Daily</title>
+  <style>
+    body { font-family: 'Prompt', sans-serif; background: #f8fafc; margin: 0; }
+    .setting-container { max-width: 500px; margin: 40px auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 12px #0001; padding: 32px 28px; }
+    h2 { color: #2c3e50; margin-bottom: 24px; text-align: center; }
+    .setting-form-group { margin-bottom: 18px; }
+    label { display: block; margin-bottom: 6px; color: #34495e; font-weight: 500; }
+    input, textarea { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; }
+    textarea { resize: vertical; min-height: 60px; }
+    .setting-btn { background: #3498db; color: #fff; border: none; padding: 10px 22px; border-radius: 6px; font-size: 1rem; cursor: pointer; transition: background 0.2s; width: 100%; margin-top: 10px; }
+    .setting-btn:hover { background: #2980b9; }
+    .success-msg { background: #d4edda; color: #155724; padding: 12px; border-radius: 5px; margin-bottom: 18px; text-align: center; display: none; }
+  </style>
+</head>
+<body>
+    <div id="navbar"></div>
+  <div class="setting-container">
+    <h2>ข้อมูลผู้ส่ง</h2>
+    <div class="success-msg" id="settingSuccess">บันทึกข้อมูลสำเร็จ</div>
+    <form id="settingForm">
+      <div class="setting-form-group">
+        <label for="senderName">ชื่อผู้ส่ง</label>
+        <input type="text" id="senderName" name="senderName" required>
+      </div>
+      <div class="setting-form-group">
+        <label for="senderPhone">เบอร์โทร</label>
+        <input type="tel" id="senderPhone" name="senderPhone" required pattern="[0-9]{9,15}">
+      </div>
+      <div class="setting-form-group">
+        <label for="senderAddress">ที่อยู่ผู้ส่ง</label>
+        <textarea id="senderAddress" name="senderAddress" required></textarea>
+      </div>
+      <button type="submit" class="setting-btn">บันทึก</button>
+    </form>
+  </div>
+  <div id="footer"></div>
+  <script src="js/navbar-footer.js"></script>
+  <script>
+    // โหลดข้อมูลจาก localStorage
+    const senderName = document.getElementById('senderName');
+    const senderPhone = document.getElementById('senderPhone');
+    const senderAddress = document.getElementById('senderAddress');
+    const settingSuccess = document.getElementById('settingSuccess');
+    // ดึงข้อมูล user ปัจจุบัน
+    senderName.value = localStorage.getItem('registeredUsername') || '';
+    senderPhone.value = localStorage.getItem('registeredPhone') || '';
+    senderAddress.value = localStorage.getItem('registeredAddress') || '';
+    document.getElementById('settingForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      localStorage.setItem('registeredUsername', senderName.value.trim());
+      localStorage.setItem('registeredPhone', senderPhone.value.trim());
+      localStorage.setItem('registeredAddress', senderAddress.value.trim());
+      // อัพเดทใน users array ด้วย
+      let users = JSON.parse(localStorage.getItem('users') || '[]');
+      const email = localStorage.getItem('registeredEmail');
+      users = users.map(u => u.email === email ? { ...u, senderName: senderName.value.trim(), phone: senderPhone.value.trim(), address: senderAddress.value.trim() } : u);
+      localStorage.setItem('users', JSON.stringify(users));
+      settingSuccess.style.display = 'block';
+      setTimeout(() => settingSuccess.style.display = 'none', 2000);
+    });
+  </script>
+</body>
+</html>
