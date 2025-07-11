@@ -764,7 +764,7 @@
   <!-- Navbar -->
   <div class="navbar">
     <div class="navbar-center" onclick="goDashboard()">
-      <span><img src="/images/logo.png" style="background-color: #ffffff;height: 100px; width: auto;border-radius: 35px;box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);"></span>
+      <span><img src="../images/logo.png" style="background-color: #ffffff;height: 100px; width: auto;border-radius: 35px;box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);"></span>
     </div>
   </div>
   
@@ -963,9 +963,9 @@
             showPrice = totalPrice;
             priceText = `${unitPrice.toLocaleString()} บาท`;
           }
-          // Fix image path if not start with '/images/'
+          // Fix image path for GitHub Pages
           let imgPath = item.image;
-          if (imgPath && !imgPath.startsWith('/')) imgPath = '/images/' + imgPath.replace(/^images\//, '');
+          if (imgPath && !imgPath.startsWith('../')) imgPath = '../images/' + imgPath.replace(/^images\//, '').replace(/^\/images\//, '');
           
           // ถ้ามีทั้ง rightEye และ leftEye และไม่เท่ากัน ให้แยกแถว
           if (item.rightEye && item.leftEye && item.rightEye !== item.leftEye) {
@@ -1185,9 +1185,9 @@
       cart.forEach(item => {
         const itemTotal = item.price * item.quantity;
         subtotal += itemTotal;
-        // Fix image path if not start with '/images/'
+        // Fix image path for GitHub Pages
         let imgPath = item.image;
-        if (imgPath && !imgPath.startsWith('/')) imgPath = '/images/' + imgPath.replace(/^images\//, '');
+        if (imgPath && !imgPath.startsWith('../')) imgPath = '../images/' + imgPath.replace(/^images\//, '').replace(/^\/images\//, '');
         html += `
           <div class="cart-item">
             <img src="${imgPath}" alt="${item.name}">

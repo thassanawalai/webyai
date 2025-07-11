@@ -53,9 +53,9 @@
       cart.forEach(item => {
         const pd = priceData[item.quantity] || priceData[1];
         total += pd.price;
-        // Fix image path if not start with '/images/'
+        // Fix image path for GitHub Pages
         let imgPath = item.image;
-        if (imgPath && !imgPath.startsWith('/')) imgPath = '/images/' + imgPath.replace(/^images\//, '');
+        if (imgPath && !imgPath.startsWith('../')) imgPath = '../images/' + imgPath.replace(/^images\//, '').replace(/^\/images\//, '');
         cartItemsList.innerHTML += `
           <div style="display:flex; gap:18px; align-items:flex-start; margin-bottom:24px; border-bottom:1px solid #f0f0f0; padding-bottom:18px;">
             <img src="${imgPath}" alt="${item.name}" style="width:80px; height:80px; border-radius:12px; background:#fff; box-shadow:0 1px 4px rgba(0,0,0,0.09); object-fit:contain;">
