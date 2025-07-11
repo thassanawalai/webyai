@@ -425,7 +425,7 @@ function addToCart() {
         id: Date.now(),
         name: 'Alice Moist Daily เลนส์สัมผัสรายวัน',
         price: data.price,
-        image: 'images/product1.png',
+        image: '../images/product1.png',
         rightEye: rightEyeValue,
         leftEye: leftEyeValue,
         quantity: quantity,
