@@ -4,28 +4,521 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Alice Moist Daily - สินค้า</title>
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="navbar-footer-style.css">
+  <style>
+    :root {
+      --primary: #3498db;
+      --primary-dark: #2980b9;
+      --secondary: #2ecc71;
+      --accent: #9b59b6;
+      --light: #f8f9fa;
+      --dark: #2c3e50;
+      --gray: #7f8c8d;
+      --card-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+      --element-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Kanit', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f0f8ff, #e6f7ff);
+      min-height: 100vh;
+      color: var(--dark);
+      line-height: 1.6;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(173, 216, 230, 0.15) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(135, 206, 250, 0.15) 0%, transparent 20%);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+      position: relative;
+      padding-bottom: 20px;
+      animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .page-header h1 {
+      font-size: 2.8rem;
+      color: var(--primary-dark);
+      margin-bottom: 15px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .page-header p {
+      font-size: 1.2rem;
+      color: var(--gray);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .page-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 2px;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+      transition: var(--transition);
+      position: relative;
+      animation: slideUp 0.6s ease;
+      border: 1px solid #e6f0ff;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .product-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 25px 70px rgba(52, 152, 219, 0.2);
+      border-color: rgba(52, 152, 219, 0.3);
+    }
+
+    .product-image {
+      position: relative;
+      height: 280px;
+      background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .product-image img {
+      max-height: 240px;
+      max-width: 90%;
+      object-fit: contain;
+      transition: var(--transition);
+    }
+
+    .product-card:hover .product-image img {
+      transform: scale(1.05);
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      padding: 8px 16px;
+      border-radius: 25px;
+      font-size: 12px;
+      font-weight: 600;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-recommended {
+      background: linear-gradient(135deg, var(--secondary), #27ae60);
+    }
+
+    .badge-coming-soon {
+      background: linear-gradient(135deg, #ff6b6b, #e55353);
+    }
+
+    .badge-new {
+      background: linear-gradient(135deg, #ff6b6b, #e55353);
+    }
+
+    .product-content {
+      padding: 2rem;
+    }
+
+    .product-title {
+      color: var(--primary-dark);
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .product-description {
+      color: var(--gray);
+      margin-bottom: 20px;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .product-features {
+      margin-bottom: 24px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .feature-item i {
+      font-size: 16px;
+      width: 20px;
+    }
+
+    .feature-item span {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .product-price-section {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .product-price {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .product-unit {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .product-button {
+      width: 100%;
+      border: none;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--primary-dark), #1f5f99);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+    }
+
+    .btn-disabled {
+      background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+      color: #999;
+      cursor: not-allowed;
+      position: relative;
+    }
+
+    .btn-disabled:hover {
+      transform: none;
+      background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+    }
+
+    .info-section {
+      margin-top: 4rem;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 3rem 2rem;
+      border-radius: 20px;
+      box-shadow: var(--element-shadow);
+      text-align: center;
+    }
+
+    .info-title {
+      color: var(--primary-dark);
+      margin-bottom: 2rem;
+      font-size: 2.2rem;
+      font-weight: 600;
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .benefit-item {
+      text-align: center;
+      padding: 1.5rem;
+    }
+
+    .benefit-icon {
+      font-size: 3.5rem;
+      color: var(--secondary);
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .benefit-title {
+      color: var(--primary-dark);
+      margin-bottom: 12px;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .benefit-description {
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    .highlight {
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 2rem 1rem;
+      }
+      
+      .page-header h1 {
+        font-size: 2.2rem;
+      }
+      
+      .product-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      
+      .info-section {
+        padding: 2rem 1.5rem;
+      }
+      
+      .info-title {
+        font-size: 1.8rem;
+      }
+      
+      .benefits-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      
+      .benefit-item {
+        padding: 1rem;
+      }
+      
+      .benefit-icon {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
   <div id="navbar"></div>
+  
   <main class="container">
-    <h1>สินค้า Alice Moist Daily</h1>
-    <div class="product-list">
-      <div class="product-item">
-        <img src="images/lens1.png" alt="เลนส์ 1">
-        <h2>Alice Moist Daily Brown</h2>
-        <p>เลนส์สีใสรายเดือน ใส่สบาย</p>
+    <div class="page-header">
+      <h1>สินค้า Alice <span class="highlight">MOIST</span> Daily</h1>
+      <p>เลนส์สัมผัสคุณภาพสูง</p>
+    </div>
+
+    <div class="product-grid">
+      
+      <!-- สินค้าหลัก -->
+      <div class="product-card">
+        <div class="product-image">
+          <img src="images/product1.png" alt="Alice Moist Daily เลนส์สัมผัสรายวัน">
+          <div class="product-badge badge-recommended">แนะนำ</div>
+        </div>
+        <div class="product-content">
+          <h3 class="product-title">Alice <span class="highlight">MOIST</span> Daily</h3>
+          <p class="product-description">เลนส์สัมผัสรายวันที่ใช้ <span class="highlight">GMMA</span> เป็นตัวรักษาความชุ่มชื่นตลอดวันที่สวมใส่</p>
+          
+          <div class="product-features">
+            <div class="feature-item">
+              <i class="fas fa-check-circle" style="color: var(--secondary);"></i>
+              <span>ใช้เทคโนโลยี GMMA</span>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-check-circle" style="color: var(--secondary);"></i>
+              <span>รักษาความชุ่มชื่นตลอดวัน</span>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-check-circle" style="color: var(--secondary);"></i>
+              <span>ปลอดภัยสำหรับใช้รายวัน</span>
+            </div>
+          </div>
+          
+          <div class="product-price-section">
+            <div>
+              <div class="product-price" style="color: var(--secondary);">เริ่มต้น 700 บาท</div>
+              <div class="product-unit">30 เลนส์/กล่อง</div>
+              <div style="font-size: 12px; color: #999; margin-top: 5px;">
+                ✅ ลด 5% ซื้อ 2 กล่อง | ลด 10% ซื้อ 4 กล่อง
+              </div>
+            </div>
+          </div>
+          
+          <button class="product-button btn-primary" onclick="window.location.href='buyer-dashboard.html'">
+            <i class="fas fa-shopping-cart"></i>
+            เลือกซื้อสินค้า
+          </button>
+        </div>
       </div>
-      <div class="product-item">
-        <img src="images/lens2.png" alt="เลนส์ 2">
-        <h2>Alice Moist Daily Gray</h2>
-        <p>เลนส์สีใสรายวัน ปลอดภัยกับดวงตา</p>
+
+      <!-- สินค้าเสริม 1 -->
+      <div class="product-card">
+        <div class="product-image">
+          <img src="images/lens1.png" alt="Alice Moist Monthly">
+          <div class="product-badge badge-coming-soon">เร็วๆ นี้</div>
+        </div>
+        <div class="product-content">
+          <h3 class="product-title">Alice <span class="highlight">MOIST</span> Monthly</h3>
+          <p class="product-description">เลนส์สัมผัสรายเดือน ใช้ได้นาน 30 วัน สะดวกกว่า ประหยัดกว่า</p>
+          
+          <div class="product-features">
+            <div class="feature-item">
+              <i class="fas fa-calendar-alt" style="color: var(--secondary);"></i>
+              <span>ใช้ได้นาน 30 วัน</span>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-piggy-bank" style="color: var(--secondary);"></i>
+              <span>ประหยัดกว่าเลนส์รายวัน</span>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-recycle" style="color: var(--secondary);"></i>
+              <span>เป็นมิตรกับสิ่งแวดล้อม</span>
+            </div>
+          </div>
+          
+          <div class="product-price-section">
+            <div>
+              <div class="product-price" style="color: #999;">Coming soon</div>
+              <div class="product-unit">2 เลนส์/กล่อง</div>
+              <div style="font-size: 12px; color: #999; margin-top: 5px;">
+              </div>
+            </div>
+          </div>
+          
+          <button class="product-button btn-disabled" disabled>
+            <i class="fas fa-clock"></i>
+            เร็วๆ นี้
+          </button>
+        </div>
       </div>
-      <!-- เพิ่มสินค้าอื่น ๆ ตามต้องการ -->
+
+      <!-- สินค้าเสริม 2 -->
+      <div class="product-card">
+        <div class="product-image">
+          <img src="images/lens2.png" alt="Alice Moist Quarterly">
+          <div class="product-badge badge-new">เร็วๆ นี้</div>
+        </div>
+        <div class="product-content">
+          <h3 class="product-title">Alice <span class="highlight">MOIST</span> Quarterly</h3>
+          <p class="product-description">เลนส์สัมผัสรายไตรมาส ใช้ได้นาน 3 เดือน สำหรับผู้ที่ต้องการความสะดวก</p>
+          
+          <div class="product-features">
+            <div class="feature-item">
+              <i class="fas fa-calendar-check" style="color: var(--secondary);"></i>
+              <span>ใช้ได้นาน 3 เดือน</span>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-star" style="color: var(--secondary);"></i>
+              <span>สะดวกสุด ไม่ต้องซื้อบ่อย</span>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-hand-holding-dollar" style="color: var(--secondary);"></i>
+              <span>คุ้มค่าที่สุด</span>
+            </div>
+          </div>
+          
+          <div class="product-price-section">
+            <div>
+              <div class="product-price" style="color: #999;">Coming soon</div>
+              <div class="product-unit">2 เลนส์/กล่อง</div>
+              <div style="font-size: 12px; color: #999; margin-top: 5px;">
+              </div>
+            </div>
+          </div>
+          
+          <button class="product-button btn-disabled" disabled>
+            <i class="fas fa-clock"></i>
+            เร็วๆ นี้
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ข้อมูลเพิ่มเติม -->
+    <div class="info-section">
+      <h2 class="info-title">ทำไมต้องเลือก Alice <span class="highlight">MOIST</span> Daily?</h2>
+      <div class="benefits-grid">
+        <div class="benefit-item">
+          <i class="fas fa-shield-alt benefit-icon"></i>
+          <h3 class="benefit-title">ปลอดภัย</h3>
+          <p class="benefit-description">ผ่านการรับรองมาตรฐาน FDA และ CE ปลอดภัยสำหรับดวงตา</p>
+        </div>
+        <div class="benefit-item">
+          <i class="fas fa-droplet benefit-icon"></i>
+          <h3 class="benefit-title">ชุ่มชื่น</h3>
+          <p class="benefit-description">เทคโนโลยี <span class="highlight">GMMA</span> รักษาความชุ่มชื่นตลอด 12+ ชั่วโมง</p>
+        </div>
+        <div class="benefit-item">
+          <i class="fas fa-thumbs-up benefit-icon"></i>
+          <h3 class="benefit-title">สบายตา</h3>
+          <p class="benefit-description">วัสดุซิลิโคนไฮโดรเจล นิ่มบาง ใส่สบายตลอดวัน</p>
+        </div>
+        <div class="benefit-item">
+          <i class="fas fa-sun benefit-icon"></i>
+          <h3 class="benefit-title">กรอง UV</h3>
+          <p class="benefit-description">ป้องกันรังสี UV ได้ถึง 90% ปกป้องดวงตาจากแสงแดด</p>
+        </div>
+        <div class="benefit-item">
+          <i class="fas fa-eye benefit-icon"></i>
+          <h3 class="benefit-title">ใสธรรมชาติ</h3>
+          <p class="benefit-description">ออกแบบให้ดูธรรมชาติ เหมือนดวงตาจริง ไม่เทียม</p>
+        </div>
+        <div class="benefit-item">
+          <i class="fas fa-clock benefit-icon"></i>
+          <h3 class="benefit-title">ใช้งานง่าย</h3>
+          <p class="benefit-description">ใช้แล้วทิ้ง ไม่ต้องดูแลรักษา สะดวก สะอาด</p>
+        </div>
+      </div>
     </div>
   </main>
+  
   <div id="footer"></div>
   <script src="navbar-footer.js"></script>
 </body>
