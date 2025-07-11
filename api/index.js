@@ -13,10 +13,11 @@ const path = require('path');
 app.use('/buyer', express.static(path.join(__dirname, '../buyer')));
 app.use('/seller', express.static(path.join(__dirname, '../seller')));
 app.use('/public', express.static(path.join(__dirname, '../public')));
-// Serve static assets from root for universal asset paths
-app.use('/css', express.static(path.resolve(__dirname, '../buyer/css')));
-app.use('/js', express.static(path.resolve(__dirname, '../buyer/js')));
-app.use('/images', express.static(path.resolve(__dirname, '../images')));
+// Serve static assets from project root for universal asset paths
+const projectRoot = path.resolve(__dirname, '..');
+app.use('/css', express.static(path.join(projectRoot, 'buyer/css')));
+app.use('/js', express.static(path.join(projectRoot, 'buyer/js')));
+app.use('/images', express.static(path.join(projectRoot, 'images')));
 
 // Routes
 app.use('/api', require('./routes/auth'));
