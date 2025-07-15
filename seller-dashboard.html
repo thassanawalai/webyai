@@ -1,197 +1,791 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
-    <title>จัดการร้านค้า</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สรุปภาพรวมยอดขาย - WebYAI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        * {
+            font-family: 'Kanit', sans-serif;
+        }
+        
         body {
-            font-family: 'Kanit', sans-serif;
-            background-color: #f5f9ff;
-            color: #2c3e50;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
+            background-color: #f8f9fa;
         }
-
-        .container {
-            width: 100%;
-            max-width: 800px;
-            margin: 50px auto;
-            background-color: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(52, 152, 219, 0.1);
+        
+        .sidebar {
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            overflow-y: auto;
+            z-index: 1000;
         }
-
-        h2, h3 {
-            color: #3498db;
-            font-weight: 600;
+        
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin: 5px 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .sidebar .nav-link i {
+            width: 20px;
+            margin-right: 10px;
+        }
+        
+        .store-logo {
             text-align: center;
-            margin-top: 0;
+            padding: 30px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .store-logo h4 {
+            color: white;
+            margin: 10px 0 5px 0;
+        }
+        
+        .store-logo small {
+            color: rgba(255, 255, 255, 0.7);
         }
 
-        .user-info {
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+            border: none;
             margin-bottom: 20px;
-            background-color: #eaf4ff;
-            padding: 15px;
-            border-radius: 10px;
-            font-weight: 500;
-            box-shadow: 0 2px 6px rgba(52, 152, 219, 0.05);
         }
-
-        .store-actions {
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stats-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
             text-align: center;
-            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+            border-left: 5px solid;
+            margin-bottom: 20px;
         }
-
-        .store-actions button {
-            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            margin: 8px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-family: 'Kanit', sans-serif;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
-            transition: all 0.3s ease;
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
         }
-
-        .store-actions button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+        
+        .stats-card.revenue {
+            border-left-color: #28a745;
         }
-
-        .product-form, .product-list {
-            margin-top: 30px;
+        
+        .stats-card.orders {
+            border-left-color: #007bff;
         }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        
+        .stats-card.products {
+            border-left-color: #ffc107;
         }
-
-        input, textarea {
-            font-family: 'Kanit', sans-serif;
-            margin: 10px 0;
-            padding: 12px;
-            width: 100%;
-            max-width: 400px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s ease;
+        
+        .stats-card.customers {
+            border-left-color: #17a2b8;
         }
-
-        input:focus, textarea:focus {
-            border-color: #3498db;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-            outline: none;
-        }
-
-        button[type="submit"] {
-            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-family: 'Kanit', sans-serif;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
-            transition: all 0.3s ease;
-            margin-top: 10px;
-        }
-
-        button[type="submit"]:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
-        }
-
-        .product-item {
-            background-color: #eaf4ff;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 5px rgba(52, 152, 219, 0.1);
-        }
-
-        .product-item h4 {
-            margin: 0;
+        
+        .stats-card h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
             color: #2c3e50;
         }
-
-        .product-item p {
-            margin: 5px 0 0;
-            color: #555;
+        
+        .stats-card p {
+            margin: 0;
+            color: #6c757d;
+            font-weight: 500;
+        }
+        
+        .stats-card small {
+            color: #28a745;
+            font-weight: 600;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+        
+        .table th {
+            background-color: #f8f9fa;
+            border: none;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .badge-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        .header-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .period-selector {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .period-btn {
+            background: transparent;
+            border: 1px solid #dee2e6;
+            color: #6c757d;
+            padding: 8px 16px;
+            border-radius: 5px;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .period-btn.active,
+        .period-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .form-select {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .form-select-sm {
+            padding: 6px 10px;
+            font-size: 0.8rem;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .mobile-toggle {
+                display: block !important;
+            }
+        }
+        
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>จัดการร้านค้า</h2>
+    <!-- Mobile Toggle Button -->
+    <button class="mobile-toggle btn" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
 
-        <div class="user-info">
-            👤 ผู้ใช้: <span id="username">ไม่ทราบ</span><br>
-            🏪 ร้านค้า: <span id="storeName">ยังไม่ได้สร้างร้านค้า</span>
-        </div>
-
-        <div class="store-actions">
-            <button id="createStoreBtn" onclick="window.location.href='seller-create-store.html'">สร้างร้านค้า</button>
-            <button id="editStoreBtn" style="display: none;" onclick="window.location.href='seller-edit-store.html'">แก้ไขร้านค้า</button>
-            <button onclick="window.location.href='seller-orders.html'">ดูคำสั่งซื้อ</button>
-            <button onclick="logout()">ออกจากระบบ</button>
-        </div>
-
-        <div class="product-form">
-            <h3>เพิ่มสินค้าใหม่</h3>
-            <form id="productForm">
-                <input type="text" placeholder="ชื่อสินค้า" required>
-                <input type="number" placeholder="ราคา" required>
-                <input type="file" accept="image/*" required>
-                <button type="submit">เพิ่มสินค้า</button>
-            </form>
-        </div>
-
-        <div class="product-list">
-            <h3>สินค้าทั้งหมด</h3>
-            <div class="product-item">
-                <h4>ชื่อสินค้า 1</h4>
-                <p>รายละเอียดสินค้า 1</p>
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="store-logo">
+            <div class="mb-3">
+                <i class="fas fa-store fa-3x text-white"></i>
             </div>
-            <div class="product-item">
-                <h4>ชื่อสินค้า 2</h4>
-                <p>รายละเอียดสินค้า 2</p>
+            <h4>ร้านค้าของฉัน</h4>
+            <small>ผู้ขาย: นาย A</small>
+        </div>
+        
+        <ul class="nav flex-column mt-4">
+            <li class="nav-item">
+                <a class="nav-link" href="seller-main.html">
+                    <i class="fas fa-tachometer-alt"></i>หน้าแรก
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="seller-product.html">
+                    <i class="fas fa-box"></i>สินค้าทั้งหมด
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="seller-orders.html">
+                    <i class="fas fa-shopping-cart"></i>คำสั่งซื้อ
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="seller-stock.html">
+                    <i class="fas fa-warehouse"></i>สต็อกสินค้า
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link active" href="seller-dashboard.html">
+                    <i class="fas fa-chart-line"></i>รายงานยอดขาย
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="seller-edit-store.html">
+                    <i class="fas fa-cog"></i>ตั้งค่าร้านค้า
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-sign-out-alt"></i>ออกจากระบบ
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header Section -->
+        <div class="header-section">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h2 class="mb-0">
+                        <i class="fas fa-chart-line text-primary me-2"></i>
+                        สรุปภาพรวมยอดขาย
+                    </h2>
+                    <p class="text-muted mb-0">รายงานและสถิติการขายของร้านค้า</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <span class="badge bg-success fs-6">
+                        <i class="fas fa-sync-alt"></i> อัปเดตล่าสุด: เมื่อสักครู่
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Period Selector -->
+        <div class="period-selector text-center mb-3">
+            <button class="period-btn" onclick="changePeriod('today')">วันนี้</button>
+            <button class="period-btn active" onclick="changePeriod('week')">7 วันที่ผ่านมา</button>
+            <button class="period-btn" onclick="changePeriod('month')">30 วันที่ผ่านมา</button>
+            <button class="period-btn" onclick="changePeriod('year')">ปีนี้</button>
+        </div>
+
+        <!-- Month Filter -->
+        <div class="dashboard-card">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h6 class="mb-0"><i class="fas fa-calendar-alt text-primary me-2"></i>ฟิลเตอร์ตามเดือน</h6>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <select class="form-select form-select-sm" id="monthFilter" onchange="filterByMonth()">
+                                <option value="">เลือกเดือน</option>
+                                <option value="01">มกราคม</option>
+                                <option value="02">กุมภาพันธ์</option>
+                                <option value="03">มีนาคม</option>
+                                <option value="04">เมษายน</option>
+                                <option value="05">พฤษภาคม</option>
+                                <option value="06">มิถุนายน</option>
+                                <option value="07">กรกฎาคม</option>
+                                <option value="08">สิงหาคม</option>
+                                <option value="09">กันยายน</option>
+                                <option value="10">ตุลาคม</option>
+                                <option value="11">พฤศจิกายน</option>
+                                <option value="12">ธันวาคม</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <select class="form-select form-select-sm" id="yearFilter" onchange="filterByMonth()">
+                                <option value="">เลือกปี</option>
+                                <option value="2024">2024</option>
+                                <option value="2025" selected>2025</option>
+                                <option value="2026">2026</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="stats-card revenue">
+                    <h3 id="totalRevenue">฿0</h3>
+                    <p>รายได้รวม</p>
+                    <small><i class="fas fa-minus"></i> ยังไม่มีข้อมูล</small>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="stats-card orders">
+                    <h3 id="totalOrders">0</h3>
+                    <p>คำสั่งซื้อทั้งหมด</p>
+                    <small><i class="fas fa-minus"></i> ยังไม่มีข้อมูล</small>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="stats-card products">
+                    <h3 id="soldProducts">0</h3>
+                    <p>สินค้าที่ขายได้</p>
+                    <small><i class="fas fa-minus"></i> ยังไม่มีข้อมูล</small>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="stats-card customers">
+                    <h3 id="newCustomers">0</h3>
+                    <p>ลูกค้าใหม่</p>
+                    <small><i class="fas fa-minus"></i> ยังไม่มีข้อมูล</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sales Chart -->
+            <div class="col-lg-8 mb-4">
+                <div class="dashboard-card">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5><i class="fas fa-chart-area text-primary"></i> กราฟยอดขาย</h5>
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-outline-primary active" onclick="toggleChart('daily')">รายวัน</button>
+                            <button class="btn btn-outline-primary" onclick="toggleChart('monthly')">รายเดือน</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sales Summary -->
+            <div class="col-lg-4 mb-4">
+                <div class="dashboard-card">
+                    <h5><i class="fas fa-chart-pie text-warning"></i> สัดส่วนยอดขาย</h5>
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Top Products -->
+            <div class="col-lg-6 mb-4">
+                <div class="dashboard-card">
+                    <h5><i class="fas fa-trophy text-warning"></i> สินค้าขายดีท็อป 5</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>อันดับ</th>
+                                    <th>ชื่อสินค้า</th>
+                                    <th>ยอดขาย</th>
+                                    <th>จำนวน</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="4" class="text-center py-4">
+                                        <i class="fas fa-chart-bar fa-3x text-muted mb-3"></i>
+                                        <h5 class="text-muted">ยังไม่มีข้อมูลการขาย</h5>
+                                        <p class="text-muted">เมื่อมีการขายสินค้า ข้อมูลจะแสดงที่นี่</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sales by Time -->
+            <div class="col-lg-6 mb-4">
+                <div class="dashboard-card">
+                    <h5><i class="fas fa-clock text-info"></i> ยอดขายตามช่วงเวลา</h5>
+                    <div class="chart-container" style="height: 280px;">
+                        <canvas id="hourlyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Reports -->
+        <div class="row">
+            <div class="col-12">
+                <div class="dashboard-card">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5><i class="fas fa-file-alt text-secondary"></i> รายงานรายละเอียด</h5>
+                        <div>
+                            <button class="btn btn-success btn-sm me-2">
+                                <i class="fas fa-download"></i> ส่งออก Excel
+                            </button>
+                            <button class="btn btn-info btn-sm">
+                                <i class="fas fa-print"></i> พิมพ์รายงาน
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <div class="border rounded p-3 text-center">
+                                <h6 class="text-muted">ยอดขายเฉลี่ยต่อวัน</h6>
+                                <h4 class="text-primary">฿0</h4>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="border rounded p-3 text-center">
+                                <h6 class="text-muted">คำสั่งซื้อเฉลี่ยต่อวัน</h6>
+                                <h4 class="text-info">0 รายการ</h4>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="border rounded p-3 text-center">
+                                <h6 class="text-muted">มูลค่าเฉลี่ยต่อคำสั่ง</h6>
+                                <h4 class="text-warning">฿0</h4>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="border rounded p-3 text-center">
+                                <h6 class="text-muted">อัตราการกลับมาซื้อ</h6>
+                                <h4 class="text-success">0%</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
-        const username = localStorage.getItem("registeredUsername") || "ไม่ทราบ";
-        const storeName = localStorage.getItem("storeName");
+        // Initialize Charts
+        let salesChart, pieChart, hourlyChart;
 
-        document.getElementById("username").textContent = username;
-        document.getElementById("storeName").textContent = storeName || "ยังไม่ได้สร้างร้านค้า";
+        function initializeCharts() {
+            // Sales Chart
+            const salesCtx = document.getElementById('salesChart').getContext('2d');                salesChart = new Chart(salesCtx, {
+                type: 'line',
+                data: {
+                    labels: ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัส', 'ศุกร์', 'เสาร์', 'อาทิตย์'],
+                    datasets: [{
+                        label: 'ยอดขาย (บาท)',
+                        data: [0, 0, 0, 0, 0, 0, 0],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '฿' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
 
-        if (storeName) {
-            document.getElementById("createStoreBtn").style.display = "none";
-            document.getElementById("editStoreBtn").style.display = "inline-block";
+            // Pie Chart
+            const pieCtx = document.getElementById('pieChart').getContext('2d');
+            pieChart = new Chart(pieCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['ยังไม่มีข้อมูล'],
+                    datasets: [{
+                        data: [1],
+                        backgroundColor: ['#e9ecef']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Hourly Chart
+            const hourlyCtx = document.getElementById('hourlyChart').getContext('2d');
+            hourlyChart = new Chart(hourlyCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'],
+                    datasets: [{
+                        label: 'คำสั่งซื้อ',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                        borderColor: '#667eea',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
         }
 
-        function logout() {
-            localStorage.clear();
-            window.location.href = "seller-login.html";
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('show');
         }
 
-        document.getElementById("productForm").addEventListener("submit", function(e) {
-            e.preventDefault();
-            alert("เพิ่มสินค้าเรียบร้อยแล้ว (ตัวอย่าง)");
+        function changePeriod(period) {
+            // Remove active class from all buttons
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            // Reset month/year filters
+            document.getElementById('monthFilter').value = '';
+            document.getElementById('yearFilter').value = '2025';
+            
+            // Update data based on period
+            updateDashboardData(period);
+            
+            // Reset charts to default view
+            if (period === 'week') {
+                salesChart.data.labels = ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัส', 'ศุกร์', 'เสาร์', 'อาทิตย์'];
+                salesChart.data.datasets[0].data = [0, 0, 0, 0, 0, 0, 0];
+            } else if (period === 'month') {
+                salesChart.data.labels = ['สัปดาห์ 1', 'สัปดาห์ 2', 'สัปดาห์ 3', 'สัปดาห์ 4'];
+                salesChart.data.datasets[0].data = [0, 0, 0, 0];
+            } else if (period === 'year') {
+                salesChart.data.labels = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+                salesChart.data.datasets[0].data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            } else {
+                salesChart.data.labels = ['เช้า', 'สาย', 'บ่าย', 'เย็น'];
+                salesChart.data.datasets[0].data = [0, 0, 0, 0];
+            }
+            salesChart.update();
+        }
+
+        function updateDashboardData(period) {
+            const data = {
+                'today': {
+                    revenue: '฿0',
+                    orders: '0',
+                    products: '0',
+                    customers: '0'
+                },
+                'week': {
+                    revenue: '฿0',
+                    orders: '0',
+                    products: '0',
+                    customers: '0'
+                },
+                'month': {
+                    revenue: '฿0',
+                    orders: '0',
+                    products: '0',
+                    customers: '0'
+                },
+                'year': {
+                    revenue: '฿0',
+                    orders: '0',
+                    products: '0',
+                    customers: '0'
+                }
+            };
+
+            const currentData = data[period];
+            document.getElementById('totalRevenue').textContent = currentData.revenue;
+            document.getElementById('totalOrders').textContent = currentData.orders;
+            document.getElementById('soldProducts').textContent = currentData.products;
+            document.getElementById('newCustomers').textContent = currentData.customers;
+        }
+
+        function filterByMonth() {
+            const month = document.getElementById('monthFilter').value;
+            const year = document.getElementById('yearFilter').value;
+            
+            if (!month || !year) {
+                // If no month/year selected, reset to default
+                updateDashboardData('week');
+                updateChartsForMonth(null, null);
+                return;
+            }
+
+            // Clear period selector
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Sample data for different months (in real app, this would come from server)
+            const monthlyData = {
+                '01': { revenue: '฿0', orders: '0', products: '0', customers: '0' },
+                '02': { revenue: '฿0', orders: '0', products: '0', customers: '0' },
+                '03': { revenue: '฿0', orders: '0', products: '0', customers: '0' },
+                '04': { revenue: '฿0', orders: '0', products: '0', customers: '0' },
+                '05': { revenue: '฿0', orders: '0', products: '0', customers: '0' },
+                '06': { revenue: '฿0', orders: '0', products: '0', customers: '0' },
+                '07': { revenue: '฿0', orders: '0', products: '0', customers: '0' },
+                '08': { revenue: '฿0', orders: '0', products: '0', customers: '0' },
+                '09': { revenue: '฿0', orders: '0', products: '0', customers: '0' },
+                '10': { revenue: '฿0', orders: '0', products: '0', customers: '0' },
+                '11': { revenue: '฿0', orders: '0', products: '0', customers: '0' },
+                '12': { revenue: '฿0', orders: '0', products: '0', customers: '0' }
+            };
+
+            const selectedData = monthlyData[month];
+            document.getElementById('totalRevenue').textContent = selectedData.revenue;
+            document.getElementById('totalOrders').textContent = selectedData.orders;
+            document.getElementById('soldProducts').textContent = selectedData.products;
+            document.getElementById('newCustomers').textContent = selectedData.customers;
+
+            // Update charts for selected month
+            updateChartsForMonth(month, year);
+
+            // Show selected period in header
+            const monthNames = {
+                '01': 'มกราคม', '02': 'กุมภาพันธ์', '03': 'มีนาคม', '04': 'เมษายน',
+                '05': 'พฤษภาคม', '06': 'มิถุนายน', '07': 'กรกฎาคม', '08': 'สิงหาคม',
+                '09': 'กันยายน', '10': 'ตุลาคม', '11': 'พฤศจิกายน', '12': 'ธันวาคม'
+            };
+            
+            console.log(`แสดงข้อมูลสำหรับ ${monthNames[month]} ${year}`);
+        }
+
+        function updateChartsForMonth(month, year) {
+            if (!month || !year) {
+                // Reset to default empty data
+                salesChart.data.datasets[0].data = [0, 0, 0, 0, 0, 0, 0];
+                salesChart.update();
+                return;
+            }
+
+            // Sample daily data for the selected month (all zeros for now)
+            const dailyData = Array(31).fill(0); // Max 31 days
+            const dailyLabels = [];
+            
+            // Generate labels for the month
+            const daysInMonth = new Date(year, month, 0).getDate();
+            for (let i = 1; i <= daysInMonth; i++) {
+                dailyLabels.push(`${i}`);
+            }
+
+            // Update sales chart with daily data for the month
+            salesChart.data.labels = dailyLabels;
+            salesChart.data.datasets[0].data = dailyData.slice(0, daysInMonth);
+            salesChart.update();
+        }
+
+        function toggleChart(type) {
+            // Update button states
+            document.querySelectorAll('.btn-group .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update chart data based on type
+            if (type === 'daily') {
+                salesChart.data.labels = ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัส', 'ศุกร์', 'เสาร์', 'อาทิตย์'];
+                salesChart.data.datasets[0].data = [0, 0, 0, 0, 0, 0, 0];
+            } else {
+                salesChart.data.labels = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.'];
+                salesChart.data.datasets[0].data = [0, 0, 0, 0, 0, 0];
+            }
+            salesChart.update();
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.querySelector('.mobile-toggle');
+            
+            if (window.innerWidth <= 768 && 
+                !sidebar.contains(event.target) && 
+                !toggleBtn.contains(event.target) && 
+                sidebar.classList.contains('show')) {
+                sidebar.classList.remove('show');
+            }
+        });
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            
+            // Auto-refresh data every 5 minutes
+            setInterval(function() {
+                console.log('Refreshing sales data...');
+                // Here you would typically make an AJAX call to refresh the data
+            }, 300000);
         });
     </script>
 </body>
