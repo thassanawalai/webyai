@@ -53,7 +53,7 @@
       cart.forEach(item => {
         const pd = priceData[item.quantity] || priceData[1];
         total += pd.price;
-        // Fix image path for GitHub Pages
+        // Logic เดิมสำหรับ path รูปใน cart
         let imgPath = item.image;
         if (imgPath && !imgPath.startsWith('../')) imgPath = '../images/' + imgPath.replace(/^images\//, '').replace(/^\/images\//, '');
         cartItemsList.innerHTML += `
@@ -102,6 +102,13 @@
       }
     }
     // sync UI on load
+    // ลบสินค้าออกจาก cart ตาม id แล้วรีเฟรช cart
+    function removeFromCart(itemId) {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const newCart = cart.filter(item => item.id !== itemId);
+      localStorage.setItem('cart', JSON.stringify(newCart));
+      renderCartPage();
+    }
     renderCartPage();
     // update on cart change (optional: listen to storage event for multi-tab)
     window.addEventListener('storage', function(e) {

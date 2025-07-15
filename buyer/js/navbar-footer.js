@@ -1,3 +1,10 @@
+// ฟังก์ชันจัดการ path รูปสินค้าแบบเดียวกับหน้า cart
+function getImage(imgPath) {
+  if (imgPath && !imgPath.startsWith('../')) {
+    return '../images/' + imgPath.replace(/^images\//, '').replace(/^\/images\//, '');
+  }
+  return imgPath;
+}
 // --- Modal เตือนเมื่อมีสินค้าในตะกร้าแล้ว ---
 window.showCartLimitModal = function showCartLimitModal() {
     // ลบ modal เดิมถ้ามี
@@ -148,7 +155,7 @@ function openCartModal() {
       }
       cartItem.innerHTML = `
         <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
-          <img src="${item.image}" alt="${item.name}" style="width: 80px; height: 80px; border-radius: 12px; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.09); object-fit: contain; margin-bottom: 6px;">
+          <img src="${getImage(item.image)}" alt="${item.name}" style="width: 80px; height: 80px; border-radius: 12px; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.09); object-fit: contain; margin-bottom: 6px;">
           <span style="font-size:1.08rem; font-weight:600; color:#222; text-align:center;">${item.name.replace('เลนส์สัมผัสรายวัน', '<span style=\"color:#00bfae;font-weight:bold\">MOIST</span> (30 เลนส์/ชุด)')}</span>
         </div>
         <div style="margin-top:8px; display:flex; flex-direction:column; gap:7px; align-items:stretch;">
