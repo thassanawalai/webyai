@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>หน้าหลักผู้ขาย - WebYAI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Kanit', sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+        }
+        
+        .sidebar {
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin: 5px 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .sidebar .nav-link i {
+            width: 20px;
+            margin-right: 10px;
+        }
+        
+        .store-logo {
+            text-align: center;
+            padding: 30px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .store-logo h4 {
+            color: white;
+            margin: 10px 0 5px 0;
+        }
+        
+        .store-logo small {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+            border: none;
+            margin-bottom: 30px;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 25px 20px;
+            border-radius: 15px;
+            color: white;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .stat-card.sales {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        
+        .stat-card.orders {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .stat-card.shipping {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .stat-card.stock {
+            background: linear-gradient(135deg, #fce38a 0%, #f38181 100%);
+        }
+        
+        .stat-card h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card p {
+            margin: 0;
+            opacity: 0.9;
+        }
+        
+        .table th {
+            background-color: #f8f9fa;
+            border: none;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .badge-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        .badge-new {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .badge-processing {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        
+        .badge-shipped {
+            background-color: #17a2b8;
+            color: white;
+        }
+        
+        .btn-action {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            border-radius: 5px;
+        }
+        
+        .product-img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        .quick-action-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px 5px;
+        }
+        
+        .quick-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+        
+        .header-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .mobile-toggle {
+                display: block !important;
+            }
+        }
+        
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Toggle Button -->
+    <button class="mobile-toggle btn" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="store-logo">
+            <div class="mb-3">
+                <i class="fas fa-store fa-3x text-white"></i>
+            </div>
+            <h4>ร้านค้าของฉัน</h4>
+            <small>ผู้ขาย: นาย A</small>
+        </div>
+        
+        <ul class="nav flex-column mt-4">
+            <li class="nav-item">
+                <a class="nav-link active" href="seller-main.html">
+                    <i class="fas fa-tachometer-alt"></i>หน้าแรก
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="seller-product.html">
+                    <i class="fas fa-box"></i>สินค้าทั้งหมด
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="seller-orders.html">
+                    <i class="fas fa-shopping-cart"></i>คำสั่งซื้อ
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="seller-stock.html">
+                    <i class="fas fa-warehouse"></i>สต็อกสินค้า
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="seller-dashboard.html">
+                    <i class="fas fa-chart-line"></i>รายงานยอดขาย
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="seller-edit-store.html">
+                    <i class="fas fa-cog"></i>ตั้งค่าร้านค้า
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-sign-out-alt"></i>ออกจากระบบ
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header Section -->
+        <div class="header-section">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h2 class="mb-0">
+                        <i class="fas fa-tachometer-alt text-primary me-2"></i>
+                        หน้าหลักผู้ขาย
+                    </h2>
+                    <p class="text-muted mb-0">ยินดีต้อนรับสู่ระบบจัดการร้านค้า</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <span class="badge bg-success fs-6">
+                        <i class="fas fa-circle"></i> ออนไลน์
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Stats -->
+        <div class="row mb-4" style="margin-bottom: 30px !important;">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stat-card sales">
+                    <h3>฿2,150</h3>
+                    <p>ยอดขายวันนี้</p>
+                    <small><i class="fas fa-arrow-up"></i> +12% จากเมื่อวาน</small>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stat-card orders">
+                    <h3>5</h3>
+                    <p>คำสั่งซื้อใหม่</p>
+                    <small><i class="fas fa-clock"></i> รอดำเนินการ</small>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stat-card shipping">
+                    <h3>3</h3>
+                    <p>รายการที่ต้องจัดส่ง</p>
+                    <small><i class="fas fa-truck"></i> พร้อมส่ง</small>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stat-card stock">
+                    <h3>2</h3>
+                    <p>สินค้าใกล้หมด</p>
+                    <small><i class="fas fa-exclamation-triangle"></i> ต้องเติมสต็อก</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Recent Orders -->
+            <div class="col-lg-8 mb-4" style="margin-bottom: 30px !important;">
+                <div class="dashboard-card">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5><i class="fas fa-shopping-cart text-primary"></i> คำสั่งซื้อใหม่ล่าสุด</h5>
+                        <a href="seller-orders.html" class="btn btn-outline-primary btn-sm">ดูทั้งหมด</a>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>หมายเลขคำสั่ง</th>
+                                    <th>ลูกค้า</th>
+                                    <th>จำนวน</th>
+                                    <th>ยอดรวม</th>
+                                    <th>สถานะ</th>
+                                    <th>การจัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#ORD001</td>
+                                    <td>นาง ส. สมใจ</td>
+                                    <td>2 รายการ</td>
+                                    <td>฿850</td>
+                                    <td><span class="badge-status badge-new">ใหม่</span></td>
+                                    <td>
+                                        <button class="btn btn-success btn-action">ยืนยัน</button>
+                                        <button class="btn btn-info btn-action">ดูรายละเอียด</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#ORD002</td>
+                                    <td>นาย บ. บุญมี</td>
+                                    <td>1 รายการ</td>
+                                    <td>฿320</td>
+                                    <td><span class="badge-status badge-processing">กำลังแพ็ค</span></td>
+                                    <td>
+                                        <button class="btn btn-primary btn-action">จัดส่ง</button>
+                                        <button class="btn btn-info btn-action">ดูรายละเอียด</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#ORD003</td>
+                                    <td>นางสาว ค. คิดดี</td>
+                                    <td>3 รายการ</td>
+                                    <td>฿1,250</td>
+                                    <td><span class="badge-status badge-shipped">จัดส่งแล้ว</span></td>
+                                    <td>
+                                        <button class="btn btn-secondary btn-action">ติดตาม</button>
+                                        <button class="btn btn-info btn-action">ดูรายละเอียด</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#ORD004</td>
+                                    <td>นาย ง. งามตา</td>
+                                    <td>1 รายการ</td>
+                                    <td>฿480</td>
+                                    <td><span class="badge-status badge-new">ใหม่</span></td>
+                                    <td>
+                                        <button class="btn btn-success btn-action">ยืนยัน</button>
+                                        <button class="btn btn-info btn-action">ดูรายละเอียด</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#ORD005</td>
+                                    <td>นางสาว จ. จริงใจ</td>
+                                    <td>2 รายการ</td>
+                                    <td>฿680</td>
+                                    <td><span class="badge-status badge-processing">กำลังแพ็ค</span></td>
+                                    <td>
+                                        <button class="btn btn-primary btn-action">จัดส่ง</button>
+                                        <button class="btn btn-info btn-action">ดูรายละเอียด</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Popular Products & Quick Actions -->
+            <div class="col-lg-4">
+                <!-- Popular Products 
+                <div class="dashboard-card mb-4">
+                    <h5><i class="fas fa-fire text-danger"></i> สินค้ายอดนิยม</h5>
+                    
+                    <div class="row mb-3">
+                        <div class="col-4">
+                            <img src="https://via.placeholder.com/100x100?text=Product1" alt="สินค้า 1" class="product-img w-100">
+                        </div>
+                        <div class="col-8">
+                            <strong>เสื้อยืดผ้าฝ้าย</strong><br>
+                            <small class="text-muted">ขายแล้ว 45 ชิ้น</small><br>
+                            <span class="text-success">฿299</span>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-4">
+                            <img src="https://via.placeholder.com/100x100?text=Product2" alt="สินค้า 2" class="product-img w-100">
+                        </div>
+                        <div class="col-8">
+                            <strong>กางเกงยีนส์</strong><br>
+                            <small class="text-muted">ขายแล้ว 32 ชิ้น</small><br>
+                            <span class="text-success">฿890</span>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-4">
+                            <img src="https://via.placeholder.com/100x100?text=Product3" alt="สินค้า 3" class="product-img w-100">
+                        </div>
+                        <div class="col-8">
+                            <strong>รองเท้าผ้าใบ</strong><br>
+                            <small class="text-muted">ขายแล้ว 28 ชิ้น</small><br>
+                            <span class="text-success">฿1,590</span>
+                        </div>
+                    </div>
+                </div>-->
+
+                <!-- Low Stock Alert 
+                <div class="dashboard-card mb-4">
+                    <h5><i class="fas fa-exclamation-triangle text-warning"></i> สินค้าใกล้หมด</h5>
+                    
+                    <div class="row mb-3">
+                        <div class="col-4">
+                            <img src="https://via.placeholder.com/100x100?text=Product4" alt="สินค้า 4" class="product-img w-100">
+                        </div>
+                        <div class="col-8">
+                            <strong>หมวกแก๊ป</strong><br>
+                            <small class="text-danger">เหลือ 3 ชิ้น</small><br>
+                            <span class="text-success">฿450</span>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-4">
+                            <img src="https://via.placeholder.com/100x100?text=Product5" alt="สินค้า 5" class="product-img w-100">
+                        </div>
+                        <div class="col-8">
+                            <strong>เข็มขัดหนัง</strong><br>
+                            <small class="text-danger">เหลือ 1 ชิ้น</small><br>
+                            <span class="text-success">฿680</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+
+        <!-- Quick Actions -->
+        <!--<div class="dashboard-card">
+            <h5><i class="fas fa-bolt text-warning"></i> ทางลัดการจัดการ</h5>
+            <div class="text-center">
+                <a href="#" class="quick-action-btn">
+                    <i class="fas fa-plus-circle"></i> เพิ่มสินค้าใหม่
+                </a>
+                <a href="seller-edit-store.html" class="quick-action-btn">
+                    <i class="fas fa-store"></i> จัดการร้านค้า
+                </a>
+                <a href="#" class="quick-action-btn">
+                    <i class="fas fa-chart-bar"></i> ดูรายงาน
+                </a>
+                <a href="#" class="quick-action-btn">
+                    <i class="fas fa-warehouse"></i> จัดการสต็อก
+                </a>
+            </div>
+        </div>-->
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('show');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.querySelector('.mobile-toggle');
+            
+            if (window.innerWidth <= 768 && 
+                !sidebar.contains(event.target) && 
+                !toggleBtn.contains(event.target) && 
+                sidebar.classList.contains('show')) {
+                sidebar.classList.remove('show');
+            }
+        });
+
+        // Auto-refresh dashboard data every 30 seconds
+        setInterval(function() {
+            // Here you would typically make an AJAX call to refresh the data
+            console.log('Refreshing dashboard data...');
+        }, 30000);
+    </script>
+</body>
+</html>

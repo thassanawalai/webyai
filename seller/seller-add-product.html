@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เพิ่มสินค้าใหม่ - WebYAI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Kanit', sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+        }
+        
+        .sidebar {
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin: 5px 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .sidebar .nav-link i {
+            width: 20px;
+            margin-right: 10px;
+        }
+        
+        .store-logo {
+            text-align: center;
+            padding: 30px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .store-logo h4 {
+            color: white;
+            margin: 10px 0 5px 0;
+        }
+        
+        .store-logo small {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .form-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+            border: none;
+            margin-bottom: 30px;
+        }
+        
+        .form-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .header-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .section-icon {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+            line-height: 40px;
+            margin-right: 15px;
+        }
+        
+        .upload-area {
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .upload-area:hover {
+            border-color: #667eea;
+            background: #e7f3ff;
+        }
+        
+        .upload-area.dragover {
+            border-color: #667eea;
+            background: #e7f3ff;
+            transform: scale(1.02);
+        }
+        
+        .preview-images {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .preview-image {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #dee2e6;
+        }
+        
+        .preview-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .remove-image {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 15px 35px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+            padding: 15px 35px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        .prescription-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .prescription-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin: 2px;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .mobile-toggle {
+                display: block !important;
+            }
+        }
+        
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        .required {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Toggle Button -->
+    <button class="mobile-toggle btn" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="store-logo">
+            <div class="mb-3">
+                <i class="fas fa-store fa-3x text-white"></i>
+            </div>
+            <h4>ร้านค้าของฉัน</h4>
+            <small>ผู้ขาย: นาย A</small>
+        </div>
+        
+        <ul class="nav flex-column mt-4">
+            <li class="nav-item">
+                <a class="nav-link" href="seller-main.html">
+                    <i class="fas fa-tachometer-alt"></i>หน้าแรก
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="seller-product.html">
+                    <i class="fas fa-box"></i>สินค้าทั้งหมด
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="seller-orders.html">
+                    <i class="fas fa-shopping-cart"></i>คำสั่งซื้อ
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="seller-stock.html">
+                    <i class="fas fa-warehouse"></i>สต็อกสินค้า
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="seller-dashboard.html">
+                    <i class="fas fa-chart-line"></i>รายงานยอดขาย
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="seller-edit-store.html">
+                    <i class="fas fa-cog"></i>ตั้งค่าร้านค้า
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-sign-out-alt"></i>ออกจากระบบ
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header Section -->
+        <div class="header-section">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h2 class="mb-0">
+                        <i class="fas fa-plus-circle text-primary me-2"></i>
+                        เพิ่มสินค้าใหม่
+                    </h2>
+                    <p class="text-muted mb-0">เพิ่มคอนแทคเลนส์ใหม่เข้าสู่ระบบ</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a href="seller-product.html" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> กลับสู่รายการสินค้า
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <form id="addProductForm">
+            <div class="row">
+                <!-- Basic Information -->
+                <div class="col-lg-8 mb-4" style="margin-bottom: 30px !important;">
+                    <div class="form-card">
+                        <div class="section-title">
+                            <span class="section-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </span>
+                            <h5 class="mb-0">ข้อมูลสินค้า</h5>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">ชื่อสินค้า <span class="required">*</span></label>
+                                <input type="text" class="form-control" id="productName" placeholder="เช่น คอนแทคเลนส์ใส" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">รหัสสินค้า <span class="required">*</span></label>
+                                <input type="text" class="form-control" id="productCode" placeholder="เช่น CL-001-100" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">คำอธิบายสินค้า</label>
+                            <textarea class="form-control" id="productDescription" rows="4" placeholder="อธิบายรายละเอียดของสินค้า คุณสมบัติ ข้อดี และข้อควรระวัง"></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">ประเภทเลนส์ <span class="required">*</span></label>
+                                <select class="form-control" id="lensType" required>
+                                    <option value="">เลือกประเภท</option>
+                                    <option value="clear">เลนส์ใส</option>
+                                    <option value="brown">เลนส์สีน้ำตาล</option>
+                                    <option value="gray">เลนส์สีเทา</option>
+                                    <option value="blue">เลนส์สีฟ้า</option>
+                                    <option value="green">เลนส์สีเขียว</option>
+                                    <option value="violet">เลนส์สีม่วง</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">ค่าสายตา (Diopter) <span class="required">*</span></label>
+                                <select class="form-control" id="prescription" required>
+                                    <option value="">เลือกค่าสายตา</option>
+                                    <option value="0.00">0.00 (ไม่มีค่าสายตา)</option>
+                                    <optgroup label="สายตาสั้น (-)">
+                                        <option value="-0.25">-0.25</option>
+                                        <option value="-0.50">-0.50</option>
+                                        <option value="-0.75">-0.75</option>
+                                        <option value="-1.00">-1.00</option>
+                                        <option value="-1.25">-1.25</option>
+                                        <option value="-1.50">-1.50</option>
+                                        <option value="-1.75">-1.75</option>
+                                        <option value="-2.00">-2.00</option>
+                                        <option value="-2.25">-2.25</option>
+                                        <option value="-2.50">-2.50</option>
+                                        <option value="-2.75">-2.75</option>
+                                        <option value="-3.00">-3.00</option>
+                                        <option value="-3.25">-3.25</option>
+                                        <option value="-3.50">-3.50</option>
+                                        <option value="-3.75">-3.75</option>
+                                        <option value="-4.00">-4.00</option>
+                                        <option value="-4.25">-4.25</option>
+                                        <option value="-4.50">-4.50</option>
+                                        <option value="-4.75">-4.75</option>
+                                        <option value="-5.00">-5.00</option>
+                                    </optgroup>
+                                    <optgroup label="สายตายาว (+)">
+                                        <option value="+0.25">+0.25</option>
+                                        <option value="+0.50">+0.50</option>
+                                        <option value="+0.75">+0.75</option>
+                                        <option value="+1.00">+1.00</option>
+                                        <option value="+1.25">+1.25</option>
+                                        <option value="+1.50">+1.50</option>
+                                        <option value="+1.75">+1.75</option>
+                                        <option value="+2.00">+2.00</option>
+                                        <option value="+2.25">+2.25</option>
+                                        <option value="+2.50">+2.50</option>
+                                        <option value="+2.75">+2.75</option>
+                                        <option value="+3.00">+3.00</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">ราคาขาย (บาท) <span class="required">*</span></label>
+                                <input type="number" class="form-control" id="price" placeholder="0" min="0" step="0.01" value="0" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">สต็อกเริ่มต้น (ชิ้น) <span class="required">*</span></label>
+                                <input type="number" class="form-control" id="initialStock" placeholder="50" min="0" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">แจ้งเตือนเมื่อสต็อกต่ำกว่า (ชิ้น)</label>
+                                <input type="number" class="form-control" id="lowStockAlert" placeholder="10" min="0" value="10">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">แบรนด์/ผู้ผลิต</label>
+                            <input type="text" class="form-control" id="brand" placeholder="เช่น Acuvue, Bausch & Lomb">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">ระยะเวลาการใช้งาน</label>
+                                <select class="form-control" id="duration">
+                                    <option value="">เลือกระยะเวลา</option>
+                                    <option value="daily">1 วัน (Daily)</option>
+                                    <option value="weekly">1 สัปดาห์ (Weekly)</option>
+                                    <option value="monthly">1 เดือน (Monthly)</option>
+                                    <option value="yearly">1 ปี (Yearly)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">วัสดุเลนส์</label>
+                                <select class="form-control" id="material">
+                                    <option value="">เลือกวัสดุ</option>
+                                    <option value="hydrogel">Hydrogel</option>
+                                    <option value="silicone-hydrogel">Silicone Hydrogel</option>
+                                    <option value="rigid-gas-permeable">Rigid Gas Permeable</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Images -->
+                <div class="col-lg-4 mb-4" style="margin-bottom: 30px !important;">
+                    <div class="form-card">
+                        <div class="section-title">
+                            <span class="section-icon">
+                                <i class="fas fa-images"></i>
+                            </span>
+                            <h5 class="mb-0">รูปภาพสินค้า</h5>
+                        </div>
+                        
+                        <div class="upload-area" onclick="document.getElementById('productImages').click()">
+                            <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                            <p class="mb-2">คลิกเพื่ออัปโหลดรูปภาพ</p>
+                            <small class="text-muted">รองรับ JPG, PNG ขนาดไม่เกิน 5MB ต่อไฟล์<br>สามารถเลือกได้หลายไฟล์</small>
+                        </div>
+                        <input type="file" id="productImages" accept="image/*" multiple style="display: none;" onchange="previewImages(this)">
+                        
+                        <div class="preview-images" id="imagePreview"></div>
+                        
+                        <div class="mt-3">
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle"></i> 
+                                รูปแรกจะเป็นรูปหลักของสินค้า
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Product Preview -->
+                    <div class="form-card">
+                        <div class="section-title">
+                            <span class="section-icon">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                            <h5 class="mb-0">ตัวอย่างสินค้า</h5>
+                        </div>
+                        
+                        <div class="card">
+                            <img id="previewMainImage" src="https://via.placeholder.com/200x150?text=รูปสินค้า" class="card-img-top" alt="ตัวอย่างสินค้า">
+                            <div class="card-body">
+                                <h6 class="card-title" id="previewName">ชื่อสินค้า</h6>
+                                <p class="card-text">
+                                    <span class="prescription-badge" id="previewPrescription">0.00D</span>
+                                </p>
+                                <h5 class="text-success" id="previewPrice">฿0</h5>
+                                <small class="text-muted" id="previewStock">สต็อก: 0 ชิ้น</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="row" style="margin-bottom: 30px;">
+                <div class="col-12">
+                    <div class="form-card">
+                        <div class="text-center" style="padding: 20px 0;">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-save"></i> บันทึกสินค้า
+                            </button>
+                            <button type="button" class="btn btn-primary btn-lg" onclick="previewProduct()">
+                                <i class="fas fa-eye"></i> ดูตัวอย่าง
+                            </button>
+                            <a href="seller-product.html" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-times"></i> ยกเลิก
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('show');
+        }
+
+        function previewImages(input) {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = '';
+
+            if (input.files) {
+                Array.from(input.files).forEach((file, index) => {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        const imageContainer = document.createElement('div');
+                        imageContainer.className = 'preview-image';
+                        imageContainer.innerHTML = `
+                            <img src="${e.target.result}" alt="รูปสินค้า ${index + 1}">
+                            <button type="button" class="remove-image" onclick="removeImage(this)">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        `;
+                        preview.appendChild(imageContainer);
+                        
+                        // Set first image as main preview
+                        if (index === 0) {
+                            document.getElementById('previewMainImage').src = e.target.result;
+                        }
+                    };
+                    
+                    reader.readAsDataURL(file);
+                });
+            }
+        }
+
+        function removeImage(button) {
+            button.parentElement.remove();
+            updateMainPreviewImage();
+        }
+
+        function updateMainPreviewImage() {
+            const firstImage = document.querySelector('#imagePreview .preview-image img');
+            const mainPreview = document.getElementById('previewMainImage');
+            
+            if (firstImage) {
+                mainPreview.src = firstImage.src;
+            } else {
+                mainPreview.src = 'https://via.placeholder.com/200x150?text=รูปสินค้า';
+            }
+        }
+
+        function updatePreview() {
+            const name = document.getElementById('productName').value || 'ชื่อสินค้า';
+            const prescription = document.getElementById('prescription').value || '0.00';
+            const price = document.getElementById('price').value || '0';
+            const stock = document.getElementById('initialStock').value || '0';
+
+            document.getElementById('previewName').textContent = name;
+            document.getElementById('previewPrescription').textContent = prescription + 'D';
+            document.getElementById('previewPrice').textContent = '฿' + parseInt(price).toLocaleString();
+            document.getElementById('previewStock').textContent = `สต็อก: ${stock} ชิ้น`;
+        }
+
+        function previewProduct() {
+            updatePreview();
+            alert('ตัวอย่างสินค้าได้ถูกอัปเดตแล้ว');
+        }
+
+        function generateProductCode() {
+            const lensType = document.getElementById('lensType').value;
+            const prescription = document.getElementById('prescription').value;
+            
+            if (lensType && prescription) {
+                let typeCode = '';
+                switch(lensType) {
+                    case 'clear': typeCode = 'CL-001'; break;
+                    case 'brown': typeCode = 'CL-003'; break;
+                    case 'gray': typeCode = 'CL-004'; break;
+                    case 'blue': typeCode = 'CL-005'; break;
+                    case 'green': typeCode = 'CL-006'; break;
+                    case 'violet': typeCode = 'CL-007'; break;
+                    default: typeCode = 'CL-001'; break;
+                }
+                
+                const prescriptionCode = Math.abs(parseFloat(prescription) * 100).toString().padStart(3, '0');
+                const productCode = `${typeCode}-${prescriptionCode}`;
+                
+                document.getElementById('productCode').value = productCode;
+            }
+        }
+
+        // Auto-update preview when form values change
+        document.getElementById('productName').addEventListener('input', updatePreview);
+        document.getElementById('prescription').addEventListener('change', function() {
+            updatePreview();
+            generateProductCode();
+        });
+        document.getElementById('price').addEventListener('input', updatePreview);
+        document.getElementById('initialStock').addEventListener('input', updatePreview);
+        document.getElementById('lensType').addEventListener('change', generateProductCode);
+
+        // Form submission
+        document.getElementById('addProductForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (this.checkValidity()) {
+                const formData = new FormData();
+                
+                // Basic product information
+                formData.append('productName', document.getElementById('productName').value);
+                formData.append('productCode', document.getElementById('productCode').value);
+                formData.append('productDescription', document.getElementById('productDescription').value);
+                formData.append('lensType', document.getElementById('lensType').value);
+                formData.append('prescription', document.getElementById('prescription').value);
+                formData.append('price', document.getElementById('price').value);
+                formData.append('initialStock', document.getElementById('initialStock').value);
+                formData.append('lowStockAlert', document.getElementById('lowStockAlert').value);
+                formData.append('brand', document.getElementById('brand').value);
+                formData.append('duration', document.getElementById('duration').value);
+                formData.append('material', document.getElementById('material').value);
+                
+                // Product images
+                const images = document.getElementById('productImages').files;
+                for (let i = 0; i < images.length; i++) {
+                    formData.append('productImages[]', images[i]);
+                }
+                
+                // Here you would typically send the data to your server
+                console.log('Product data:', Object.fromEntries(formData));
+                
+                // Simulate success
+                alert('เพิ่มสินค้าเรียบร้อยแล้ว!');
+                
+                // Redirect to products page
+                window.location.href = 'seller-product.html';
+            } else {
+                alert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน');
+            }
+        });
+
+        // Drag and drop functionality
+        const uploadArea = document.querySelector('.upload-area');
+        
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const productImages = document.getElementById('productImages');
+                productImages.files = files;
+                previewImages(productImages);
+            }
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.querySelector('.mobile-toggle');
+            
+            if (window.innerWidth <= 768 && 
+                !sidebar.contains(event.target) && 
+                !toggleBtn.contains(event.target) && 
+                sidebar.classList.contains('show')) {
+                sidebar.classList.remove('show');
+            }
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePreview();
+            console.log('หน้าเพิ่มสินค้าพร้อมใช้งาน');
+        });
+    </script>
+</body>
+</html>
