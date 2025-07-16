@@ -4,14 +4,14 @@ const db = require('../db');
 const transporter = require('../mailer');
 const router = express.Router();
 
-// Register
+// Register (ไม่รับ address ตอนสมัคร)
 router.post('/register', async (req, res) => {
-  const { fullName, phone, address, province, district, postalCode, email, password } = req.body;
-  if (!fullName || !phone || !address || !province || !district || !postalCode || !email || !password) {
+  const { user_name, phone, email, password, user_role, user_profile_img } = req.body;
+  if (!user_name || !phone || !email || !password || !user_role) {
     return res.status(400).json({ error: 'กรุณากรอกข้อมูลให้ครบทุกช่อง' });
   }
   try {
-    db.get('SELECT id FROM users WHERE email = ? OR phone = ?', [email, phone], async (err, existing) => {
+    db.get('SELECT user_id FROM users WHERE user_email = ? OR phone = ?', [email, phone], async (err, existing) => {
       if (err) return res.status(500).json({ error: 'Database error' });
       if (existing) {
         return res.status(409).json({ error: 'อีเมลหรือเบอร์โทรศัพท์นี้ถูกใช้แล้ว' });
@@ -20,10 +20,9 @@ router.post('/register', async (req, res) => {
       const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
       db.run(
         `INSERT INTO users (
-          full_name, phone, address, province, 
-          district, postal_code, email, password, verification_code
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [fullName, phone, address, province, district, postalCode, email, hash, verificationCode],
+          user_name, phone, user_email, user_password, user_role, user_profile_img, user_created_at, email_verified_at, default_address_id
+        ) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, NULL, NULL)`,
+        [user_name, phone, email, hash, user_role, user_profile_img || ''],
         async function (err2) {
           if (err2) return res.status(500).json({ error: 'เกิดข้อผิดพลาดในระบบ' });
           await transporter.sendMail({
@@ -42,38 +41,38 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// Login
+// Login (ตาม schema ใหม่)
 router.post('/login', (req, res) => {
   const { username, password } = req.body;
   db.get(
-    'SELECT * FROM users WHERE email = ? OR phone = ?',
+    'SELECT * FROM users WHERE user_email = ? OR phone = ?',
     [username, username],
     async (err, user) => {
       if (err || !user) return res.status(401).json({ error: 'User not found' });
-      const match = await bcrypt.compare(password, user.password);
+      const match = await bcrypt.compare(password, user.user_password);
       if (!match) return res.status(401).json({ error: 'Incorrect password' });
-      if (!user.is_verified) return res.status(403).json({ error: 'Email not verified' });
+      if (!user.email_verified_at) return res.status(403).json({ error: 'Email not verified' });
       res.json({
-        id: user.id,
-        fullName: user.full_name,
+        user_id: user.user_id,
+        user_name: user.user_name,
+        user_email: user.user_email,
+        user_role: user.user_role,
+        user_profile_img: user.user_profile_img,
+        user_created_at: user.user_created_at,
         phone: user.phone,
-        address: user.address,
-        province: user.province,
-        district: user.district,
-        postalCode: user.postal_code,
-        email: user.email
+        default_address_id: user.default_address_id
       });
     }
   );
 });
 
-// Email verification
+// Email verification (ตาม schema ใหม่)
 router.post('/verify-email', (req, res) => {
   const { email, code } = req.body;
-  db.get('SELECT verification_code FROM users WHERE email = ?', [email], (err, user) => {
+  db.get('SELECT verification_code FROM users WHERE user_email = ?', [email], (err, user) => {
     if (err || !user) return res.status(400).json({ error: 'ไม่พบผู้ใช้' });
     if (user.verification_code === code) {
-      db.run('UPDATE users SET is_verified = 1, verification_code = NULL WHERE email = ?', [email], (err2) => {
+      db.run('UPDATE users SET email_verified_at = CURRENT_TIMESTAMP, verification_code = NULL WHERE user_email = ?', [email], (err2) => {
         if (err2) return res.status(400).json({ error: 'อัปเดตสถานะไม่สำเร็จ' });
         res.json({ success: true });
       });
@@ -83,16 +82,16 @@ router.post('/verify-email', (req, res) => {
   });
 });
 
-// Reset password
+// Reset password (ตาม schema ใหม่)
 router.post('/reset-password', async (req, res) => {
   const { email, newPassword, confirmPassword } = req.body;
   if (!email || !newPassword || !confirmPassword) return res.status(400).json({ error: 'กรุณากรอกข้อมูลให้ครบถ้วน' });
   if (newPassword !== confirmPassword) return res.status(400).json({ error: 'รหัสผ่านใหม่ไม่ตรงกัน' });
   if (newPassword.length < 6) return res.status(400).json({ error: 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร' });
-  db.get('SELECT * FROM users WHERE email = ?', [email], async (err, user) => {
+  db.get('SELECT * FROM users WHERE user_email = ?', [email], async (err, user) => {
     if (err || !user) return res.status(404).json({ error: 'ไม่พบอีเมลนี้ในระบบ' });
     const hash = await bcrypt.hash(newPassword, 10);
-    db.run('UPDATE users SET password = ? WHERE email = ?', [hash, email], (err2) => {
+    db.run('UPDATE users SET user_password = ? WHERE user_email = ?', [hash, email], (err2) => {
       if (err2) return res.status(500).json({ error: 'อัปเดตรหัสผ่านไม่สำเร็จ' });
       transporter.sendMail({
         from: `"Alice Moist" <${process.env.EMAIL_USER}>`,

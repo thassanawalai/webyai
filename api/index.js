@@ -19,10 +19,16 @@ app.use('/css', express.static(path.join(projectRoot, 'buyer/css')));
 app.use('/js', express.static(path.join(projectRoot, 'buyer/js')));
 app.use('/images', express.static(path.join(projectRoot, 'images')));
 
+
+
 // Routes
 app.use('/api', require('./routes/auth'));
 app.use('/api/user', require('./routes/user'));
 app.use('/api/health', require('./routes/health'));
+app.use('/api/addresses', require('./routes/addresses'));
+app.use('/api/cart', require('./routes/cart'));
+app.use('/api/products', require('./routes/products'));
+app.use('/api/orders', require('./routes/orders'));
 
 const PORT = process.env.PORT || 5500;
 app.listen(PORT, () => {
