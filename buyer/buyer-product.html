@@ -11,22 +11,58 @@
 <body>
   <div id="navbar"></div>
   <main class="container">
-    <h1>สินค้า Alice Moist Daily</h1>
-    <div class="product-list">
-      <div class="product-item">
-        <img src="/images/lens1.png" alt="เลนส์ 1">
-        <h2>Alice Moist Daily Brown</h2>
-        <p>เลนส์สีใสรายเดือน ใส่สบาย</p>
-      </div>
-      <div class="product-item">
-        <img src="/images/lens2.png" alt="เลนส์ 2">
-        <h2>Alice Moist Daily Gray</h2>
-        <p>เลนส์สีใสรายวัน ปลอดภัยกับดวงตา</p>
-      </div>
-      <!-- เพิ่มสินค้าอื่น ๆ ตามต้องการ -->
+    <div id="productDetail">
+      <div style="text-align:center; color:#888;">กำลังโหลดข้อมูลสินค้า...</div>
     </div>
   </main>
   <div id="footer"></div>
   <script src="js/navbar-footer.js"></script>
+  <script>
+    // ดึง id จาก query string เช่น buyer-product.html?id=123
+    function getProductIdFromQuery() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id');
+    }
+    const productId = getProductIdFromQuery();
+    const productDetailDiv = document.getElementById('productDetail');
+    if (!productId) {
+      productDetailDiv.innerHTML = '<div style="color:#e74c3c; text-align:center;">ไม่พบรหัสสินค้า</div>';
+    } else {
+      fetch(`/api/products/${productId}`)
+        .then(res => res.json())
+        .then(product => {
+          if (!product || !product.id) {
+            productDetailDiv.innerHTML = '<div style="color:#e74c3c; text-align:center;">ไม่พบข้อมูลสินค้า</div>';
+            return;
+          }
+          productDetailDiv.innerHTML = `
+            <div class="product-item" style="max-width:420px;margin:0 auto;text-align:center;">
+              <img src="${product.image || '/images/product1.png'}" alt="${product.name || ''}" style="max-width:220px;">
+              <h2>${product.name || '-'}</h2>
+              <p>${product.description || ''}</p>
+              <div style="font-size:1.2rem;color:#183a7a;margin:10px 0;">${product.price ? product.price.toLocaleString() + ' บาท' : ''}</div>
+              <label>จำนวน: <input type="number" id="qtyInput" min="1" value="1" style="width:60px;"></label>
+              <button class="btn" id="addToCartBtn" style="margin-left:10px;">เพิ่มในตะกร้า</button>
+            </div>
+          `;
+          document.getElementById('addToCartBtn').onclick = function() {
+            const qty = parseInt(document.getElementById('qtyInput').value) || 1;
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            // ถ้ามีสินค้า id นี้ใน cart แล้ว ให้บวกจำนวน
+            const idx = cart.findIndex(item => item.id === product.id);
+            if (idx !== -1) {
+              cart[idx].quantity += qty;
+            } else {
+              cart.push({ id: product.id, name: product.name, price: product.price, image: product.image, quantity: qty });
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert('เพิ่มสินค้าในตะกร้าเรียบร้อย');
+          };
+        })
+        .catch(() => {
+          productDetailDiv.innerHTML = '<div style="color:#e74c3c; text-align:center;">เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า</div>';
+        });
+    }
+  </script>
 </body>
 </html>
