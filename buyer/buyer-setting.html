@@ -19,49 +19,83 @@
 <body>
     <div id="navbar"></div>
   <div class="setting-container">
-    <h2>ข้อมูลผู้ส่ง</h2>
-    <div class="success-msg" id="settingSuccess">บันทึกข้อมูลสำเร็จ</div>
+    <h2>แก้ไขข้อมูลส่วนตัว</h2>
+    <div class="success-msg" id="settingSuccess" style="display:none"></div>
     <form id="settingForm">
       <div class="setting-form-group">
-        <label for="senderName">ชื่อผู้ส่ง</label>
-        <input type="text" id="senderName" name="senderName" required>
+        <label for="fullName">ชื่อ-นามสกุล</label>
+        <input type="text" id="fullName" name="fullName" required>
       </div>
       <div class="setting-form-group">
-        <label for="senderPhone">เบอร์โทร</label>
-        <input type="tel" id="senderPhone" name="senderPhone" required pattern="[0-9]{9,15}">
+        <label for="phone">เบอร์โทรศัพท์</label>
+        <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}">
       </div>
       <div class="setting-form-group">
-        <label for="senderAddress">ที่อยู่ผู้ส่ง</label>
-        <textarea id="senderAddress" name="senderAddress" required></textarea>
+        <label for="address">ที่อยู่</label>
+        <textarea id="address" name="address" rows="3" required></textarea>
       </div>
-      <button type="submit" class="setting-btn">บันทึก</button>
+      <button type="submit" class="setting-btn">บันทึกการเปลี่ยนแปลง</button>
     </form>
+    <button class="setting-btn" style="background:#888; margin-top:18px;" onclick="window.location='buyer-dashboard.html'">กลับหน้าหลัก</button>
   </div>
   <div id="footer"></div>
   <script src="js/navbar-footer.js"></script>
   <script>
-    // โหลดข้อมูลจาก localStorage
-    const senderName = document.getElementById('senderName');
-    const senderPhone = document.getElementById('senderPhone');
-    const senderAddress = document.getElementById('senderAddress');
-    const settingSuccess = document.getElementById('settingSuccess');
-    // ดึงข้อมูล user ปัจจุบัน
-    senderName.value = localStorage.getItem('registeredUsername') || '';
-    senderPhone.value = localStorage.getItem('registeredPhone') || '';
-    senderAddress.value = localStorage.getItem('registeredAddress') || '';
+    // โหลดข้อมูลผู้ใช้จาก localStorage (buyer_user_id)
+    document.addEventListener('DOMContentLoaded', function() {
+      const userId = localStorage.getItem('buyer_user_id');
+      if (!userId) {
+        showMsg('กรุณาเข้าสู่ระบบใหม่', 'error');
+        document.getElementById('settingForm').style.display = 'none';
+        return;
+      }
+      const token = localStorage.getItem('token');
+      fetch(`/api/user/${userId}`, {
+        headers: token ? { 'Authorization': 'Bearer ' + token } : {}
+      })
+        .then(res => res.json())
+        .then(user => {
+          if (user && user.fullName) document.getElementById('fullName').value = user.fullName;
+          if (user && user.phone) document.getElementById('phone').value = user.phone;
+          if (user && user.address) document.getElementById('address').value = user.address;
+        })
+        .catch(() => {});
+    });
+    // ส่งข้อมูลไป /api/user/update
     document.getElementById('settingForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      localStorage.setItem('registeredUsername', senderName.value.trim());
-      localStorage.setItem('registeredPhone', senderPhone.value.trim());
-      localStorage.setItem('registeredAddress', senderAddress.value.trim());
-      // อัพเดทใน users array ด้วย
-      let users = JSON.parse(localStorage.getItem('users') || '[]');
-      const email = localStorage.getItem('registeredEmail');
-      users = users.map(u => u.email === email ? { ...u, senderName: senderName.value.trim(), phone: senderPhone.value.trim(), address: senderAddress.value.trim() } : u);
-      localStorage.setItem('users', JSON.stringify(users));
-      settingSuccess.style.display = 'block';
-      setTimeout(() => settingSuccess.style.display = 'none', 2000);
+      const userId = localStorage.getItem('buyer_user_id');
+      if (!userId) return;
+      const fullName = document.getElementById('fullName').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const address = document.getElementById('address').value.trim();
+      if (!fullName || !phone || !address) {
+        showMsg('กรุณากรอกข้อมูลให้ครบถ้วน', 'error');
+        return;
+      }
+      const token = localStorage.getItem('token');
+      fetch('/api/user/update', {
+        method: 'POST',
+        headers: Object.assign({ 'Content-Type': 'application/json' }, token ? { 'Authorization': 'Bearer ' + token } : {}),
+        body: JSON.stringify({ user_id: userId, fullName, phone, address })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          showMsg('บันทึกข้อมูลสำเร็จ', 'success');
+        } else {
+          showMsg(data.error || 'เกิดข้อผิดพลาด', 'error');
+        }
+      })
+      .catch(() => showMsg('เกิดข้อผิดพลาดในการเชื่อมต่อ', 'error'));
     });
+    function showMsg(msg, type) {
+      const el = document.getElementById('settingSuccess');
+      el.textContent = msg;
+      el.style.display = 'block';
+      el.className = 'success-msg' + (type === 'error' ? ' error' : '');
+      setTimeout(() => { el.style.display = 'none'; }, 2000);
+    }
   </script>
 </body>
 </html>
