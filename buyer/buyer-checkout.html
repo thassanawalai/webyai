@@ -1060,39 +1060,55 @@
             return;
           }
         }
-        // สร้างออเดอร์ (mock)
-        const order = {
-          id: 'ORD-' + Date.now(),
-          date: new Date().toLocaleString(),
-          items: JSON.parse(localStorage.getItem('cart')),
-          address: {},
+        // สร้างข้อมูล order
+        const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+        // เก็บข้อมูล address
+        const addrFields = ['firstName','lastName','company','address','apartment','city','province','postalCode','phone'];
+        const addr = {};
+        const addrInputs = shippingForm.querySelectorAll('input,select');
+        addrFields.forEach((f,i) => {
+          const el = addrInputs[i];
+          if (el) addr[f] = el.value;
+        });
+        // เตรียม payload สำหรับ API
+        const orderPayload = {
+          items: cartItems,
+          address: addr,
           subtotal: orderSummary.total,
           shippingFee: orderSummary.shipping,
           discount: orderSummary.discount,
           total: orderSummary.grandTotal
         };
-        // เก็บข้อมูล address (mock)
-        const addrFields = ['country','firstName','lastName','company','address','apartment','city','province','postalCode','phone'];
-        const addr = {};
-        addrFields.forEach((f,i) => {
-          const el = shippingForm.querySelectorAll('input,select')[i];
-          if (el) addr[f] = el.value;
+        // ส่ง order ไป API
+        fetch('/api/orders', {
+          method: 'POST',
+          headers: Object.assign({ 'Content-Type': 'application/json' }, (function(){
+            const token = localStorage.getItem('token');
+            return token ? { 'Authorization': 'Bearer ' + token } : {};
+          })()),
+          body: JSON.stringify(orderPayload)
+        })
+        .then(async res => {
+          if (!res.ok) {
+            const err = await res.text();
+            throw new Error(err || 'เกิดข้อผิดพลาดในการสั่งซื้อ');
+          }
+          return res.json();
+        })
+        .then(data => {
+          // ลบ cart, แสดง thank you page
+          localStorage.removeItem('cart');
+          document.querySelector('.container').style.display = 'none';
+          document.getElementById('thankYouPage').style.display = 'block';
+          document.getElementById('orderId').textContent = data.id || ('ORD-' + Date.now());
+          document.getElementById('orderDate').textContent = new Date().toLocaleString();
+          document.getElementById('orderTotal').textContent = orderSummary.grandTotal.toLocaleString() + ' บาท';
+          document.getElementById('paymentMethod').textContent = 'โอนเงิน/ชำระเงิน';
+          document.getElementById('shippingMethod').textContent = 'จัดส่งปกติ';
+        })
+        .catch(err => {
+          alert('สั่งซื้อไม่สำเร็จ: ' + (err.message || err));
         });
-        order.address = addr;
-        // Save order history
-        let orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
-        orderHistory.push(order);
-        localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
-        // Clear cart
-        localStorage.removeItem('cart');
-        // Show thank you page
-        document.querySelector('.container').style.display = 'none';
-        document.getElementById('thankYouPage').style.display = 'block';
-        document.getElementById('orderId').textContent = order.id;
-        document.getElementById('orderDate').textContent = order.date;
-        document.getElementById('orderTotal').textContent = order.total.toLocaleString() + ' บาท';
-        document.getElementById('paymentMethod').textContent = 'โอนเงิน/ชำระเงิน';
-        document.getElementById('shippingMethod').textContent = 'จัดส่งปกติ';
       };
       document.addEventListener('DOMContentLoaded', renderOrderSummary);
       window.addEventListener('storage', function(e) { if (e.key === 'cart') renderOrderSummary(); });

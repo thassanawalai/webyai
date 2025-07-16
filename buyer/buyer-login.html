@@ -657,10 +657,6 @@
             </div>
             <div class="step" data-step="2">
               <div class="step-number">2</div>
-              <div class="step-title">ข้อมูลที่อยู่</div>
-            </div>
-            <div class="step" data-step="3">
-              <div class="step-number">3</div>
               <div class="step-title">ข้อมูลล็อกอิน</div>
             </div>
           </div>
@@ -669,7 +665,6 @@
           <div class="form-step active" id="step1" style="display: block;">
             <h2 class="form-title">ข้อมูลส่วนตัว</h2>
             <p class="form-subtitle">กรุณากรอกข้อมูลส่วนตัวของคุณ</p>
-            
             <div class="form-group">
               <label for="fullName">ชื่อ-นามสกุล</label>
               <div class="input-icon">
@@ -678,7 +673,6 @@
               </div>
               <div class="error-message" id="fullNameError"></div>
             </div>
-            
             <div class="form-group">
               <label for="phone">เบอร์โทรศัพท์</label>
               <div class="input-icon">
@@ -687,64 +681,12 @@
               </div>
               <div class="error-message" id="phoneError"></div>
             </div>
-            
             <button class="btn next-step" data-next="2">ต่อไป</button>
           </div>
-          
-          <!-- Step 2: Address Information -->
+          <!-- Step 2: Login Information -->
           <div class="form-step" id="step2" style="display: none;">
-            <h2 class="form-title">ข้อมูลที่อยู่</h2>
-            <p class="form-subtitle">กรุณากรอกข้อมูลที่อยู่สำหรับจัดส่งสินค้า</p>
-            
-            <div class="form-group">
-              <label for="address">ที่อยู่</label>
-              <div class="input-icon">
-                <i class="fas fa-home"></i>
-                <input type="text" id="address" class="form-control" placeholder="ที่อยู่">
-              </div>
-              <div class="error-message" id="addressError"></div>
-            </div>
-            
-            <div class="form-row">
-              <div class="form-group">
-                <label for="province">จังหวัด</label>
-                <div class="input-icon">
-                  <i class="fas fa-map-marker-alt"></i>
-                  <input type="text" id="province" class="form-control" placeholder="จังหวัด">
-                </div>
-                <div class="error-message" id="provinceError"></div>
-              </div>
-              
-              <div class="form-group">
-                <label for="district">อำเภอ/เขต</label>
-                <div class="input-icon">
-                  <i class="fas fa-map"></i>
-                  <input type="text" id="district" class="form-control" placeholder="อำเภอ/เขต">
-                </div>
-                <div class="error-message" id="districtError"></div>
-              </div>
-            </div>
-            
-            <div class="form-group">
-              <label for="postalCode">รหัสไปรษณีย์</label>
-              <div class="input-icon">
-                <i class="fas fa-envelope"></i>
-                <input type="text" id="postalCode" class="form-control" placeholder="รหัสไปรษณีย์">
-              </div>
-              <div class="error-message" id="postalCodeError"></div>
-            </div>
-            
-            <div class="form-row">
-              <button class="btn prev-step" data-prev="1">ย้อนกลับ</button>
-              <button class="btn next-step" data-next="3">ต่อไป</button>
-            </div>
-          </div>
-          
-          <!-- Step 3: Login Information -->
-          <div class="form-step" id="step3" style="display: none;">
             <h2 class="form-title">ข้อมูลล็อกอิน</h2>
             <p class="form-subtitle">กรุณากรอกข้อมูลสำหรับเข้าสู่ระบบ</p>
-            
             <div class="form-group">
               <label for="email">อีเมล</label>
               <div class="input-icon">
@@ -753,7 +695,6 @@
               </div>
               <div class="error-message" id="emailError"></div>
             </div>
-            
             <div class="form-group">
               <label for="password">รหัสผ่าน</label>
               <div class="input-icon" style="position: relative;">
@@ -776,14 +717,11 @@
               </div>
               <div class="error-message" id="confirmPasswordError"></div>
             </div>
-            
             <div class="form-row">
-              <button class="btn prev-step" data-prev="2">ย้อนกลับ</button>
-              <button class="btn next-step" data-next="4">สมัครสมาชิก</button>
+              <button class="btn prev-step" data-prev="1">ย้อนกลับ</button>
+              <button class="btn next-step" data-next="3">สมัครสมาชิก</button>
             </div>
           </div>
-          
-          <!-- Step 4: Email Verification (handled by modal, so just trigger) -->
         </div>
       </div>
     </div>
@@ -905,7 +843,7 @@
       function goToStep(stepNumber) {
         // Update steps
         steps.forEach(step => {
-          if (parseInt(step.dataset.step) <= stepNumber && parseInt(step.dataset.step) <= 3) {
+          if (parseInt(step.dataset.step) <= stepNumber && parseInt(step.dataset.step) <= 2) {
             step.classList.add('active');
           } else {
             step.classList.remove('active');
@@ -921,8 +859,8 @@
             step.style.display = 'none';
           }
         });
-        // Update progress bar (divide by 2 for 3 steps)
-        progressBar.style.width = `${((stepNumber - 1) / 2) * 100}%`;
+        // Update progress bar (2 steps)
+        progressBar.style.width = `${((stepNumber - 1) / 1) * 100}%`;
       }
       
       // Next Step Button
@@ -951,8 +889,8 @@
               }
             }
           }
-          // ถ้าเป็น step 3 (ข้อมูลล็อกอิน) ให้เช็คอีเมลซ้ำก่อน
-          if (nextStep === 4) {
+          // ถ้าเป็น step 2 (ข้อมูลล็อกอิน) ให้เช็คอีเมลซ้ำก่อน
+          if (nextStep === 3) {
             const email = document.getElementById('email').value.trim();
             if (email && /^\S+@\S+\.\S+$/.test(email)) {
               try {
@@ -975,8 +913,8 @@
           }
           // Validate current step before proceeding
           if (validateStep(nextStep - 1)) {
-            if (nextStep === 4) {
-              // Show modal only, do not go to step 4
+            if (nextStep === 3) {
+              // Show modal only, do not go to step 3
               submitRegistration();
             } else {
               goToStep(nextStep);
@@ -996,23 +934,16 @@
       // Reset registration form
       function resetRegistration() {
         goToStep(1);
-        
         // Clear form fields
         document.getElementById('fullName').value = '';
         document.getElementById('phone').value = '';
-        document.getElementById('address').value = '';
-        document.getElementById('province').value = '';
-        document.getElementById('district').value = '';
-        document.getElementById('postalCode').value = '';
         document.getElementById('email').value = '';
         document.getElementById('password').value = '';
         document.getElementById('confirmPassword').value = '';
-        
         // Clear errors
         document.querySelectorAll('.error-message').forEach(el => {
           el.style.display = 'none';
         });
-        
         document.querySelectorAll('.form-control').forEach(input => {
           input.classList.remove('input-error');
         });
@@ -1021,14 +952,12 @@
       // Form Validation
       function validateStep(step) {
         let isValid = true;
-        
         if (step === 1) {
           // Validate personal info
           if (!document.getElementById('fullName').value.trim()) {
             showError('fullName', 'กรุณากรอกชื่อ-นามสกุล');
             isValid = false;
           }
-          
           const phone = document.getElementById('phone').value.trim();
           if (!phone) {
             showError('phone', 'กรุณากรอกเบอร์โทรศัพท์');
@@ -1038,31 +967,6 @@
             isValid = false;
           }
         } else if (step === 2) {
-          // Validate address info
-          if (!document.getElementById('address').value.trim()) {
-            showError('address', 'กรุณากรอกที่อยู่');
-            isValid = false;
-          }
-          
-          if (!document.getElementById('province').value.trim()) {
-            showError('province', 'กรุณากรอกจังหวัด');
-            isValid = false;
-          }
-          
-          if (!document.getElementById('district').value.trim()) {
-            showError('district', 'กรุณากรอกอำเภอ/เขต');
-            isValid = false;
-          }
-          
-          const postalCode = document.getElementById('postalCode').value.trim();
-          if (!postalCode) {
-            showError('postalCode', 'กรุณากรอกรหัสไปรษณีย์');
-            isValid = false;
-          } else if (!/^[0-9]{5}$/.test(postalCode)) {
-            showError('postalCode', 'รหัสไปรษณีย์ต้องเป็นตัวเลข 5 หลัก');
-            isValid = false;
-          }
-        } else if (step === 3) {
           // Validate login info
           const email = document.getElementById('email').value.trim();
           if (!email) {
@@ -1072,7 +976,6 @@
             showError('email', 'รูปแบบอีเมลไม่ถูกต้อง');
             isValid = false;
           }
-          
           const password = document.getElementById('password').value;
           if (!password) {
             showError('password', 'กรุณากรอกรหัสผ่าน');
@@ -1084,7 +987,6 @@
             showError('password', 'รหัสผ่านต้องมีตัวเลขอย่างน้อย 1 ตัว');
             isValid = false;
           }
-          
           const confirmPassword = document.getElementById('confirmPassword').value;
           if (!confirmPassword) {
             showError('confirmPassword', 'กรุณายืนยันรหัสผ่าน');
@@ -1094,7 +996,6 @@
             isValid = false;
           }
         }
-        
         return isValid;
       }
       
@@ -1110,16 +1011,14 @@
       
       // Submit registration
       async function submitRegistration() {
-        if (validateStep(3)) {
+        if (validateStep(2)) {
           const user = {
-            fullName: document.getElementById('fullName').value.trim(),
+            user_name: document.getElementById('fullName').value.trim(),
             phone: document.getElementById('phone').value.trim(),
-            address: document.getElementById('address').value.trim(),
-            province: document.getElementById('province').value.trim(),
-            district: document.getElementById('district').value.trim(),
-            postalCode: document.getElementById('postalCode').value.trim(),
             email: document.getElementById('email').value.trim(),
-            password: document.getElementById('password').value
+            password: document.getElementById('password').value,
+            user_role: 'buyer',
+            user_profile_img: ''
           };
           // เช็คซ้ำฝั่ง client ก่อน
           try {
@@ -1161,6 +1060,10 @@
             // Remove loading message
             if (document.getElementById('verificationLoadingMsg')) {
               document.getElementById('verificationLoadingMsg').remove();
+            }
+            if (data.success && data.user_id && user.email) {
+              localStorage.setItem('buyer_user_id', data.user_id);
+              localStorage.setItem('buyer_email', user.email);
             }
             if (!data.success) {
               verificationModal.classList.remove('show');
@@ -1204,6 +1107,11 @@
             if (data.success) {
               verificationModal.classList.remove('show');
               showNotification('ยืนยันอีเมลสำเร็จ! คุณสามารถเข้าสู่ระบบได้แล้ว', 'success');
+              // Save user_id and email to localStorage (for buyer) after register & verify
+              if (data.user_id && email) {
+                localStorage.setItem('buyer_user_id', data.user_id);
+                localStorage.setItem('buyer_email', email);
+              }
               tabs[0].click();
             } else {
               showNotification(data.error || 'รหัสยืนยันไม่ถูกต้อง', 'error');
@@ -1276,6 +1184,11 @@
           if (res.ok) {
             // Save user info to sessionStorage
             sessionStorage.setItem('currentUser', JSON.stringify(data));
+            // Save user_id and email to localStorage (for buyer)
+            if (data && data.user_id && data.email) {
+              localStorage.setItem('buyer_user_id', data.user_id);
+              localStorage.setItem('buyer_email', data.email);
+            }
             showNotification('เข้าสู่ระบบสำเร็จ! จะนำคุณไปยังหน้าหลัก', 'success');
             setTimeout(() => {
               // ดึงข้อมูล user จาก sessionStorage ไปใส่ใน dropdown (ถ้ามี navbar)
