@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>ประวัติการสั่งซื้อ | Order History</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/navbar-footer-style.css">
+  <style>
+    body { background: #f7f7fb; font-family: 'Prompt', sans-serif; }
+    .container { max-width: 900px; margin: 40px auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 16px rgba(0,0,0,0.07); padding: 32px; }
+    h2 { color: #223; font-size: 1.5rem; margin-bottom: 24px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+    th, td { padding: 12px 8px; border-bottom: 1px solid #eee; text-align: left; }
+    th { background: #f0f4fa; color: #183a7a; font-weight: 600; }
+    tr:last-child td { border-bottom: none; }
+    .status { font-weight: bold; }
+    .status.pending { color: #3498db; }
+    .status.success { color: #27ae60; }
+    .status.cancel { color: #e74c3c; }
+    .btn { background: #3498db; color: #fff; border: none; border-radius: 6px; padding: 7px 18px; cursor: pointer; font-size: 1rem; }
+    .btn:active { background: #217dbb; }
+    /* Modal styles */
+    .modal-bg {
+      display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.25); align-items: center; justify-content: center;
+    }
+    .modal-bg.active { display: flex; }
+    .modal-box {
+      background: #fff; border-radius: 12px; max-width: 480px; width: 95vw; padding: 32px 24px 24px 24px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.13); position: relative;
+      animation: modalIn 0.18s;
+    }
+    @keyframes modalIn { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+    .modal-close { position: absolute; top: 12px; right: 18px; font-size: 1.5rem; color: #888; cursor: pointer; }
+    .modal-title { font-size: 1.18rem; font-weight: 700; color: #223; margin-bottom: 12px; }
+    .modal-section { margin-bottom: 14px; }
+    .modal-label { color: #888; font-size: 0.98rem; }
+    .modal-value { color: #223; font-size: 1.05rem; font-weight: 500; }
+    .modal-items { margin: 10px 0 0 0; padding: 0; list-style: none; }
+    .modal-items li { border-bottom: 1px solid #eee; padding: 7px 0; font-size: 0.98rem; }
+    .modal-items li:last-child { border-bottom: none; }
+    /* Responsive styles */
+    @media (max-width: 600px) {
+      .container {
+        padding: 10px 2vw 18px 2vw;
+        max-width: 100vw;
+        border-radius: 0;
+        box-shadow: none;
+      }
+      h2 { font-size: 1.1rem; margin-bottom: 16px; }
+      table, thead, tbody, th, td, tr {
+        display: block;
+        width: 100%;
+      }
+      thead { display: none; }
+      tr { margin-bottom: 18px; background: #fff; border-radius: 8px; box-shadow: 0 1px 6px rgba(0,0,0,0.04); }
+      td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 48%;
+        min-height: 36px;
+        font-size: 0.98rem;
+        box-sizing: border-box;
+      }
+      td:last-child { border-bottom: none; }
+      td:before {
+        position: absolute;
+        top: 10px; left: 10px; width: 44%; min-width: 90px;
+        white-space: nowrap;
+        font-weight: 600;
+        color: #888;
+        font-size: 0.93rem;
+        content: attr(data-label);
+      }
+      .btn { width: 100%; margin-top: 8px; font-size: 1rem; padding: 10px 0; }
+      .modal-box {
+        max-width: 98vw;
+        padding: 18px 6vw 16px 6vw;
+      }
+      .modal-title { font-size: 1.05rem; }
+      .modal-section { font-size: 0.97rem; }
+      .modal-items li { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="navbar-center" onclick="window.location='buyer-dashboard.html'">
+       <span><img src="/images/logo.png" style="background-color: #ffffff;height: 100px; width: auto;border-radius: 35px;box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);"></span>
+    </div>
+  </div>
+  <div class="container">
+    <h2>ประวัติการสั่งซื้อของคุณ</h2>
+    <table id="orderTable">
+      <thead>
+        <tr>
+          <th>หมายเลขคำสั่งซื้อ</th>
+          <th>วันที่</th>
+          <th>ยอดรวม</th>
+          <th>สถานะ</th>
+          <th>รายละเอียด</th>
+        </tr>
+      </thead>
+      <tbody id="orderTableBody">
+        <tr><td colspan="5" style="text-align:center; color:#888;">กำลังโหลด...</td></tr>
+      </tbody>
+    </table>
+    <button class="btn" onclick="window.location='buyer-dashboard.html'">กลับสู่หน้าหลัก</button>
+  </div>
+
+  <!-- Modal for order detail -->
+  <div class="modal-bg" id="orderModalBg">
+    <div class="modal-box">
+      <span class="modal-close" onclick="closeOrderModal()">&times;</span>
+      <div class="modal-title">รายละเอียดคำสั่งซื้อ</div>
+      <div class="modal-section"><span class="modal-label">หมายเลขคำสั่งซื้อ: </span><span class="modal-value" id="modalOrderId"></span></div>
+      <div class="modal-section"><span class="modal-label">วันที่สั่งซื้อ: </span><span class="modal-value" id="modalOrderDate"></span></div>
+      <div class="modal-section"><span class="modal-label">สถานะ: </span><span class="modal-value" id="modalOrderStatus"></span></div>
+      <div class="modal-section"><span class="modal-label">ยอดรวม: </span><span class="modal-value" id="modalOrderTotal"></span></div>
+      <div class="modal-section"><span class="modal-label">ที่อยู่จัดส่ง:</span><br><span class="modal-value" id="modalOrderAddress"></span></div>
+      <div class="modal-section"><span class="modal-label">รายการสินค้า:</span>
+        <ul class="modal-items" id="modalOrderItems"></ul>
+      </div>
+      <button class="btn" id="cancelOrderBtn" style="background:#e74c3c; margin-top:10px; display:none;">ยกเลิกคำสั่งซื้อ</button>
+    </div>
+  </div>
+  </div>
+  <script>
+    // --- Modal logic ---
+    function openOrderModal(order) {
+      document.getElementById('modalOrderId').textContent = order.id || '-';
+      document.getElementById('modalOrderDate').textContent = order.date ? new Date(order.date).toLocaleString() : '-';
+      document.getElementById('modalOrderStatus').textContent = order.status || 'รอดำเนินการ';
+      document.getElementById('modalOrderTotal').textContent = order.total ? order.total.toLocaleString() + ' บาท' : '-';
+      // Address
+      let addr = '-';
+      if (order.address && typeof order.address === 'object') {
+        addr = [order.address.firstName, order.address.lastName, order.address.company, order.address.address, order.address.apartment, order.address.city, order.address.province, order.address.postalCode, order.address.phone]
+          .filter(Boolean).join(' | ');
+      } else if (typeof order.address === 'string') {
+        addr = order.address;
+      }
+      document.getElementById('modalOrderAddress').textContent = addr;
+      // Items
+      const itemsUl = document.getElementById('modalOrderItems');
+      if (Array.isArray(order.items) && order.items.length > 0) {
+        itemsUl.innerHTML = order.items.map(item => {
+          let desc = item.name || '';
+          if (item.rightEye || item.leftEye) desc += ` (ขวา: ${item.rightEye || '-'}, ซ้าย: ${item.leftEye || '-'})`;
+          desc += ` | จำนวน: ${item.quantity || 1}`;
+          if (item.price) desc += ` | ราคา: ${item.price.toLocaleString()} บาท`;
+          return `<li>${desc}</li>`;
+        }).join('');
+      } else {
+        itemsUl.innerHTML = '<li>-</li>';
+      }
+      // ปุ่มยกเลิก: แสดงเฉพาะถ้า order ยังไม่ success/cancel
+      const cancelBtn = document.getElementById('cancelOrderBtn');
+      if (order.status !== 'success' && order.status !== 'cancel') {
+        cancelBtn.style.display = 'block';
+        cancelBtn.onclick = function() { cancelOrder(order); };
+      } else {
+        cancelBtn.style.display = 'none';
+        cancelBtn.onclick = null;
+      }
+      document.getElementById('orderModalBg').classList.add('active');
+    }
+    function closeOrderModal() {
+      document.getElementById('orderModalBg').classList.remove('active');
+      // reset cancel btn
+      const cancelBtn = document.getElementById('cancelOrderBtn');
+      cancelBtn.style.display = 'none';
+      cancelBtn.onclick = null;
+    }
+
+    // --- Cancel order logic ---
+    function cancelOrder(order) {
+      if (!confirm('คุณต้องการยกเลิกคำสั่งซื้อนี้ใช่หรือไม่?')) return;
+      const token = localStorage.getItem('token');
+      fetch(`/api/orders/${order.id}`, {
+        method: 'PATCH',
+        headers: Object.assign({ 'Content-Type': 'application/json' }, token ? { 'Authorization': 'Bearer ' + token } : {}),
+        body: JSON.stringify({ status: 'cancel' })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('ยกเลิกคำสั่งซื้อไม่สำเร็จ');
+        return res.json();
+      })
+      .then(data => {
+        alert('ยกเลิกคำสั่งซื้อสำเร็จ');
+        // อัปเดตสถานะใน modal และตาราง
+        document.getElementById('modalOrderStatus').textContent = 'cancel';
+        // อัปเดตใน window._orders
+        if (window._orders) {
+          const idx = window._orders.findIndex(o => o.id === order.id);
+          if (idx !== -1) window._orders[idx].status = 'cancel';
+        }
+        // อัปเดตในตาราง
+        document.querySelectorAll('#orderTableBody tr').forEach(tr => {
+          if (tr.querySelector('td') && tr.querySelector('td').textContent === order.id) {
+            const statusTd = tr.querySelector('td.status');
+            if (statusTd) statusTd.textContent = 'cancel';
+          }
+        });
+        // ซ่อนปุ่ม
+        document.getElementById('cancelOrderBtn').style.display = 'none';
+      })
+      .catch(err => {
+        alert(err.message || 'เกิดข้อผิดพลาด');
+      });
+    }
+
+    // --- ดึง order history จาก API ---
+    document.addEventListener('DOMContentLoaded', function() {
+      const token = localStorage.getItem('token');
+      fetch('/api/orders', {
+        method: 'GET',
+        headers: Object.assign({ 'Content-Type': 'application/json' }, token ? { 'Authorization': 'Bearer ' + token } : {})
+      })
+      .then(res => res.json())
+      .then(data => {
+        const orders = Array.isArray(data) ? data : [];
+        const tbody = document.getElementById('orderTableBody');
+        if (orders.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#888;">ไม่พบประวัติการสั่งซื้อ</td></tr>';
+          return;
+        }
+        tbody.innerHTML = orders.map((order, idx) => `
+          <tr>
+            <td data-label="หมายเลขคำสั่งซื้อ">${order.id || '-'}</td>
+            <td data-label="วันที่">${order.date ? new Date(order.date).toLocaleString() : '-'}</td>
+            <td data-label="ยอดรวม">${order.total ? order.total.toLocaleString() + ' บาท' : '-'}</td>
+            <td data-label="สถานะ" class="status pending">${order.status || 'รอดำเนินการ'}</td>
+            <td data-label="รายละเอียด"><button class="btn" onclick='openOrderModal(window._orders[${idx}])'>ดู</button></td>
+          </tr>
+        `).join('');
+        // เก็บ orders ไว้ใน window เพื่อเรียก modal
+        window._orders = orders;
+      })
+      .catch(() => {
+        document.getElementById('orderTableBody').innerHTML = '<tr><td colspan="5" style="text-align:center; color:#e74c3c;">เกิดข้อผิดพลาดในการโหลดข้อมูล</td></tr>';
+      });
+    });
+    // ปิด modal เมื่อกด ESC
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeOrderModal();
+    });
+    // ปิด modal เมื่อคลิกพื้นหลัง
+    document.getElementById('orderModalBg').addEventListener('click', function(e) {
+      if (e.target === this) closeOrderModal();
+    });
+  </script>
+</body>
+</html>
