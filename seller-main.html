@@ -302,14 +302,14 @@
         <div class="row mb-4" style="margin-bottom: 30px !important;">
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="stat-card sales">
-                    <h3>฿0</h3>
+                    <h3>฿1,200</h3>
                     <p>ยอดขายวันนี้</p>
-                    <small><i class="fas fa-arrow-up"></i> +0% จากเมื่อวาน</small>
+                    <small><i class="fas fa-arrow-up"></i> +100% จากเมื่อวาน</small>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="stat-card orders">
-                    <h3>0</h3>
+                    <h3>1</h3>
                     <p>คำสั่งซื้อใหม่</p>
                     <small><i class="fas fa-clock"></i> รอดำเนินการ</small>
                 </div>
@@ -353,9 +353,27 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td colspan="6" class="text-center text-muted py-4">
-                                        <i class="fas fa-inbox fa-3x mb-3"></i><br>
-                                        ยังไม่มีคำสั่งซื้อ
+                                    <td><strong>ORD-001</strong></td>
+                                    <td>
+                                        <div>
+                                            <strong>นางสาวอันนา สมิท</strong><br>
+                                            <small class="text-muted">anna.smith@email.com</small>
+                                        </div>
+                                    </td>
+                                    <td>2 ชิ้น</td>
+                                    <td><strong>฿1,200</strong></td>
+                                    <td>
+                                        <span class="badge badge-status badge-new">
+                                            <i class="fas fa-clock"></i> รอดำเนินการ
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary btn-action" onclick="viewOrder('ORD-001')">
+                                            <i class="fas fa-eye"></i> ดู
+                                        </button>
+                                        <button class="btn btn-success btn-action" onclick="processOrder('ORD-001')">
+                                            <i class="fas fa-check"></i> รับ
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -456,6 +474,18 @@
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('show');
+        }
+
+        function viewOrder(orderId) {
+            alert(`ดูรายละเอียดคำสั่งซื้อ: ${orderId}\n\nสินค้า: คอนแทคเลนส์แบบใส\nค่าสายตา: -2.50 (ซ้าย), -3.00 (ขวา)\nจำนวน: 2 ชิ้น (1 คู่)\nราคา: ฿1,200\nลูกค้า: นางสาวอันนา สมิท\nที่อยู่จัดส่ง: 123 ถนนสุขุมวิท กรุงเทพฯ 10110`);
+        }
+
+        function processOrder(orderId) {
+            if (confirm(`ต้องการรับคำสั่งซื้อ ${orderId} หรือไม่?`)) {
+                alert(`รับคำสั่งซื้อ ${orderId} เรียบร้อยแล้ว\nกรุณาเตรียมสินค้าและจัดส่งให้ลูกค้า`);
+                // Here you would typically update the order status
+                location.reload(); // Refresh to show updated status
+            }
         }
 
         // Close sidebar when clicking outside on mobile
