@@ -204,9 +204,9 @@
         }
         
         .store-preview img {
-            width: 80px;
+            width: 150px;
             height: 80px;
-            border-radius: 50%;
+            border-radius: 8px;
             object-fit: cover;
             border: 3px solid white;
             margin-bottom: 15px;
@@ -279,10 +279,9 @@
     <nav class="sidebar" id="sidebar">
         <div class="store-logo">
             <div class="mb-3">
-                <i class="fas fa-store fa-3x text-white"></i>
+                <img id="sidebarStoreLogo" src="https://via.placeholder.com/120x80?text=Logo" alt="โลโก้ร้าน" style="width: 150px; height: 80px; border-radius: 8px; object-fit: cover; border: 3px solid white;">
             </div>
-            <h4>ร้านค้าของฉัน</h4>
-            <small>ผู้ขาย: นาย A</small>
+            <h4>ร้านของใบเตย</h4>
         </div>
         
         <ul class="nav flex-column mt-4">
@@ -548,6 +547,9 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Store original values for reset functionality
+        let originalValues = {};
+        
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('show');
@@ -562,6 +564,9 @@
                 viewMode.style.display = 'none';
                 editField.style.display = 'block';
                 editField.focus();
+                
+                // Store original value
+                originalValues[field] = editField.value;
                 
                 // Add save/cancel buttons
                 const buttonContainer = document.createElement('div');
@@ -585,19 +590,27 @@
             const viewMode = document.getElementById(field + 'ViewMode');
             const buttons = document.getElementById(field + 'Buttons');
             
+            // Validate input
+            if (!validateField(field, editField.value)) {
+                return;
+            }
+            
             // Update the view with new value
             viewSpan.textContent = editField.value;
             
             // Update preview if applicable
             updatePreview(field, editField.value);
             
+            // Save to localStorage
+            saveToStorage(field, editField.value);
+            
             // Switch back to view mode
             editField.style.display = 'none';
             viewMode.style.display = 'flex';
             buttons.remove();
             
-            // Show success message (removed notification)
-            console.log(`อัปเดต${getFieldLabel(field)}เรียบร้อยแล้ว`);
+            // Show success message
+            // showNotification(`อัปเดต${getFieldLabel(field)}เรียบร้อยแล้ว`, 'success');
         }
 
         function cancelEdit(field) {
@@ -606,8 +619,7 @@
             const buttons = document.getElementById(field + 'Buttons');
             
             // Reset to original value
-            const originalValue = document.getElementById(field + 'View').textContent;
-            editField.value = originalValue;
+            editField.value = originalValues[field];
             
             // Switch back to view mode
             editField.style.display = 'none';
@@ -615,10 +627,45 @@
             buttons.remove();
         }
 
+        function validateField(field, value) {
+            switch(field) {
+                case 'email':
+                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailPattern.test(value)) {
+                        // showNotification('รูปแบบอีเมลไม่ถูกต้อง', 'error');
+                        return false;
+                    }
+                    break;
+                case 'phone':
+                    const phonePattern = /^[0-9-+().\s]+$/;
+                    if (!phonePattern.test(value) || value.length < 9) {
+                        // showNotification('รูปแบบเบอร์โทรไม่ถูกต้อง', 'error');
+                        return false;
+                    }
+                    break;
+                case 'zipcode':
+                    const zipcodePattern = /^[0-9]{5}$/;
+                    if (!zipcodePattern.test(value)) {
+                        // showNotification('รหัสไปรษณีย์ต้องเป็นตัวเลข 5 หลัก', 'error');
+                        return false;
+                    }
+                    break;
+                case 'storeName':
+                    if (value.trim().length < 2) {
+                        // showNotification('ชื่อร้านต้องมีอย่างน้อย 2 ตัวอักษร', 'error');
+                        return false;
+                    }
+                    break;
+            }
+            return true;
+        }
+
         function updatePreview(field, value) {
             switch(field) {
                 case 'storeName':
                     document.getElementById('storeNamePreview').textContent = value;
+                    // Update sidebar title too
+                    document.querySelector('.store-logo h4').textContent = value;
                     break;
                 case 'description':
                     document.getElementById('storeDescPreview').textContent = value;
@@ -645,52 +692,148 @@
 
         function previewLogo(input) {
             if (input.files && input.files[0]) {
+                const file = input.files[0];
+                
+                // Validate file size (2MB)
+                if (file.size > 2 * 1024 * 1024) {
+                    // showNotification('ขนาดไฟล์ต้องไม่เกิน 2MB', 'error');
+                    input.value = '';
+                    return;
+                }
+                
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                    // showNotification('กรุณาเลือกไฟล์รูปภาพเท่านั้น', 'error');
+                    input.value = '';
+                    return;
+                }
+                
                 const reader = new FileReader();
                 
                 reader.onload = function(e) {
-                    document.getElementById('storeLogoPreview').src = e.target.result;
-                    console.log('อัปโหลดโลโก้เรียบร้อยแล้ว');
+                    const logoPreview = document.getElementById('storeLogoPreview');
+                    const sidebarLogo = document.getElementById('sidebarStoreLogo');
+                    logoPreview.src = e.target.result;
+                    sidebarLogo.src = e.target.result;
+                    
+                    // Save to localStorage
+                    saveToStorage('storeLogo', e.target.result);
+                    
+                    // showNotification('อัปโหลดโลโก้เรียบร้อยแล้ว', 'success');
                 };
                 
-                reader.readAsDataURL(input.files[0]);
+                reader.readAsDataURL(file);
             }
         }
 
         function saveAllSettings() {
             // Collect all form data
             const settings = {
-                storeName: document.getElementById('storeName').value,
-                description: document.getElementById('description').value,
-                address: document.getElementById('address').value,
-                province: document.getElementById('province').value,
-                zipcode: document.getElementById('zipcode').value,
-                phone: document.getElementById('phone').value,
-                email: document.getElementById('email').value,
-                facebook: document.getElementById('facebook').value,
+                storeName: document.getElementById('storeNameView').textContent,
+                description: document.getElementById('descriptionView').textContent,
+                address: document.getElementById('addressView').textContent,
+                province: document.getElementById('provinceView').textContent,
+                zipcode: document.getElementById('zipcodeView').textContent,
+                phone: document.getElementById('phoneView').textContent,
+                email: document.getElementById('emailView').textContent,
+                facebook: document.getElementById('facebookView').textContent,
                 storeStatus: document.getElementById('storeStatus').value,
                 openTime: document.getElementById('openTime').value,
                 closeTime: document.getElementById('closeTime').value,
                 autoAcceptOrders: document.getElementById('autoAcceptOrders').checked
             };
             
-            // Here you would typically send data to server
-            console.log('Saving settings:', settings);
-            
-            // Update all previews
+            // Validate all settings
+            let isValid = true;
             Object.keys(settings).forEach(key => {
-                if (settings[key] !== undefined) {
-                    updatePreview(key, settings[key]);
+                if (key === 'email' || key === 'phone' || key === 'zipcode' || key === 'storeName') {
+                    if (!validateField(key, settings[key])) {
+                        isValid = false;
+                    }
                 }
             });
             
-            console.log('บันทึกการตั้งค่าทั้งหมดเรียบร้อยแล้ว');
+            if (!isValid) {
+                // showNotification('กรุณาแก้ไขข้อมูลที่ไม่ถูกต้อง', 'error');
+                return;
+            }
+            
+            // Save all to localStorage
+            Object.keys(settings).forEach(key => {
+                saveToStorage(key, settings[key]);
+            });
+            
+            // showNotification('บันทึกการตั้งค่าทั้งหมดเรียบร้อยแล้ว', 'success');
+            
+            // Auto-save reminder
+            setTimeout(() => {
+                // showNotification('ข้อมูลถูกบันทึกอัตโนมัติแล้ว', 'info');
+            }, 3000);
         }
 
         function resetAllChanges() {
-            if (confirm('ต้องการยกเลิกการเปลี่ยนแปลงทั้งหมด?')) {
-                // Reset all fields to original values
-                location.reload();
+            if (confirm('ต้องการยกเลิกการเปลี่ยนแปลงทั้งหมดและกลับไปใช้ค่าเริ่มต้น?')) {
+                // Clear localStorage
+                clearStorage();
+                
+                // Reset to default values
+                const defaultValues = {
+                    storeName: 'ร้านของใบเตย',
+                    description: 'จำหน่ายสินค้าน่ารัก ของขวัญ และของสะสม',
+                    address: '509 ซอยบางนา-ตราด 56, เขตบางนา',
+                    province: 'กรุงเทพมหานคร',
+                    zipcode: '10260',
+                    phone: '081-234-5678',
+                    email: 'contact@mystore.com',
+                    facebook: 'facebook.com/mystore'
+                };
+                
+                // Update all fields
+                Object.keys(defaultValues).forEach(key => {
+                    const viewElement = document.getElementById(key + 'View');
+                    const inputElement = document.getElementById(key);
+                    if (viewElement) viewElement.textContent = defaultValues[key];
+                    if (inputElement) inputElement.value = defaultValues[key];
+                    updatePreview(key, defaultValues[key]);
+                });
+                
+                // Reset other settings
+                document.getElementById('storeStatus').value = 'open';
+                document.getElementById('openTime').value = '09:00';
+                document.getElementById('closeTime').value = '18:00';
+                document.getElementById('autoAcceptOrders').checked = true;
+                
+                // Reset logo
+                document.getElementById('storeLogoPreview').src = 'https://via.placeholder.com/120x80?text=Logo';
+                document.getElementById('sidebarStoreLogo').src = 'https://via.placeholder.com/120x80?text=Logo';
+                
+                // showNotification('รีเซ็ตการตั้งค่าเรียบร้อยแล้ว', 'info');
             }
+        }
+
+        function saveToStorage(key, value) {
+            try {
+                localStorage.setItem('store_' + key, JSON.stringify(value));
+            } catch (e) {
+                console.error('ไม่สามารถบันทึกข้อมูลได้:', e);
+            }
+        }
+
+        function loadFromStorage(key) {
+            try {
+                const stored = localStorage.getItem('store_' + key);
+                return stored ? JSON.parse(stored) : null;
+            } catch (e) {
+                console.error('ไม่สามารถโหลดข้อมูลได้:', e);
+                return null;
+            }
+        }
+
+        function clearStorage() {
+            const keys = ['storeName', 'description', 'address', 'province', 'zipcode', 'phone', 'email', 'facebook', 'storeStatus', 'openTime', 'closeTime', 'autoAcceptOrders', 'storeLogo'];
+            keys.forEach(key => {
+                localStorage.removeItem('store_' + key);
+            });
         }
 
         function showNotification(message, type = 'info') {
@@ -698,7 +841,55 @@
             console.log(message);
         }
 
-        // Drag and drop functionality for logo upload
+        // Auto-save functionality
+        function enableAutoSave() {
+            const inputs = document.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    if (this.id && this.id !== 'logoUpload') {
+                        saveToStorage(this.id, this.type === 'checkbox' ? this.checked : this.value);
+                    }
+                });
+            });
+        }
+
+        // Load saved data on page load
+        function loadSavedData() {
+            const fields = ['storeName', 'description', 'address', 'province', 'zipcode', 'phone', 'email', 'facebook'];
+            
+            fields.forEach(field => {
+                const saved = loadFromStorage(field);
+                if (saved) {
+                    const viewElement = document.getElementById(field + 'View');
+                    const inputElement = document.getElementById(field);
+                    if (viewElement) viewElement.textContent = saved;
+                    if (inputElement) inputElement.value = saved;
+                    updatePreview(field, saved);
+                }
+            });
+            
+            // Load other settings
+            const storeStatus = loadFromStorage('storeStatus');
+            if (storeStatus) document.getElementById('storeStatus').value = storeStatus;
+            
+            const openTime = loadFromStorage('openTime');
+            if (openTime) document.getElementById('openTime').value = openTime;
+            
+            const closeTime = loadFromStorage('closeTime');
+            if (closeTime) document.getElementById('closeTime').value = closeTime;
+            
+            const autoAccept = loadFromStorage('autoAcceptOrders');
+            if (autoAccept !== null) document.getElementById('autoAcceptOrders').checked = autoAccept;
+            
+            // Load logo
+            const storeLogo = loadFromStorage('storeLogo');
+            if (storeLogo) {
+                document.getElementById('storeLogoPreview').src = storeLogo;
+                document.getElementById('sidebarStoreLogo').src = storeLogo;
+            }
+        }
+
+        // Enhanced drag and drop functionality
         const uploadArea = document.querySelector('.upload-area');
         
         uploadArea.addEventListener('dragover', function(e) {
@@ -736,10 +927,59 @@
             }
         });
 
+        // Export/Import functionality
+        function exportSettings() {
+            const settings = {};
+            const fields = ['storeName', 'description', 'address', 'province', 'zipcode', 'phone', 'email', 'facebook', 'storeStatus', 'openTime', 'closeTime', 'autoAcceptOrders', 'storeLogo'];
+            
+            fields.forEach(field => {
+                const saved = loadFromStorage(field);
+                if (saved !== null) {
+                    settings[field] = saved;
+                }
+            });
+            
+            const dataStr = JSON.stringify(settings, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'store-settings-backup.json';
+            link.click();
+            
+            URL.revokeObjectURL(url);
+            // showNotification('ส่งออกการตั้งค่าเรียบร้อยแล้ว', 'success');
+        }
+
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('ยินดีต้อนรับสู่หน้าตั้งค่าร้านค้า!');
+            loadSavedData();
+            enableAutoSave();
+            
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 's') {
+                    e.preventDefault();
+                    saveAllSettings();
+                }
+            });
+            
+            // showNotification('ยินดีต้อนรับสู่หน้าตั้งค่าร้านค้า! กด Ctrl+S เพื่อบันทึกด่วน', 'info');
         });
+
+        // Add export button functionality
+        function addExportButton() {
+            const actionButtons = document.querySelector('.text-center');
+            const exportBtn = document.createElement('button');
+            exportBtn.className = 'btn btn-outline-primary ms-3';
+            exportBtn.innerHTML = '<i class="fas fa-download"></i> ส่งออกการตั้งค่า';
+            exportBtn.onclick = exportSettings;
+            actionButtons.appendChild(exportBtn);
+        }
+
+        // Call this after DOM is loaded
+        setTimeout(addExportButton, 100);
     </script>
 </body>
 </html>

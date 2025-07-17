@@ -235,8 +235,7 @@
             <div class="mb-3">
                 <i class="fas fa-store fa-3x text-white"></i>
             </div>
-            <h4>ร้านค้าของฉัน</h4>
-            <small>ผู้ขาย: นาย A</small>
+            <h4>ร้านของใบเตย</h4>
         </div>
         
         <ul class="nav flex-column mt-4">
@@ -303,28 +302,28 @@
         <div class="row mb-4" style="margin-bottom: 30px !important;">
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="stat-card sales">
-                    <h3>฿2,150</h3>
+                    <h3>฿0</h3>
                     <p>ยอดขายวันนี้</p>
-                    <small><i class="fas fa-arrow-up"></i> +12% จากเมื่อวาน</small>
+                    <small><i class="fas fa-arrow-up"></i> +0% จากเมื่อวาน</small>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="stat-card orders">
-                    <h3>5</h3>
+                    <h3>0</h3>
                     <p>คำสั่งซื้อใหม่</p>
                     <small><i class="fas fa-clock"></i> รอดำเนินการ</small>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="stat-card shipping">
-                    <h3>3</h3>
+                    <h3>0</h3>
                     <p>รายการที่ต้องจัดส่ง</p>
                     <small><i class="fas fa-truck"></i> พร้อมส่ง</small>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="stat-card stock">
-                    <h3>2</h3>
+                    <h3>0</h3>
                     <p>สินค้าใกล้หมด</p>
                     <small><i class="fas fa-exclamation-triangle"></i> ต้องเติมสต็อก</small>
                 </div>
@@ -333,7 +332,7 @@
 
         <div class="row">
             <!-- Recent Orders -->
-            <div class="col-lg-8 mb-4" style="margin-bottom: 30px !important;">
+            <div class="col-12 mb-4" style="margin-bottom: 30px !important;">
                 <div class="dashboard-card">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h5><i class="fas fa-shopping-cart text-primary"></i> คำสั่งซื้อใหม่ล่าสุด</h5>
@@ -354,58 +353,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>#ORD001</td>
-                                    <td>นาง ส. สมใจ</td>
-                                    <td>2 รายการ</td>
-                                    <td>฿850</td>
-                                    <td><span class="badge-status badge-new">ใหม่</span></td>
-                                    <td>
-                                        <button class="btn btn-success btn-action">ยืนยัน</button>
-                                        <button class="btn btn-info btn-action">ดูรายละเอียด</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>#ORD002</td>
-                                    <td>นาย บ. บุญมี</td>
-                                    <td>1 รายการ</td>
-                                    <td>฿320</td>
-                                    <td><span class="badge-status badge-processing">กำลังแพ็ค</span></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-action">จัดส่ง</button>
-                                        <button class="btn btn-info btn-action">ดูรายละเอียด</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>#ORD003</td>
-                                    <td>นางสาว ค. คิดดี</td>
-                                    <td>3 รายการ</td>
-                                    <td>฿1,250</td>
-                                    <td><span class="badge-status badge-shipped">จัดส่งแล้ว</span></td>
-                                    <td>
-                                        <button class="btn btn-secondary btn-action">ติดตาม</button>
-                                        <button class="btn btn-info btn-action">ดูรายละเอียด</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>#ORD004</td>
-                                    <td>นาย ง. งามตา</td>
-                                    <td>1 รายการ</td>
-                                    <td>฿480</td>
-                                    <td><span class="badge-status badge-new">ใหม่</span></td>
-                                    <td>
-                                        <button class="btn btn-success btn-action">ยืนยัน</button>
-                                        <button class="btn btn-info btn-action">ดูรายละเอียด</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>#ORD005</td>
-                                    <td>นางสาว จ. จริงใจ</td>
-                                    <td>2 รายการ</td>
-                                    <td>฿680</td>
-                                    <td><span class="badge-status badge-processing">กำลังแพ็ค</span></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-action">จัดส่ง</button>
-                                        <button class="btn btn-info btn-action">ดูรายละเอียด</button>
+                                    <td colspan="6" class="text-center text-muted py-4">
+                                        <i class="fas fa-inbox fa-3x mb-3"></i><br>
+                                        ยังไม่มีคำสั่งซื้อ
                                     </td>
                                 </tr>
                             </tbody>
@@ -413,9 +363,7 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Popular Products & Quick Actions -->
-            <div class="col-lg-4">
+        </div>
                 <!-- Popular Products 
                 <div class="dashboard-card mb-4">
                     <h5><i class="fas fa-fire text-danger"></i> สินค้ายอดนิยม</h5>
