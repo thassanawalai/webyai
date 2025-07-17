@@ -11,29 +11,33 @@ router.post('/register', async (req, res) => {
     return res.status(400).json({ error: 'กรุณากรอกข้อมูลให้ครบทุกช่อง' });
   }
   try {
-    db.get('SELECT user_id FROM users WHERE user_email = ? OR phone = ?', [email, phone], async (err, existing) => {
+    // เช็คเบอร์โทรศัพท์ซ้ำก่อน
+    db.get('SELECT user_id FROM users WHERE phone = ?', [phone], async (err, userPhone) => {
       if (err) return res.status(500).json({ error: 'Database error' });
-      if (existing) {
-        return res.status(409).json({ error: 'อีเมลหรือเบอร์โทรศัพท์นี้ถูกใช้แล้ว' });
-      }
-      const hash = await bcrypt.hash(password, 10);
-      const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-      db.run(
-        `INSERT INTO users (
-          user_name, phone, user_email, user_password, user_role, user_profile_img, user_created_at, email_verified_at, default_address_id
-        ) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, NULL, NULL)`,
-        [user_name, phone, email, hash, user_role, user_profile_img || ''],
-        async function (err2) {
-          if (err2) return res.status(500).json({ error: 'เกิดข้อผิดพลาดในระบบ' });
-          await transporter.sendMail({
-            from: `"Alice Moist" <${process.env.EMAIL_USER}>`,
-            to: email,
-            subject: 'ยืนยันอีเมล Alice Moist',
-            html: `<p>รหัสยืนยัน 6 หลักของคุณคือ: <strong>${verificationCode}</strong></p>`
-          });
-          res.json({ success: true });
-        }
-      );
+      if (userPhone) return res.status(409).json({ error: 'เบอร์โทรศัพท์นี้ถูกใช้แล้ว' });
+      // ถ้าเบอร์ไม่ซ้ำ เช็คอีเมลต่อ
+      db.get('SELECT user_id FROM users WHERE user_email = ?', [email], async (err2, userEmail) => {
+        if (err2) return res.status(500).json({ error: 'Database error' });
+        if (userEmail) return res.status(409).json({ error: 'อีเมลนี้ถูกใช้แล้ว' });
+        const hash = await bcrypt.hash(password, 10);
+        const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+        db.run(
+          `INSERT INTO users (
+            user_name, phone, user_email, user_password, user_role, user_profile_img, user_created_at, email_verified_at, default_address_id
+          ) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, NULL, NULL)`,
+          [user_name, phone, email, hash, user_role, user_profile_img || ''],
+          async function (err3) {
+            if (err3) return res.status(500).json({ error: 'เกิดข้อผิดพลาดในระบบ' });
+            await transporter.sendMail({
+              from: `"Alice Moist" <${process.env.EMAIL_USER}>`,
+              to: email,
+              subject: 'ยืนยันอีเมล Alice Moist',
+              html: `<p>รหัสยืนยัน 6 หลักของคุณคือ: <strong>${verificationCode}</strong></p>`
+            });
+            res.json({ success: true });
+          }
+        );
+      });
     });
   } catch (err) {
     console.error('Registration error:', err);

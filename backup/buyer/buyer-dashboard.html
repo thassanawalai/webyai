@@ -6,389 +6,184 @@
   <title>Alice Moist Daily</title>
   <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="/buyer/css/navbar-footer-style.css">
-  <script src="/buyer/js/navbar-footer.js" defer></script>
+  <link rel="stylesheet" href="css/navbar-footer-style.css">
+  <script src="js/navbar-footer.js" defer></script>
 </head>
 
 <body>
 <div id="navbar"></div>
 
-<!-- <section class="banner">
-  <div class="container">
-    <div class="banner-content">
-      <div class="banner-image">
-        <img src="images/banner1.png" alt="Alice Moist Daily">
-      </div>
-      <div class="banner-text">
-        <h1>Alice Moist Daily เลนส์สัมผัสชนิดนิ่ม</h1>
-        <p>เป็นคอนแทคเลนส์ใสรายวันที่ใช้ GMMA เป็นตัวรักษาความชุ่มชื่นตลอดวันที่สวมใส่</p>
-      </div>
-    </div>
-  </div>
-</section> -->
-
 <main class="container">
-    <section class="product-section">
-        <div class="product-image">
-            <img src="images/product1.png" alt="Alice Moist Daily Contact Lenses" style="height: 300px; width: auto; ">
+    <section class="product-section" style="display:flex;gap:32px;align-items:center;justify-content:center;background:none;box-shadow:none;padding:0 0 32px 0;max-width:1100px;margin:auto;">
+      <div style="flex:1;min-width:320px;max-width:480px;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+        <h1 style="font-family:'Kanit',sans-serif;font-size:2.1rem;font-weight:700;color:#183a7a;margin-bottom:18px;text-align:center;width:100%;"><span style='color:#183a7a;'>Alice</span> <span style='color:#00bfae;'>MOIST</span> Daily</h1>
+        <div style="width:100%;min-height:340px;display:flex;justify-content:center;align-items:center;">
+          <img src="/images/product1.png" alt="Alice Moist Daily Contact Lenses" style="max-width:420px;width:90%;height:auto;display:block;margin-bottom:0;border-radius:12px;box-shadow:0 2px 16px rgba(0,0,0,0.09);background:#fff;object-fit:contain;">
         </div>
-        <div class="product-details">
-            <h1 class="product-title">Alice <span style="color: #2ecc71;">MOIST</span> Daily เลนส์สัมผัสชนิดนิ่ม</h1>
-            <p class="product-subtitle">เป็นคอนแทคเลนส์ใสรายวันที่ใช้ <span style="color: #2ecc71;">GMMA</span> เป็นตัวรักษาความชุ่มชื่นตลอดวันที่สวมใส่</p>
-            
-            <div class="prescription-selection">
-                <h3>เลือกค่าสายตา</h3>
-                
-                <div class="eye-selection">
-                    <div class="eye-option">
-                        <label for="rightEyeSelect">
-                            <i class="fas fa-eye eye-icon"></i> ตาขวา
-                        </label>
-                        <select id="rightEyeSelect" class="eye-dropdown">
-                            <option value="">-- เลือกค่าสายตา --</option>
-                            <option value="-0.25">-0.25</option>
-                            <option value="-0.50">-0.50</option>
-                            <option value="-0.75">-0.75</option>
-                            <option value="-1.00">-1.00</option>
-                            <option value="-1.25">-1.25</option>
-                            <option value="-1.50">-1.50</option>
-                            <option value="-1.75">-1.75</option>
-                            <option value="-2.00">-2.00</option>
-                            <option value="-2.25">-2.25</option>
-                            <option value="-2.50">-2.50</option>
-                            <option value="-2.75">-2.75</option>
-                            <option value="-3.00">-3.00</option>
-                            <option value="-3.25">-3.25</option>
-                            <option value="-3.50">-3.50</option>
-                            <option value="-3.75">-3.75</option>
-                            <option value="-4.00">-4.00</option>
-                            <option value="-4.25">-4.25</option>
-                            <option value="-4.50">-4.50</option>
-                            <option value="-4.75">-4.75</option>
-                            <option value="-5.00">-5.00</option>
-                            <option value="-5.25">-5.25</option>
-                            <option value="-5.50">-5.50</option>
-                            <option value="-5.75">-5.75</option>
-                            <option value="-6.00">-6.00</option>
-                        </select>
-                    </div>
-                    
-                    <div class="eye-option">
-                        <label for="leftEyeSelect">
-                            <i class="fas fa-eye eye-icon"></i> ตาซ้าย
-                        </label>
-                        <select id="leftEyeSelect" class="eye-dropdown">
-                            <option value="">-- เลือกค่าสายตา --</option>
-                            <option value="-0.25">-0.25</option>
-                            <option value="-0.50">-0.50</option>
-                            <option value="-0.75">-0.75</option>
-                            <option value="-1.00">-1.00</option>
-                            <option value="-1.25">-1.25</option>
-                            <option value="-1.50">-1.50</option>
-                            <option value="-1.75">-1.75</option>
-                            <option value="-2.00">-2.00</option>
-                            <option value="-2.25">-2.25</option>
-                            <option value="-2.50">-2.50</option>
-                            <option value="-2.75">-2.75</option>
-                            <option value="-3.00">-3.00</option>
-                            <option value="-3.25">-3.25</option>
-                            <option value="-3.50">-3.50</option>
-                            <option value="-3.75">-3.75</option>
-                            <option value="-4.00">-4.00</option>
-                            <option value="-4.25">-4.25</option>
-                            <option value="-4.50">-4.50</option>
-                            <option value="-4.75">-4.75</option>
-                            <option value="-5.00">-5.00</option>
-                            <option value="-5.25">-5.25</option>
-                            <option value="-5.50">-5.50</option>
-                            <option value="-5.75">-5.75</option>
-                            <option value="-6.00">-6.00</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="quantity-selection" id="quantitySelection" style="display: none;">
-                <h3>เลือกจำนวนกล่อง</h3>
-                <div class="quantity-dropdown-wrapper">
-                    <select id="quantitySelect" class="quantity-dropdown">
-                        <option value="1">1 กล่อง (30 เลนส์)</option>
-                        <option value="2" selected>2 กล่อง (60 เลนส์) - ประหยัด 7.14%</option>
-                        <option value="4">4 กล่อง (120 เลนส์) - ประหยัด 14.28%</option>
+      </div>
+      <div style="flex:1;min-width:320px;max-width:420px;background:#fff;border-radius:18px;box-shadow:0 2px 16px rgba(0,0,0,0.09);padding:28px 24px 32px 24px;display:flex;flex-direction:column;align-items:stretch;gap:12px;">
+        <h2 style="font-family:'Kanit',sans-serif;font-size:1.35rem;font-weight:700;color:#183a7a;margin-bottom:8px;text-align:left;">Alice <span style='color:#00bfae;font-weight:bold;'>MOIST</span> Daily</h2>
+        <div style="font-size:1.05rem;color:#223;margin-bottom:10px;">เลนส์สัมผัสชนิดนิ่ม <b style='color:#183a7a;'>อัลิซมอยส์เดลี่</b> เป็นคอนแทคเลนส์ใสรายวันที่ใช้ <span style='color:#00bfae;font-weight:bold;'>GMMA</span> เป็นตัวรักษาความชุ่มชื้น (Moisturizer) ตลอดวันที่สวมใส่</div>
+        <div class="prescription-selection">
+          <div style="background:#f7fafd;border-radius:16px;box-shadow:0 2px 12px rgba(24,58,122,0.07);padding:18px 18px 10px 18px;display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;gap:18px;justify-content:space-between;align-items:flex-start;">
+              <div style="flex:1;display:flex;flex-direction:column;gap:18px;">
+                <!-- ตาขวา -->
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:#fff;border-radius:12px;padding:12px 16px 10px 16px;box-shadow:0 1px 6px rgba(24,58,122,0.06);">
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:flex-start;">
+                    <div style="font-size:1.05rem;font-weight:600;color:#183a7a;">ตาขวา*</div>
+                    <select id="rightEyeSelect" class="eye-dropdown" style="width:100%;max-width:120px;font-size:1.1rem;padding:7px 12px;border-radius:8px;border:1px solid #b5d6e6;margin-top:8px;">
+                      <option value="">-- เลือก --</option>
+                      <option value="-0.25">-0.25</option>
+                      <option value="-0.50">-0.50</option>
+                      <option value="-0.75">-0.75</option>
+                      <option value="-1.00">-1.00</option>
+                      <option value="-1.25">-1.25</option>
+                      <option value="-1.50">-1.50</option>
+                      <option value="-1.75">-1.75</option>
+                      <option value="-2.00">-2.00</option>
+                      <option value="-2.25">-2.25</option>
+                      <option value="-2.50">-2.50</option>
+                      <option value="-2.75">-2.75</option>
+                      <option value="-3.00">-3.00</option>
+                      <option value="-3.25">-3.25</option>
+                      <option value="-3.50">-3.50</option>
+                      <option value="-3.75">-3.75</option>
+                      <option value="-4.00">-4.00</option>
+                      <option value="-4.25">-4.25</option>
+                      <option value="-4.50">-4.50</option>
+                      <option value="-4.75">-4.75</option>
+                      <option value="-5.00">-5.00</option>
+                      <option value="-5.25">-5.25</option>
+                      <option value="-5.50">-5.50</option>
+                      <option value="-5.75">-5.75</option>
+                      <option value="-6.00">-6.00</option>
                     </select>
+                    <div style="font-size:0.85rem;color:#888;margin-top:6px;">* กรณีสั่ง 1 ชุด จะได้สายตาขวาเป็นหลัก</div>
+                  </div>
+                  <div style="width:54px;height:38px;display:flex;align-items:center;justify-content:center;">
+                    <svg width="48" height="32" viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <ellipse cx="24" cy="16" rx="22" ry="13" stroke="#183a7a" stroke-width="2"/>
+                      <circle cx="24" cy="16" r="7" stroke="#183a7a" stroke-width="2"/>
+                      <circle cx="24" cy="16" r="2.5" stroke="#183a7a" stroke-width="2"/>
+                    </svg>
+                  </div>
                 </div>
-                <div class="quantity-details" id="quantityDetails">
-                    <div class="quantity-info">
-                        <div class="quantity-price">
-                            <span class="current-price">1,300.00 บาท</span>
-                            <span class="original-price">1,400.00 บาท</span>
-                        </div>
-                        <div class="quantity-note">ตาขวา + ตาซ้าย</div>
-                        <div class="quantity-savings">ประหยัด 100.00 บาท</div>
-                    </div>
+                <!-- ตาซ้าย -->
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:#fff;border-radius:12px;padding:12px 16px 10px 16px;box-shadow:0 1px 6px rgba(24,58,122,0.06);">
+                  <div style="width:54px;height:38px;display:flex;align-items:center;justify-content:center;">
+                    <svg width="48" height="32" viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <ellipse cx="24" cy="16" rx="22" ry="13" stroke="#183a7a" stroke-width="2"/>
+                      <circle cx="24" cy="16" r="7" stroke="#183a7a" stroke-width="2"/>
+                      <circle cx="24" cy="16" r="2.5" stroke="#183a7a" stroke-width="2"/>
+                    </svg>
+                  </div>
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:flex-end;">
+                    <div style="font-size:1.05rem;font-weight:600;color:#183a7a;">ตาซ้าย</div>
+                    <select id="leftEyeSelect" class="eye-dropdown" style="width:100%;max-width:120px;font-size:1.1rem;padding:7px 12px;border-radius:8px;border:1px solid #b5d6e6;margin-top:8px;">
+                      <option value="">-- เลือก --</option>
+                      <option value="-0.25">-0.25</option>
+                      <option value="-0.50">-0.50</option>
+                      <option value="-0.75">-0.75</option>
+                      <option value="-1.00">-1.00</option>
+                      <option value="-1.25">-1.25</option>
+                      <option value="-1.50">-1.50</option>
+                      <option value="-1.75">-1.75</option>
+                      <option value="-2.00">-2.00</option>
+                      <option value="-2.25">-2.25</option>
+                      <option value="-2.50">-2.50</option>
+                      <option value="-2.75">-2.75</option>
+                      <option value="-3.00">-3.00</option>
+                      <option value="-3.25">-3.25</option>
+                      <option value="-3.50">-3.50</option>
+                      <option value="-3.75">-3.75</option>
+                      <option value="-4.00">-4.00</option>
+                      <option value="-4.25">-4.25</option>
+                      <option value="-4.50">-4.50</option>
+                      <option value="-4.75">-4.75</option>
+                      <option value="-5.00">-5.00</option>
+                      <option value="-5.25">-5.25</option>
+                      <option value="-5.50">-5.50</option>
+                      <option value="-5.75">-5.75</option>
+                      <option value="-6.00">-6.00</option>
+                    </select>
+                  </div>
                 </div>
+              </div>
             </div>
-            
-            <div class="help-section">
-                <h3>ต้องการความช่วยเหลือ</h3>
-                <div class="help-buttons">
-                    <a href="tel:+66123456789" class="help-btn call-btn">
-                        <i class="fas fa-phone"></i>
-                        <span>Call</span>
-                    </a>
-                    <a href="https://line.me/ti/p/@example" class="help-btn line-btn">
-                        <i class="fab fa-line"></i>
-                        <span>Line Chat</span>
-                    </a>
-                </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
+              <span style="font-size:0.98rem;color:#183a7a;">ต้องการความช่วยเหลือ</span>
+              <a href="https://line.me/ti/p/~@alicecontactlens" target="_blank" style="background:#00c300;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;margin-left:2px;"><img src="/images/icon.png" alt="LINE" style="width:20px;height:20px;"></a>
             </div>
+          </div>
+        <div class="quantity-selection" id="quantitySelection" style="display: none;">
+          <div style="background:#f7fafd;border-radius:16px;box-shadow:0 2px 12px rgba(24,58,122,0.07);padding:18px 18px 10px 18px;margin-top:12px;">
+            <h3 style="font-size:1.08rem;font-weight:600;color:#183a7a;margin-bottom:8px;">เลือกจำนวนกล่อง</h3>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <select id="quantitySelect" class="quantity-dropdown" style="font-size:1.1rem;padding:7px 16px;border-radius:8px;border:1px solid #b5d6e6;min-width:180px;">
+                <option value="1">1 ชุด (30 เลนส์)</option>
+                <option value="2" selected>2 ชุด (60 เลนส์) - ประหยัด 7.14%</option>
+                <option value="4">4 ชุด (120 เลนส์) - ประหยัด 14.28%</option>
+              </select>
+              <span style="font-size:0.98rem;color:#00bfae;font-weight:600;">ประหยัดกว่า 14.28% หากซื้อ 4 ชุด</span>
+            </div>
+            <div class="quantity-details" id="quantityDetails" style="margin-top:10px;">
+              <div class="quantity-info" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+                <div class="quantity-price" style="font-size:1.15rem;font-weight:600;color:#183a7a;">
+                  <span class="current-price" style="color:#00bfae;font-size:1.25rem;font-weight:700;">1,300.00 บาท</span>
+                  <span class="original-price" style="color:#bbb;text-decoration:line-through;margin-left:8px;">1,400.00 บาท</span>
+                </div>
+                <div class="quantity-note" style="font-size:0.98rem;color:#183a7a;">ตาขวา + ตาซ้าย</div>
+                <div class="quantity-savings" style="font-size:0.98rem;color:#00bfae;">ประหยัด 100.00 บาท</div>
+                <div class="shipping-badge" style="background:#00bfae;color:#fff;font-size:0.95rem;padding:2px 12px;border-radius:12px;display:inline-block;">ส่งฟรี!</div>
+              </div>
+            </div>
+          </div>
+            </div>
+        </div>
+        <div class="summary">
+            <div class="total-price">
+                ยอดรวม: <span id="totalPrice">XXX.00 บาท</span>
+            </div>
+            <div class="action-buttons">
+                <button class="add-to-cart" onclick="addToCart()">
+                    <i class="fas fa-shopping-cart"></i> เพิ่มในตะกร้า
+                </button>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="product-info">
+        <div class="container">
+            <h2>Alice Moist Daily เลนส์สัมผัสรายวัน</h2>
+            <p>เลนส์ Alice Moist Daily บรรจุในน้ำยาเกลือแร่ที่ช่วยเพิ่มความชุ่มชื่นและความสบายตาตลอดวัน</p>
             
-            <div class="summary">
-                <div class="total-price">
-                    ยอดรวม: <span id="totalPrice">XXX.00 บาท</span>
+            <div class="info-boxes">
+                <div class="whats-included">
+                    <h3><i class="fas fa-box-open"></i> สิ่งที่คุณจะได้รับในแต่ละกล่อง:</h3>
+                    <ul>
+                        <li>เลนส์สัมผัสรายวัน Alice Moist Daily (HEMA+GMMA 58%)</li>
+                        <li>น้ำยาเกลือแร่สำหรับแช่เลนส์</li>
+                        <li>คู่มือการใช้งาน</li>
+                        <li>กล่องบรรจุภัณฑ์คุณภาพ</li>
+                    </ul>
                 </div>
                 
-                <div class="action-buttons">
-                    <button class="add-to-cart" onclick="addToCart()">
-                        <i class="fas fa-shopping-cart"></i> เพิ่มในตะกร้า
-                    </button>
+                <div class="how-to-use">
+                    <h3><i class="fas fa-question-circle"></i> วิธีการใช้งาน:</h3>
+                    <ol>
+                        <li>ล้างมือให้สะอาดก่อนสัมผัสเลนส์</li>
+                        <li>นำเลนส์ออกจากบรรจุภัณฑ์</li>
+                        <li>ใส่เลนส์ตามวิธีที่แนะนำ</li>
+                        <li>ทิ้งเลนส์หลังใช้แล้ววันเดียว</li>
+                        <li>ทำความสะอาดที่เก็บเลนส์เป็นประจำ</li>
+                    </ol>
                 </div>
             </div>
         </div>
     </section>
 </main>
 <div id="footer"></div>
-
-<script>
-// DOM elements
-const rightEyeSelect = document.getElementById('rightEyeSelect');
-const leftEyeSelect = document.getElementById('leftEyeSelect');
-const quantitySelection = document.getElementById('quantitySelection');
-const quantitySelect = document.getElementById('quantitySelect');
-const quantityDetails = document.getElementById('quantityDetails');
-const totalPriceElement = document.getElementById('totalPrice');
-const eyeSelectionNote = document.querySelector('.eye-selection-note');
-
-// Price configuration
-const basePrice = 700; // Base price per box
-const discounts = {
-    1: 0,      // No discount for 1 box
-    2: 0.0714, // 7.14% discount for 2 boxes
-    4: 0.1428  // 14.28% discount for 4 boxes
-};
-
-// Initialize the application
-document.addEventListener('DOMContentLoaded', function() {
-    loadNavbarFooter();
-    updateCartBadge();
-    
-    // Add event listeners
-    rightEyeSelect.addEventListener('change', handleEyeSelection);
-    leftEyeSelect.addEventListener('change', handleEyeSelection);
-    quantitySelect.addEventListener('change', updateQuantityDetails);
-    
-    // Initial state
-    updateNoteVisibility();
-    updateQuantityDetails();
-});
-
-// Handle eye selection changes
-function handleEyeSelection() {
-    const rightValue = rightEyeSelect.value;
-    const leftValue = leftEyeSelect.value;
-    
-    if (rightValue && leftValue) {
-        quantitySelection.style.display = 'block';
-        updateNoteVisibility();
-        updateQuantityDetails();
-    } else {
-        quantitySelection.style.display = 'none';
-    }
-}
-
-// Update note visibility based on quantity selection
-function updateNoteVisibility() {
-    const quantity = parseInt(quantitySelect.value);
-    if (eyeSelectionNote) {
-        eyeSelectionNote.style.display = quantity === 1 ? 'block' : 'none';
-    }
-}
-
-// Update quantity details and pricing
-function updateQuantityDetails() {
-    const quantity = parseInt(quantitySelect.value);
-    const discount = discounts[quantity] || 0;
-    const originalPrice = basePrice * quantity;
-    const discountAmount = originalPrice * discount;
-    const finalPrice = originalPrice - discountAmount;
-    
-    // Update quantity details display
-    const quantityInfo = quantityDetails.querySelector('.quantity-info');
-    if (quantityInfo) {
-        const currentPriceElement = quantityInfo.querySelector('.current-price');
-        const originalPriceElement = quantityInfo.querySelector('.original-price');
-        const quantityNoteElement = quantityInfo.querySelector('.quantity-note');
-        const quantitySavingsElement = quantityInfo.querySelector('.quantity-savings');
-        
-        if (currentPriceElement) {
-            currentPriceElement.textContent = `${finalPrice.toLocaleString()}.00 บาท`;
-        }
-        
-        if (originalPriceElement) {
-            if (discount > 0) {
-                originalPriceElement.textContent = `${originalPrice.toLocaleString()}.00 บาท`;
-                originalPriceElement.style.display = 'inline';
-            } else {
-                originalPriceElement.style.display = 'none';
-            }
-        }
-        
-        if (quantityNoteElement) {
-            if (quantity === 1) {
-                quantityNoteElement.textContent = 'ตาขวา (ใช้ทั้งสองข้าง)';
-            } else {
-                quantityNoteElement.textContent = 'ตาขวา + ตาซ้าย';
-            }
-        }
-        
-        if (quantitySavingsElement) {
-            if (discount > 0) {
-                quantitySavingsElement.textContent = `ประหยัด ${discountAmount.toLocaleString()}.00 บาท`;
-                quantitySavingsElement.style.display = 'block';
-            } else {
-                quantitySavingsElement.style.display = 'none';
-            }
-        }
-    }
-    
-    // Update total price
-    if (totalPriceElement) {
-        totalPriceElement.textContent = `${finalPrice.toLocaleString()}.00 บาท`;
-    }
-    
-    // Update note visibility
-    updateNoteVisibility();
-}
-
-// Add to cart functionality
-function addToCart() {
-    const rightEye = rightEyeSelect.value;
-    const leftEye = leftEyeSelect.value;
-    const quantity = parseInt(quantitySelect.value);
-    
-    if (!rightEye || !leftEye) {
-        showNotification('กรุณาเลือกค่าสายตาทั้งสองข้าง', 'error');
-        return;
-    }
-    
-    const quantity_text = quantity === 1 ? 'ตาขวา (ใช้ทั้งสองข้าง)' : 'ตาขวา + ตาซ้าย';
-    const discount = discounts[quantity] || 0;
-    const originalPrice = basePrice * quantity;
-    const discountAmount = originalPrice * discount;
-    const finalPrice = originalPrice - discountAmount;
-    
-    const cartItem = {
-        id: Date.now(),
-        name: 'เลนส์คอนแทคต์ รายวัน',
-        rightEye: rightEye,
-        leftEye: leftEye,
-        quantity: quantity,
-        quantityText: quantity_text,
-        price: finalPrice,
-        originalPrice: discount > 0 ? originalPrice : null,
-        discount: discount > 0 ? discountAmount : 0,
-        image: 'images/lens1.png'
-    };
-    
-    // Get existing cart or create new one
-    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    cart.push(cartItem);
-    localStorage.setItem('cart', JSON.stringify(cart));
-    
-    showNotification('เพิ่มสินค้าในตะกร้าเรียบร้อยแล้ว!', 'success');
-    updateCartBadge();
-}
-
-// Show notification
-function showNotification(message, type = 'success') {
-    // Remove existing notification
-    const existingNotification = document.querySelector('.notification');
-    if (existingNotification) {
-        existingNotification.remove();
-    }
-    
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
-    
-    // Add styles
-    notification.style.cssText = `
-        position: fixed;
-        top: 100px;
-        right: 20px;
-        background: ${type === 'success' ? '#22c55e' : '#ef4444'};
-        color: white;
-        padding: 15px 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        z-index: 10000;
-        font-weight: 500;
-        max-width: 300px;
-        word-wrap: break-word;
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Remove after 3 seconds
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.parentNode.removeChild(notification);
-        }
-    }, 3000);
-}
-
-// Update cart badge
-function updateCartBadge() {
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    const cartBadge = document.querySelector('.cart-badge');
-    
-    if (cartBadge) {
-        if (cart.length > 0) {
-            cartBadge.textContent = cart.length;
-            cartBadge.style.display = 'block';
-        } else {
-            cartBadge.style.display = 'none';
-        }
-    }
-}
-
-// Load navbar and footer
-function loadNavbarFooter() {
-    // Load navbar
-    fetch('navbar.html')
-        .then(response => response.text())
-        .then(data => {
-            const navbar = document.getElementById('navbar');
-            if (navbar) {
-                navbar.innerHTML = data;
-                updateCartBadge();
-            }
-        })
-        .catch(error => console.error('Error loading navbar:', error));
-    
-    // Load footer
-    fetch('footer.html')
-        .then(response => response.text())
-        .then(data => {
-            const footer = document.getElementById('footer');
-            if (footer) {
-                footer.innerHTML = data;
-            }
-        })
-        .catch(error => console.error('Error loading footer:', error));
-}
-</script>
-
 </body>
 </html>
