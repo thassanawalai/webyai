@@ -1,3 +1,4 @@
+
 // Node.js/Express API for buyer login/register/email verify/user update with SQLite
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
@@ -27,24 +28,6 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
   }
-});
-
-// เพิ่ม route สำหรับ root path
-app.get('/', (req, res) => {
-  res.json({
-    message: 'Alice Moist Daily API Server',
-    version: '1.0.0',
-    status: 'running',
-    endpoints: {
-      register: 'POST /api/register',
-      login: 'POST /api/login',
-      verify: 'POST /api/verify',
-      resend: 'POST /api/resend-verification',
-      update: 'PUT /api/update-user',
-      'forgot-password': 'POST /api/forgot-password',
-      'reset-password': 'POST /api/reset-password'
-    }
-  });
 });
 
 // Register
@@ -194,12 +177,16 @@ app.post('/api/check-duplicate', (req, res) => {
     res.json({ duplicate: false });
   });
 });
-
-// API Health Check
+// เพิ่ม endpoint สำหรับตรวจสอบสุขภาพระบบ
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+  db.get('SELECT 1', (err) => {
+    if (err) {
+      console.error('SQLite health check failed:', err);
+      return res.status(500).json({ status: 'DOWN', error: err.message });
+    }
+    res.json({ status: 'UP' });
+  });
 });
-
 const PORT = 5500;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
