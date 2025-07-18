@@ -167,18 +167,6 @@
     </div>
 
     <script>
-
-        // --- เพิ่มบัญชีแอดมินสำหรับล็อกอินเทส ---
-        (function createAdminAccountIfNotExists() {
-            const adminEmail = "admin@email.com";
-            const adminPassword = "123456";
-            if (!localStorage.getItem("adminTestAccountCreated")) {
-                localStorage.setItem("registeredEmail", adminEmail);
-                localStorage.setItem("registeredPassword", adminPassword);
-                localStorage.setItem("adminTestAccountCreated", "1");
-            }
-        })();
-
         document.getElementById("loginForm").addEventListener("submit", function(event) {
             event.preventDefault();
 
